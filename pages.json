@@ -1,0 +1,172 @@
+{
+	"pages": [{
+		"path": "pages/recomment/recomment",
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/social/social",
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/employment/employment",
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/message/message",
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/person/person",
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/photo/photo"
+	}, {
+		"path": "pages/register/register",
+		"style": {
+			"navigationBarBackgroundColor": "#ffb4c0",
+			"navigationBarTitleText": "注册"
+		}
+	}],
+	"subPackages": [{
+		"root": "subpkg",
+		"pages": [{
+			"path": "share/share",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
+			"path": "comment/comment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
+			"path": "information/information",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
+			"path": "group/group"
+		}, {
+			"path": "xiangqing/xiangqing"
+		}, {
+			"path": "checkPerson/checkPerson",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
+			"path": "privilege/privilege",
+			"style": {
+				"navigationBarTitleText": "我的特权"
+			}
+
+		}, {
+			"path": "activity/activity",
+			"style": {
+				"navigationBarTitleText": "活动",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "emotionTesting/emotionTesting",
+			"style": {
+				"navigationBarTitleText": "情感测试",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "search/search",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+
+		}    ,{
+                    "path" : "editDetail/editDetail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+	}],
+
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#fff",
+		"app-plus": {
+			"background": "#fff"
+		}
+	},
+	"tabBar": {
+		"selectedColor": "#ffb4c0",
+		"list": [{
+				"pagePath": "pages/recomment/recomment",
+				"text": "约吧",
+				"iconPath": "static/images/tabs/compromise.png",
+				"selectedIconPath": "static/images/tabs/compromise2.png"
+			},
+			{
+				"pagePath": "pages/social/social",
+				"text": "广场",
+				"iconPath": "static/images/tabs/cate.png",
+				"selectedIconPath": "static/images/tabs/cate-active.png"
+			},
+			{
+				"pagePath": "pages/employment/employment",
+				"text": "就业",
+				"iconPath": "static/images/tabs/employment.png",
+				"selectedIconPath": "static/images/tabs/employment-active.png"
+			},
+			{
+				"pagePath": "pages/message/message",
+				"text": "消息",
+				"iconPath": "static/images/tabs/message.png",
+				"selectedIconPath": "static/images/tabs/message-active.png"
+			},
+			{
+				"pagePath": "pages/person/person",
+				"text": "我的",
+				"iconPath": "static/images/tabs/my.png",
+				"selectedIconPath": "static/images/tabs/my-active.png"
+			}
+		]
+	}
+}

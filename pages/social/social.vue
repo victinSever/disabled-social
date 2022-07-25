@@ -1,0 +1,172 @@
+<template>
+	<view class="root">
+		<mover></mover>
+		<!-- social头部-->
+		<view class="social-header">
+			<!-- 关注和附近按钮切换 -->
+			<view class="social-header-left"  >
+				<span :style="!isClose? activeStyle: ''" id="concern" @click="isClose = false">关注</span>
+				<span :style="isClose? activeStyle: ''" id="close" @click="isClose = true">附近</span>				
+				<span>
+					<uni-icons type="list" size="30" color="darkorange"
+						@click="changeSetting()">					
+					</uni-icons>
+				</span>
+			</view>	
+			
+			<!-- 右侧动态按钮 -->
+			<view class="social-header-right">
+				<span class="btnSend" @click="gotoShare">发动态</span>
+			</view>
+		</view>
+		
+		<uni-transition mode-class="slide-right" :show="isClose">
+			<social-close @openPopu="openPopu"></social-close>
+		</uni-transition>
+		<uni-transition mode-class="slide-left" :show="!isClose">
+			<social-concern @openPopu="openPopu"></social-concern>
+		</uni-transition>
+		
+		<!-- 举报和关注弹窗 -->
+		<uni-popup ref="tip" background-color="#fff">
+			<view class="tip-content">
+				<span>关注</span>
+				<span>匿名举报</span>
+				<hr>
+				<span>取消</span>
+			</view>
+		</uni-popup>
+		
+		<!-- 设置部分的抽屉盒子 -->
+		<uni-popup ref="popup" background-color="#fff">
+			<social-apps @closePopup="closePopup"></social-apps>
+		</uni-popup>
+		
+		<!-- 不定期活动按钮 -->	
+		<uni-transition mode-class="fade" :show="activeBtn.show && isClose">
+			<activity-btn :activeBtn="activeBtn"></activity-btn>
+		</uni-transition>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				// 活动按钮定制
+				activeBtn:{
+					show: false,//是否存在
+					type: 'button',//样式为按钮
+					bgc: 'light',//背景为浅色
+				},
+				isClose: true,
+				activeStyle: 'font-weight: bold;color: black;', //active样式
+				
+			};
+		},
+		mounted(){
+			let $this = this
+			// 延时广告出现
+			setTimeout(function(){
+				$this.activeBtn.show = true
+			}, 1000)
+		},
+		methods: {
+			gotoShare(){
+				uni.navigateTo({
+					url: '/subpkg/share/share'
+				})
+			},
+			openPopu() {
+				this.$refs.tip.open('bottom')
+			},
+			// 关闭弹窗
+			closePopup(){
+				this.$refs.popup.close()
+			},
+			// 改变设置状态
+			changeSetting(){
+				this.$refs.popup.open('top')
+			},
+		}
+	}
+</script>
+
+<style lang="scss" socped>
+	
+	// 头部
+	.social-header {
+		height: 100rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: sticky;
+		top: 70rpx;
+		z-index: 5;
+		background-color: #fff;
+		padding: 0 20rpx;
+		
+		.social-header-left {
+			display: flex;
+			width: 50%;
+			line-height: 100rpx;
+			justify-content: space-around;
+			align-items: center;
+			span {
+				margin-right: 15px;
+				color: gray;
+				font-size: 18px;
+				display: flex;
+				align-items: center;
+			}
+			
+			.active{
+				font-weight: bold;
+				color: black;
+			}
+		}
+		
+		.social-header-right {
+			margin-right: 5px;
+			
+			.btnSend{
+				display: inline-block;
+				text-align: center;
+				padding: 5px 10px;
+				height: 80%;
+				border-radius: 6px;
+				color: #fff;
+				font-size: 12px;
+				background-color: orange;
+			}
+		}
+	}
+	
+	// 弹窗
+	.tip-content{
+		margin-top: 10px;
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
+		hr{
+			margin: 5px 0;
+			height: 2px;
+			width: 100%;
+			background-color: #ccc;
+		}
+		
+		span{
+			display: inline-block;
+			line-height: 40px;
+		}
+		
+		span:nth-child(2) {
+			color: orange;
+		}
+	}
+		
+
+</style>
