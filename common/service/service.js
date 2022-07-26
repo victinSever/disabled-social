@@ -4,14 +4,13 @@ import {
 } from '@/common/util/constants.js'
 import configService from './config.service.js'
 import tip from '@/common/util/tip.js';
-import store from '@/store/index.js';
 import Vue from 'vue'
 let apiUrl = configService.apiUrl;
 
 const getTokenStorage = () => {
     let token = ''
     try {
-   token = "Bearer " + (uni.getStorageSync(ACCESS_TOKEN)?uni.getStorageSync(ACCESS_TOKEN):"")
+      token = "Bearer " + (uni.getStorageSync(ACCESS_TOKEN)?uni.getStorageSync(ACCESS_TOKEN):"")
    } catch (e) {
     }
     return token
