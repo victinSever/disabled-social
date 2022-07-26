@@ -230,6 +230,8 @@
         </div>
       </el-card>
     </el-row>
+
+    <vue-ueditor-wrap v-model="contents"  :config="myConfig"  style="width: 100%;"></vue-ueditor-wrap>
   </div>
 </template>
 
@@ -237,6 +239,15 @@
 export default {
   data() {
     return {
+      contents: this.contents,
+      myConfig: {
+        autoHeightEnabled: false, // 编辑器不自动被内容撑高
+        initialFrameHeight: 200, // 初始容器高度
+        initialFrameWidth: '100%', // 初始容器宽度
+        UEDITOR_HOME_URL: '/UEditor/',
+        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
+        serverUrl: `/ueditorUploads`
+      },
       // 团队成员
       teamData: [{
         userImg: require('@/assets/images/user.jpeg'),
@@ -644,7 +655,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
-      
+
       #targetTable {
         width: 100%;
         height: 300px;
@@ -689,7 +700,7 @@ export default {
               height: 30px;
               line-height: 30px;
             }
-            
+
             .item-role{
               font-size: 14px;
               color: #777;

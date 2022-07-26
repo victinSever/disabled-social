@@ -11,7 +11,8 @@ import ElementUI from 'element-ui';
 import echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
-
+import VueUeditorWrap from 'vue-ueditor-wrap'
+Vue.component('vue-ueditor-wrap', VueUeditorWrap)
 //基础地址
 axios.defaults.baseURL = "http://119.91.135.239:6324/";
 
