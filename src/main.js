@@ -13,8 +13,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 import VueUeditorWrap from 'vue-ueditor-wrap'
 Vue.component('vue-ueditor-wrap', VueUeditorWrap)
+
 //基础地址
-axios.defaults.baseURL = "http://119.91.135.239:6324/";
+axios.defaults.baseURL = "http://127.0.0.1:8080/";
 
 // axios拦截请求
 axios.interceptors.request.use(config => {

@@ -5,6 +5,13 @@
       <div class="table-header">
         <div class="table-header-left">
           <el-button
+            type="success"
+            class="el-icon-edit"
+            size="mini"
+            @click="handleAdd()"
+            >添加</el-button
+          >
+          <el-button
             type="primary"
             class="el-icon-edit"
             size="mini"
@@ -202,19 +209,35 @@
     >
       <UserDetail :personData="personData" />
     </el-dialog>
+
+    <!-- 添加单个用户 -->
+    <el-dialog
+      title="添加用户"
+      :visible.sync="dialogVisible2"
+      :before-close="handleClose"
+    >
+      <userBase ref="userBase"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="addUserData()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import UserDetail from "@/components/user/userDetail.vue";
+import userBase from "@/components/user/userBase.vue";
+import nProgress from 'nprogress'
 export default {
   components: {
-    UserDetail,
+    UserDetail,userBase
   },
   data() {
     return {
       // 弹窗显示
-      dialogVisible: false,
+      dialogVisible: false,//详细信息
+      dialogVisible2: false,//添加单个用户
       personData: {
         baseData: {
           role: 0, //0为用户，1为管理员
@@ -266,7 +289,7 @@ export default {
       page: {
         pageSize: 10,
         pageNum: 1,
-        total: 400,
+        total: 20,
       },
 
       // 被选择
@@ -346,6 +369,18 @@ export default {
     };
   },
   methods: {
+    addUserData(){    
+      let data = this.$refs.userBase.returnData()
+      console.log(data);
+      if(data !== false){
+        nProgress.start()
+        this.$message.success('添加成功')
+        this.handleClose()
+        nProgress.done()
+      }         
+      
+    },
+
     // 刷新页面数据
     refreshPage(){
       location.reload()
@@ -354,13 +389,21 @@ export default {
     //关闭窗口
     handleClose() {
       this.dialogVisible = false
+      this.dialogVisible2 = false
     },
 
     // 打开详情diaglo
-    openDetail(index, row) {
-      console.log(index, row);
-      this.dialogVisible = true;
+    openDetail(index, row) {  
       this.peronData = row;
+      this.dialogVisible = true;
+    },
+    // 添加单个
+    handleAdd(){
+      this.dialogVisible2 = true
+    },
+    // 批量添加
+    handleAddMore(scope) {
+      this.$message.warning("该功能未完成");
     },
 
     // 删除一个
@@ -379,10 +422,7 @@ export default {
       console.log(this.multipleSelection);
       this.$message.warning("暂未开放功能");
     },
-    // 批量添加
-    handleAddMore(scope) {
-      this.$message.warning("暂未开放功能");
-    },
+    
     // 多选
     handleSelectionChange(val) {
       this.multipleSelection = val;

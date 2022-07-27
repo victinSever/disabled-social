@@ -70,8 +70,8 @@
           label="活动封面"
           width="100"
           align="center"
-        > 
-        <template slot-scope="scope">
+        >
+          <template slot-scope="scope">
             <div class="block">
               <el-avatar
                 shape="square"
@@ -120,7 +120,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="signUp"
+          prop="signUpNum"
           label="报名人数"
           width="150"
           align="center"
@@ -196,32 +196,34 @@
 
     <!-- 更新活动-->
     <el-drawer
-      :title="type === 1 ? '更新活动':'新建活动'"
+      :title="type === 1 ? '更新活动' : '新建活动'"
       :visible.sync="dialogVisible"
       direction="rtl"
       :before-close="handleClose"
-      width="800px"    >
-      <updateActivity :adverData="adverData" ref="updateAdver" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveData">确 定</el-button>
-      </div>
+      size="90%"
+    >
+      <el-col :span="20" :offset="2">
+        <activity :adverData="adverData" ref="activity" />
+        <div class="demo-drawer-footer">
+          <el-button @click="handleClose">取 消</el-button>
+          <el-button type="primary" @click="saveData(false)">确 定</el-button>
+        </div>
+      </el-col>
     </el-drawer>
-
   </div>
 </template>
 
 <script>
-import updateActivity from "@/components/activity/updateActivity.vue";
+import activity from "@/components/activity/index.vue";
 export default {
   components: {
-    updateActivity,
+    activity,
   },
   data() {
     return {
       // 弹窗显示
       dialogVisible: false,
-      type: 1,//1表示更新，2表示添加
+      type: 1, //1表示更新，2表示添加
 
       page: {
         pageSize: 10,
@@ -245,7 +247,8 @@ export default {
           order: 1,
           status: 1,
           views: 234, //关注度
-          signUp: 20, //报名人数
+          signUpNum: 20, //报名人数
+          isSignUp: false, //是否可报名
           startTime: "2022/7/25 14:39",
           endTime: "2022/7/25 14:39",
           createTime: "2022/7/25 14:39",
@@ -258,9 +261,10 @@ export default {
     };
   },
   methods: {
+    //
     // 修改单个数据请求
     saveData() {
-      let data = this.$refs.updateAdver.returnData();
+      let data = this.$refs.activity.returnData();
       console.log(data);
       this.$message.success("修改成功！");
       this.handleClose(); //关闭窗口
@@ -287,7 +291,7 @@ export default {
     // 打开详情dialog
     handleEdit(index, row) {
       this.adverData = row;
-      this.type = 1
+      this.type = 1;
       this.dialogVisible = true;
     },
 
@@ -310,7 +314,7 @@ export default {
     },
     // 添加
     handleAdd() {
-    this.type = 1
+      this.type = 1;
       this.adverData = {};
       this.dialogVisible = true;
     },
@@ -347,5 +351,9 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.demo-drawer-footer {
+  margin: 30px 0;
 }
 </style>

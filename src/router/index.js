@@ -93,11 +93,6 @@ const routes = [{
             component: () => import('@/views/business/activity.vue'),
         },
         {
-            path: 'activitySort',
-            meta: { title: '活动位管理 - MPDF' },
-            component: () => import('@/views/business/activitySort.vue'),
-        },
-        {
             path: 'celebration',
             meta: { title: '节日庆典 - MPDF' },
             component: () => import('@/views/business/celebration.vue'),
@@ -127,6 +122,21 @@ const routes = [{
             meta: { title: '会员管理 - MPDF' },
             component: () => import('@/views/user/vipUser.vue'),
         }
+    ]
+},
+
+// 个人中心
+
+{
+    path: '/person',
+    meta: { title: '个人中心' },
+    component: () => import('@/views/home/home.vue'),
+    children: [
+        {
+            path: 'personData',
+            meta: { title: '个人资料 - MPDF' },
+            component: () => import('@/views/person/personData.vue'),
+        },
     ]
 },
 

@@ -42,13 +42,13 @@
           <div class="home-header-Info">
             <div
               class="user_avatar_search user_avatar_i"
-              @click="$router.push('/products')"
+              @click="$router.push('/dashboard/workplace')"
             >
               <i class="el-icon-search"></i>
             </div>
             <div
               class="user_avatar_bell user_avatar_i"
-              @click="$router.push('/logs')"
+              @click="$router.push('/dashboard/workplace')"
             >
               <el-tooltip
                 class="item"
@@ -77,7 +77,7 @@
             </div>
             <div
               class="user_avatar_message user_avatar_i"
-              @click="$router.push('/loginLog')"
+              @click="$router.push('/dashboard/workplace')"
             >
               <el-tooltip
                 class="item"
@@ -112,7 +112,7 @@
                 <el-dropdown-item>
                   <span
                     class="el-icon-s-home"
-                    @click="$router.push({ name: 'home' })"
+                    @click="$router.push('/dashboard/workplace')"
                     >系统首页</span
                   >
                 </el-dropdown-item>
