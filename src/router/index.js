@@ -59,11 +59,6 @@ const routes = [{
             component: () => import('@/views/system/admin.vue'),
         },
         {
-            path: 'department',
-            meta: { title: '部门管理 - MPDF' },
-            component: () => import('@/views/system/department.vue'),
-        },
-        {
             path: 'menu',
             meta: { title: '菜单管理 - MPDF' },
             component: () => import('@/views/system/menu.vue'),
@@ -117,11 +112,6 @@ const routes = [{
             meta: { title: '用户管理 - MPDF' },
             component: () => import('@/views/user/commontUser.vue'),
         },
-        {
-            path: 'vipUser',
-            meta: { title: '会员管理 - MPDF' },
-            component: () => import('@/views/user/vipUser.vue'),
-        }
     ]
 },
 

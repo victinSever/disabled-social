@@ -156,11 +156,20 @@
           align="center"
         ></el-table-column>
 
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" width="300" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button
               size="mini"
+              class="el-icon-view"
+              type="success"
+              @click="handleDetail(scope.$index, scope.row)"
+              >报名情况</el-button
+            >
+
+            <el-button
+              size="mini"
               class="el-icon-edit"
+              type="primary"
               @click="handleEdit(scope.$index, scope.row)"
               >更新</el-button
             >
@@ -210,19 +219,31 @@
         </div>
       </el-col>
     </el-drawer>
+
+    <el-drawer
+      title="报名详情"
+      :visible.sync="dialogVisible2"
+      direction="rtl"
+      :before-close="handleClose"
+      size="90%"
+    >
+        <activityDetail :adverData="adverData"/>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import activity from "@/components/activity/index.vue";
+import activityDetail from "@/components/activity/detail.vue";
 export default {
   components: {
-    activity,
+    activity,activityDetail
   },
   data() {
     return {
       // 弹窗显示
       dialogVisible: false,
+      dialogVisible2: false,
       type: 1, //1表示更新，2表示添加
 
       page: {
@@ -283,9 +304,15 @@ export default {
       location.reload();
     },
 
+    //报名详情
+    handleDetail(index, row) {
+      this.dialogVisible2 = true;
+    },
+
     //关闭窗口
     handleClose() {
       this.dialogVisible = false;
+      this.dialogVisible2 = false;
     },
 
     // 打开详情dialog
