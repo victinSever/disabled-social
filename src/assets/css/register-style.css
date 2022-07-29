@@ -1,75 +1,25 @@
 .register {
     /* 页面宽度为百分之百页面大小，几位一个视角长 */
     height: 100vh;
+    width: 100vw;
     /* 弹性布局，水平居中 */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000;
+    background:linear-gradient(45deg, #777,#fff,#eee,#ddd);
     /* 溢出隐藏 */
     overflow: hidden;
 }
 
-.containerBox {
-    /* 设置视距 */
-    perspective: 120px;
-    /* 设置3D元素的基准点位置 */
-    perspective-origin: 50% 50%;
-}
 
-.wrap {
-    /* 绝对定位 */
-    position: absolute;
-    width: 1000px;
-    height: 1000px;
-    left: -500px;
-    top: -500px;
-    /* 开启3D效果 */
-    transform-style: preserve-3d;
-    /* 自定义动画 */
-    animation: move 40s linear infinite;
-}
-
-.wall {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url(../images/space2.jpg) no-repeat;
-    /* 保持原有尺寸比例并且裁剪长边 */
-    background-size: cover;
-}
-
-
-/* 为各个方向的墙设置旋转角度和z轴位移 */
-
-.wall-top {
-    transform: rotateX(90deg) translateZ(500px);
-}
-
-.wall-bottom {
-    transform: rotateX(-90deg) translateZ(500px);
-}
-
-.wall-left {
-    transform: rotateY(-90deg) translateZ(500px);
-}
-
-.wall-right {
-    transform: rotateY(90deg) translateZ(500px);
-}
-
-.wall-back {
-    transform: rotateX(180deg) translateZ(500px);
-}
 
 .form-box2 {
-    transform: translateY(-20%);
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #000;
     width: 400px;
-    height: 550px;
+    height: 400px;
     border-radius: 15px;
     /* 背景阴影 */
-    backdrop-filter: blur(20px);
+    /* backdrop-filter: blur(20px); */
     /* 阴影 */
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
@@ -84,18 +34,17 @@
 .form-box2 input {
     /* width: 300px; */
     height: 30px;
-    background: transparent;
+    /* background: transparent; */
     text-indent: 8px;
     border: none;
     border-radius: none;
     outline: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-    color: #fff;
     margin: 15px auto;
 }
 
 .form-box2 input::placeholder {
-    color: rgba(170, 169, 169, 0.8);
+    /* color: rgba(170, 169, 169, 0.8); */
     letter-spacing: 2px;
 }
 

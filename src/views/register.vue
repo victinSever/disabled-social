@@ -3,148 +3,100 @@
     <div class="topBox">
       <span>已有账号？ <router-link to="/login">去登陆</router-link></span>
     </div>
-    <div class="containerBox">
-      <!-- 背景 -->
-      <div class="wrap">
-        <div class="wall wall-front"></div>
-        <div class="wall wall-top"></div>
-        <div class="wall wall-bottom"></div>
-        <div class="wall wall-left"></div>
-        <div class="wall wall-right"></div>
-        <div class="wall wall-back"></div>
-      </div>
 
-      <div class="form-box2">
-        <el-card>
-          <el-form
-            ref="formRef"
-            :rules="formRules"
-            status-icon
-            :model="formData"
-          >
-            <!-- 标题 -->
-            <h1 class="title">管理员注册</h1>
-            <!-- 账号 -->
-            <el-form-item prop="account">
-              <el-input
-                prefix-icon="el-icon-user"
-                v-model="formData.account"
-                placeholder="登陆账号"
-              ></el-input>
-            </el-form-item>
-            <!-- 用户名 -->
-            <el-form-item prop="userName">
-              <el-input
-                prefix-icon="el-icon-user"
-                v-model="formData.userName"
-                placeholder="用户名"
-              ></el-input>
-            </el-form-item>
-            <!-- 密码 -->
-            <el-form-item prop="password">
-              <el-input
-                show-password
-                prefix-icon="el-icon-suitcase"
-                v-model="formData.password"
-                placeholder="密码"
-              ></el-input>
-            </el-form-item>
-            <!-- 验证密码 -->
-            <el-form-item prop="passwordS">
-              <el-input
-                show-password
-                prefix-icon="el-icon-suitcase"
-                v-model="formData.passwordS"
-                placeholder="确认密码"
-              ></el-input>
-            </el-form-item>
-            <!-- 4位验证码 -->
-            <el-form-item prop="verifyCode">
-              <div style="display: flex">
-                <el-input
-                  v-model="formData.verifyCode"
-                  prefix-icon="el-icon-mobile"
-                  class="verify_code"
-                  placeholder="请输入验证码"
-                ></el-input>
-                <img
-                  :src="imgCode"
-                  alt=""
-                  class="verify_img"
-                  style="
-                    margin-left: 10px;
-                    cursor: pointer;
-                    height: 40px;
-                    border-radius: 10px;
-                  "
-                  @click="uploadeImgCode"
-                />
-              </div>
-            </el-form-item>
-            <el-form-item>
+    <div class="form-box2">
+      <el-card>
+        <el-form ref="formRef" :rules="formRules" status-icon :model="formData">
+          <!-- 标题 -->
+          <h1 class="title">管理员注册</h1>
+          <!-- 账号 -->
+          <el-form-item prop="account">
+            <el-input
+              prefix-icon="el-icon-user"
+              v-model="formData.account"
+              placeholder="登陆账号"
+            ></el-input>
+          </el-form-item>
+          <!-- 用户名 -->
+          <el-form-item prop="userName">
+            <el-input
+              prefix-icon="el-icon-user"
+              v-model="formData.userName"
+              placeholder="用户名"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item prop="password">
+            <el-input
+              show-password
+              prefix-icon="el-icon-suitcase"
+              v-model="formData.password"
+              placeholder="密码"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item prop="passwordS">
+            <el-input
+              show-password
+              prefix-icon="el-icon-suitcase"
+              v-model="formData.passwordS"
+              placeholder="验证密码"
+            ></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <div class="role-and-depar">
               <!-- 部门 -->
-              <span style="float: left"
-                ><span
-                  class="el-icon-mobile"
-                  style="color: rgba(255, 255, 255, 0.8); margin: 0 10px"
-                ></span>
-                <el-select
-                  v-model="formData.department"
-                  placeholder="部门"
-                  style="width: 100px"
-                  clearable
+              <el-select
+                v-model="formData.department"
+                placeholder="部门"
+                style="width: 100px"
+                clearable
+              >
+                <el-option
+                  v-for="item in departments"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.disabled"
                 >
-                  <el-option
-                    v-for="item in departments"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  >
-                  </el-option> </el-select
-              ></span>
+                </el-option> </el-select
+            >
 
-              <!-- 管理员等级 -->
-              <span style="float: right">
-                <span
-                  class="el-icon-mobile"
-                  style="color: rgba(255, 255, 255, 0.8); margin: 0 10px"
-                ></span>
-                <el-select
-                  v-model="formData.role"
-                  placeholder="管理员等级"
-                  style="width: 150px"
-                  clearable
+            <!-- 管理员等级 -->
+              <el-select
+                v-model="formData.role"
+                placeholder="管理员等级"
+                style="width: 150px"
+                clearable
+              >
+                <el-option
+                  v-for="item in roles"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.disabled"
                 >
-                  <el-option
-                    v-for="item in roles"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  >
-                  </el-option>
-                </el-select>
-              </span>
-            </el-form-item>
-            <!-- 注册按钮 -->
-            <el-form-item class="form-commit">
+                </el-option>
+              </el-select>
+            </div>
+          </el-form-item>
+          <!-- 注册按钮 -->
+          <el-form-item>
+            <div class="form-commit">
               <el-button
-                type="primary"
-                icon="el-icon-finished"
-                @click="submitFormData"
-                >注册</el-button
-              >
-              <el-button
-                icon="el-icon-refresh"
-                type="primary"
-                @click="resetForm"
-                >重置</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </div>
+              type="primary"
+              icon="el-icon-finished"
+              @click="submitFormData"
+              >注册</el-button
+            >
+            <el-button icon="el-icon-refresh" type="primary" @click="resetForm"
+              >重置</el-button
+            >
+            </div>
+          </el-form-item>
+        </el-form>
+      </el-card>
     </div>
   </div>
 </template>
@@ -163,14 +115,11 @@ export default {
       }
     };
     return {
-      imgCode: "",
-      code: "",
       formData: {
         account: "",
         userName: "",
         password: "",
         passwordS: "",
-        verifyCode: "",
         department: "",
         role: "",
       },
@@ -235,14 +184,11 @@ export default {
         { label: "信息技术支持部", value: "信息技术支持部", disabled: false },
       ], //部门数据
       roles: [
-        { label: "管理员", value: "管理员", disabled: false },
-        { label: "部门主管", value: "部门主管", disabled: false },
+        { label: "管理员", value: "0", disabled: false },
+        { label: "审核员", value: "1", disabled: false },
         { label: "超级管理员", value: "超级管理员", disabled: true },
       ], //部门数据
     };
-  },
-  mounted() {
-    this.uploadeImgCode();
   },
   methods: {
     //提交表单
@@ -258,12 +204,6 @@ export default {
 
     //注册信息发送
     async sentData() {
-      //判断验证码的正误
-      if (this.code !== this.formData.verifyCode.toLowerCase()) {
-        this.isShow = false;
-        return this.$message.error("验证码出错！");
-      }
-
       const data = {
         account: this.formData.account,
         userName: this.formData.userName,
@@ -283,27 +223,6 @@ export default {
       }
     },
 
-    //加载图形验证码
-    async uploadeImgCode() {
-      try {
-        const res = await this.$http({
-          method: "get",
-          url: "user/showCode",
-          responseType: "arraybuffer",
-        });
-        if (res.status === 200) {
-          let binaryData = [];
-          binaryData.push(res.data);
-          this.imgCode = window.URL.createObjectURL(new Blob(binaryData)); //获取验证码图片
-          this.code = res.headers.code.toLowerCase();
-        } else {
-          this.$message.error("访问错误！");
-        }
-      } catch (err) {
-        this.$message.error("悄悄告诉你，服务器偷偷开小差去了！");
-      }
-    },
-
     //重置表单
     resetForm() {
       this.$refs.formRef.resetFields();
@@ -319,39 +238,73 @@ export default {
 };
 </script>
 
-<style scoped>
-/* 引入特效css */
-@import url(../assets/css/register-style.css);
+<style scoped lang='less'>
+
 
 .register {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  padding-top: calc((100vh - 550px) / 2);
-  top: 0;
+    /* 页面宽度为百分之百页面大小，几位一个视角长 */
+    height: 100vh;
+    width: 100vw;
+    /* 弹性布局，水平居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:linear-gradient(45deg, #777,#fff,#eee,#ddd);
+    /* 溢出隐藏 */
+    overflow: hidden;
 }
 
 
-.el-form-item {
-  margin: 5px 0;
+
+.form-box2 {
+    background-color: #000;
+    border-radius: 15px;
+    /* 背景阴影 */
+    backdrop-filter: blur(20px);
+    /* 阴影 */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
-.el-card {
-  width: 400px;
-  height: 550px;
-  background-color: transparent;
-  border: none;
+.form-box2 .title {
+    text-align: center;
+    letter-spacing: 2px;
+    color: #74b9ff;
+    margin: 20px 0;
+    font-size: 20px;
 }
 
-.form-commit {
-  margin-top: 10px;
+.form-box2 input {
+    /* width: 300px; */
+    height: 30px;
+    /* background: transparent; */
+    text-indent: 8px;
+    border: none;
+    border-radius: none;
+    outline: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+    margin: 15px auto;
+}
+
+.form-box2 input::placeholder {
+    /* color: rgba(170, 169, 169, 0.8); */
+    letter-spacing: 2px;
+}
+
+.role-and-depar{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
-.el-input__inner {
-  border-radius: none;
+
+.form-commit{
+  display: flex;
+  justify-content: space-around;
+  button{
+    width: 150px;
+    border-radius: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
 }
 
 /* 头部链接 */

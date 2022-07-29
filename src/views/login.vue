@@ -66,12 +66,19 @@
             ></el-input>
           </el-form-item>
 
-          <!-- 记住密码 -->
-          <el-checkbox
-            v-model="checked"
-            style="margin-left: 130px; color: #fefefe"
-            >记住密码</el-checkbox
-          >
+          <el-form-item>
+            <div class="check">
+              <span @click="gotoSearchPassward">忘记密码</span>
+              <!-- 记住密码 -->
+              <el-checkbox
+                v-model="checked"
+                style="margin-left: 100px; color: #fefefe"
+                >记住密码</el-checkbox
+              >
+            </div>
+          </el-form-item>
+
+          
           <!-- 登录按钮 -->
           <el-form-item class="form-commit">
             <el-button
@@ -568,6 +575,11 @@ export default {
   methods: {
     ...mapMutations(["setUserInfo", "setMenuList"]),
 
+    // 找回密码
+    gotoSearchPassward(){
+      this.$message.warning('暂未开放找回密码通道！')
+    },
+
     //提交表单
     submitFormData() {
       this.$refs.formRef.validate((valid) => {
@@ -636,6 +648,20 @@ export default {
 <style scoped>
 /* 引入特效css */
 @import url(../assets/css/login-style.css);
+
+.check{
+  display:flex;
+  justify-content: center;
+}
+
+.check span{
+  color: skyblue;
+  cursor: pointer;
+}
+
+.check span:hover{
+  color: #fefefe;
+}
 
 .body {
 }
