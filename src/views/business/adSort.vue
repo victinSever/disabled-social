@@ -60,13 +60,13 @@
         </el-table-column>
 
         <el-table-column
-          prop="title"
+          prop="description"
           label="广告位描述"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="position"
+          prop="place"
           label="广告位位置"
           width="150"
           align="center"
@@ -104,7 +104,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="order"
+          prop="number"
           label="序号"
           width="80"
           align="center"
@@ -112,13 +112,13 @@
         <el-table-column
           prop="createTime"
           label="创建时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="pusblishTime"
+          prop="updateTime"
           label="更新时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
 
@@ -179,6 +179,7 @@
 
 <script>
 import adSort from "@/components/adverSort/adSort.vue";
+import { getAdvertiseplaceList } from '@/api/manage'
 export default {
   components: {
     adSort,
@@ -217,7 +218,20 @@ export default {
       ],
     };
   },
+  mounted(){
+    this.getData()
+  },
   methods: {
+    // 查询数据
+    async getData(){
+      const { data: res} = await getAdvertiseplaceList({
+        size: this.page.pageSize,
+        page: this.page.pageNum
+      })
+      console.log(res);
+      this.tableData = res.list
+      this.page.total = res.total
+    },
     // 修改单个数据请求
     saveData() {
       let data = this.$refs.updateAdver.returnData();

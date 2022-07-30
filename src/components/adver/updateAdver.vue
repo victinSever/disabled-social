@@ -13,10 +13,9 @@
             class="avatar-uploader"
             action=""
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="data.imgPath" :src="data.imgPath" class="avatar" />
+            <img v-if="imgUrl" :src="imgUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -30,13 +29,13 @@
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="广告链接" prop="url">
-            <el-input v-model="data.url" placeholder="输入链接" clearable
+          <el-form-item label="广告链接" prop="advertisingLinks">
+            <el-input v-model="data.advertisingLinks" placeholder="输入链接" clearable
               ><template slot="prepend">Http://</template></el-input
             >
           </el-form-item>
-          <el-form-item label="型号" prop="size">
-            <el-select v-model="data.size" placeholder="请选择型号">
+          <el-form-item label="型号" prop="advertisedModel">
+            <el-select v-model="data.advertisedModel" placeholder="请选择型号">
               <el-option
                 v-for="item in adverSize"
                 :key="item.value"
@@ -47,9 +46,9 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="序号" prop="order">
+          <el-form-item label="序号" prop="ordinal">
             <el-input-number
-              v-model="data.order"
+              v-model="data.ordinal"
               controls-position="right"
               :min="1"
               :max="10"
@@ -69,7 +68,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="所属广告位" prop="name">
-            <el-select v-model="data.position" placeholder="请选择广告位">
+            <el-select v-model="data.unit" placeholder="请选择广告位">
               <el-option
                 v-for="item in adverPosition"
                 :key="item.value"
@@ -142,6 +141,8 @@ export default {
         order: [{ required: true, message: "请输入数字", trigger: "change" }],
         status: [{ required: true, message: "请选择状态", trigger: "change" }],
       },
+      imgUrl: '',
+      appearencePath: '',
 
       //   广告位
       adverPosition: [
@@ -238,28 +239,28 @@ export default {
   },
   watch:{
     adverData(){
+      if(this.adverData === {}){
+        this.data = {
+          imgPath: ''
+        } 
+      }else
         this.data = this.adverData
     }
   },
   methods: {
-    // 上传生成
-    handleAvatarSuccess(res, file) {
-      this.data.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+    beforeAvatarUpload(file) {     
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!');
-      // }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+
+      this.appearencePath = file
+      this.imgUrl = URL.createObjectURL(file);
+      return isLt2M;
     },
     // 父组件调用
-    returnData(){
+    returnData(){   
       return this.data
     }
   },

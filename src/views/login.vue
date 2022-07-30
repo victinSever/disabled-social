@@ -36,7 +36,7 @@
           没有账号？请点击右上角注册
         </marquee>
         <el-form
-          ref="formRef"
+          ref="loginForm"
           :rules="formRules"
           status-icon
           :model="formData"
@@ -422,64 +422,7 @@ export default {
         },
       ],
       // 审核员菜单栏数据
-      menuList2: [
-        {
-          id: 1,
-          parentId: 0,
-          menuName: "控制面板",
-          parentName: "",
-          url: "",
-          icon: "el-icon-house",
-          orderNum: 1,
-          open: 1,
-          disabled: false,
-          perms: null,
-          type: 0,
-          children: [
-            {
-              id: 11,
-              parentId: 1,
-              menuName: "工作台",
-              parentName: "控制面板",
-              url: "/dashboard/workplace",
-              icon: "el-icon-monitor",
-              orderNum: 1,
-              open: 0,
-              disabled: false,
-              perms: "welcome:view",
-              type: 0,
-              children: [],
-            },
-            {
-              id: 12,
-              parentId: 1,
-              menuName: "分析页",
-              parentName: "控制面板",
-              url: "/dashboard/analysis",
-              icon: "el-icon-data-analysis",
-              orderNum: 1,
-              open: 0,
-              disabled: false,
-              perms: "welcome:view",
-              type: 0,
-              children: [],
-            },
-            {
-              id: 13,
-              parentId: 1,
-              menuName: "监控",
-              parentName: "控制面板",
-              url: "/dashboard/monitor",
-              icon: "el-icon-monitor",
-              orderNum: 1,
-              open: 0,
-              disabled: false,
-              perms: "welcome:view",
-              type: 0,
-              children: [],
-            },
-          ],
-        },
+      menuList2: [     
         {
           id: 2,
           parentId: 0,
@@ -582,7 +525,7 @@ export default {
 
     //提交表单
     submitFormData() {
-      this.$refs.formRef.validate((valid) => {
+      this.$refs.loginForm.validate((valid) => {
         if (!valid) {
           return this.$message.warning("输入数据不合法！");
         } else {
@@ -616,30 +559,26 @@ export default {
       // 向vuex中存储个人信息和菜单栏信息
       this.setUserInfo(this.formData);
       this.setMenuList(this.menuList);
+      // 存储token
+      sessionStorage.setItem("token", "sfdgsbfjhsFBDSAHJFSDFL");
 
       if (data.userName != "admin") {
         this.setMenuList(this.menuList2);
+        this.$router.push("/person/personData");
+      }else{
+        // 跳转至主页
+        this.$router.push("/dashboard/workplace");
       }
-
-      // 存储token
-      sessionStorage.setItem("token", "sfdgsbfjhsFBDSAHJFSDFL");
-      // 跳转至主页
-      this.$router.push("/dashboard/workplace");
+     
       this.$message.success(
         (this.formData.role === 1 ? "管理员" : "审核员") +
           this.formData.userName +
           "，欢迎登录"
       );
     },
-
     //重置表单
     resetForm() {
-      this.$refs.formRef.resetFields();
-    },
-
-    // 用户点击遮罩层，应该关闭模态框
-    close() {
-      this.isShow = false;
+      this.$refs.loginForm.resetFields();
     },
   },
 };

@@ -24,10 +24,12 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex';
     export default {
         name: "MenuTree",
         props: ['menuList'],
         methods: {
+            ...mapMutations(["setBreadcrumb"]),
             //保存激活路径
             savePath(item) {
                 let breadcrumb = [{
@@ -38,7 +40,7 @@
                     label: item.menuName
                 }]
                 this.$bus.$emit('changeBreadcrumb',breadcrumb)
-                sessionStorage.setItem('breadcrumb', breadcrumb)            
+                this.setBreadcrumb(breadcrumb)           
             },
 
         }

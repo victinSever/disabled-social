@@ -294,8 +294,15 @@ export default {
       ],
     };
   },
+  mounted(){
+    this.getData()
+  },
   methods: {
-    //
+    // 查询数据
+    async getData(){
+      const { data: res} = await this.$http.get('/business/getFestivalList?size=4&page=1')
+      console.log(res);
+    },
     // 修改单个数据请求
     saveData() {
       let data = this.$refs.cele.returnData();

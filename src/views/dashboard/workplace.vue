@@ -41,7 +41,7 @@
     <!-- 快捷入口 -->
     <el-row class="entrance">
       <el-card v-for="(item, i) in entrance" :key="i" shadow="hover">
-        <div class="entrance-item">
+        <div class="entrance-item" @click="$router.push(item.router)">
           <i :class="item.icon" :style="'color:' + item.color"></i>
           <span>{{ item.label }}</span>
         </div>
@@ -345,41 +345,49 @@ export default {
           icon: "el-icon-user",
           color: "skyblue",
           label: "用户管理",
+          router: '/user/commontUser'
         },
         {
           icon: "el-icon-data-line",
           color: "lightgreen",
           label: "广告投放",
+          router: '/business/adver'
         },
         {
           icon: "el-icon-menu",
           color: "lightred",
           label: "创建活动",
+          router: '/business/activity'
         },
         {
           icon: "el-icon-s-ticket",
           color: "purple",
           label: "节日庆典",
+          router: '/business/celebration'
         },
         {
           icon: "el-icon-s-promotion",
           color: "lightgrey",
-          label: "用户管理",
+          label: "特权管理",
+          router: '/business/vip'
         },
         {
           icon: "el-icon-data-analysis",
           color: "green",
-          label: "用户管理",
+          label: "监控",
+          router: '/dashboard/monitor'
         },
         {
           icon: "el-icon-files",
           color: "pink",
-          label: "用户管理",
+          label: "数据分析",     
+          router: '/dashboard/analysis'
         },
         {
           icon: "el-icon-shopping-bag-2",
           color: "orange",
-          label: "用户管理",
+          label: "个人中心",
+          router: '/person/personData'
         },
       ],
     };

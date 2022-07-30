@@ -55,11 +55,19 @@
             <el-tag v-else type="success">通过</el-tag>           
           </div>
         </el-form-item>
+        <el-form-item label="未通过原因" v-if="data.status >= 3 && !isPass">
+          <el-input
+          type="textarea"
+          placeholder="填写不予通过原因"
+          focus
+          v-model="faileResult"
+        ></el-input>
+        </el-form-item>
         <el-form-item label="是否发布" v-if="data.status === 2 || data.status === 4">
           <el-button type="primary" v-if="data.status === 2" @click="auditActive(4)">发布</el-button>
           <el-tag type="success" v-else>发布成功</el-tag>
         </el-form-item>
-        <el-form-item label="继续" v-if="data.status >= 2">
+        <el-form-item label="继续" v-if="data.status == 2 || data.status == 4 || (faileResult && data.status == 3)">
           <el-button type="primary" @click="getNext">审核下一个</el-button>
         </el-form-item>
       </el-form>     
@@ -72,7 +80,9 @@ export default {
   props: ['itemData'],
   data(){
     return {
-      data: {}
+      data: {},
+      isPass: false,//是否填写
+      faileResult: ''
     }
   },
   watch: {
@@ -85,7 +95,8 @@ export default {
     // 审核
     auditActive(judge){
       this.data.status = judge;
-      if (judge === 2) {     
+      if (judge === 2) {
+        this.isPass = true     
         this.$message.success("审核通过！");
       } else if(judge === 3){
         this.$message.error("审核未通过！");

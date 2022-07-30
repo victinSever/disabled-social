@@ -66,21 +66,24 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="position"
+          prop="unit"
           label="所属广告位"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column label="广告类型" width="150" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.type === 0" size="mini" type="success"
-              >图片广告</el-tag
+            <el-tag v-if="scope.row.type == 0" size="mini" type="success"
+              >图片</el-tag
             >
-            <el-tag v-else-if="scope.row.type === 1" size="mini" style="primary"
-              >链接广告</el-tag
+            <el-tag v-else-if="scope.row.type == 1" size="mini" style="primary"
+              >文字</el-tag
             >
-            <el-tag v-else-if="scope.row.type === 2" size="mini" style="warning"
-              >图标广告</el-tag
+            <el-tag v-else-if="scope.row.type == 2" size="mini" style="warning"
+              >视频</el-tag
+            >
+            <el-tag v-else-if="scope.row.type == 3" size="mini" style="danger"
+              >链接</el-tag
             >
           </template>
         </el-table-column>
@@ -90,41 +93,41 @@
               <el-avatar
                 shape="square"
                 :size="30"
-                :src="scope.row.imgPath"
+                :src="scope.row.appearencePath"
               ></el-avatar>
             </div>
           </template>
         </el-table-column>
         <el-table-column label="广告状态" width="150" align="center">
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.status"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
+            <el-tag v-if="scope.row.status === 0" size="mini" type="success"
+              >开放</el-tag
             >
-            </el-switch>
+            <el-tag v-else-if="scope.row.status === 1" size="mini" style="primary"
+              >未开放</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
-          prop="url"
+          prop="advertisingLinks"
           label="广告链接"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="size"
+          prop="advertisedModel"
           label="广告型号"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="views"
+          prop="viewAmount"
           label="浏览量"
           width="80"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="order"
+          prop="ordinal"
           label="序号"
           width="80"
           align="center"
@@ -132,25 +135,25 @@
         <el-table-column
           prop="startTime"
           label="开始时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="endTime"
           label="结束时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="创建时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="pusblishTime"
+          prop="updateTime"
           label="更新时间"
-          width="150"
+          width="200"
           align="center"
         ></el-table-column>
 
@@ -162,12 +165,26 @@
               @click="handleEdit(scope.$index, scope.row)"
               >修改</el-button
             >
-              <el-button size="mini" class="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)"
-                >删除</el-button
+              <el-popconfirm
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+                icon="el-icon-info"
+                icon-color="red"
+                title="确认删除该条动态？"
+                @confirm="handleDelete(scope.$index, scope.row)"
               >
+                <el-button
+                  type="danger"
+                  size="mini"
+                  class="el-icon-delete"                
+                  slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
+      
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -189,7 +206,7 @@
 
     <!-- 修改广告 -->
     <el-dialog
-      :title="type === 1 ? '添加广告':'修改广告'"
+      :title="type === 1 ? '修改广告':'添加广告'"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="800px"
@@ -206,6 +223,7 @@
 
 <script>
 import updateAdver from "@/components/adver/updateAdver.vue";
+import { getAdvertisingList, addAdvertising, deleteAdvertsing } from '@/api/manage'
 export default {
   components: {
     updateAdver,
@@ -229,31 +247,29 @@ export default {
       multipleSelection: [],
 
       // 数据
-      tableData: [
-        {
-          title: "sad",
-          id: "1",
-          position: "213",
-          order: 1,
-          type: 0,
-          imgPath: require("@/assets/images/user.jpeg"),
-          status: true,
-          url: "http://localhost:8080",
-          size: "50 * 50",
-          views: 1000, //浏览量
-          startTime: "2022/7/25 14:39", //开始时间
-          endTime: "2022/7/25 14:39", //结束时间
-          createTime: "2022/7/25 14:39", //创建时间
-          pusblishTime: "2022/7/25 14:39", //更新时间
-        },
-      ],
+      tableData: [],
     };
   },
+    mounted(){
+    this.getData()
+  },
   methods: {
+    // 查询数据
+    async getData(){
+      const {data:res} = await getAdvertisingList({
+        size: this.page.pageSize,
+        page: this.page.pageNum
+      })
+      this.tableData = res.list
+      this.page.total = res.total
+    },
+
     // 修改单个数据请求
-    saveData() {
+    async saveData() {
       let data = this.$refs.updateAdver.returnData();
       console.log(data);
+      const res = await addAdvertising(data)
+      console.log(res);
       this.$message.success("修改成功！");
       this.handleClose(); //关闭窗口
     },
@@ -284,9 +300,12 @@ export default {
     },
 
     // 删除一个
-    handleDelete(index, row) {
-      console.log(index, row);
-      this.$message.warning("暂未开放功能");
+    async handleDelete(index, row) {
+      const res = await deleteAdvertsing({
+        id: row.id
+      })
+      this.getData()
+      this.$message.warning("删除成功！");
     },
     // 批量删除
     handleDeleteMore() {
@@ -312,11 +331,13 @@ export default {
     },
     // 改变页大小
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.pageSize = val
+      this.getData()
     },
     // 改变页码
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.pageNum = val
+      this.getData()
     },
   },
 };
@@ -339,5 +360,9 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.el-button{
+  margin-right: 10px;
 }
 </style>

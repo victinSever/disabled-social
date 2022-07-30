@@ -3,7 +3,7 @@ import axios from "axios"
 
 
 //服务器端口
-let baseUrl = 'http://127.0.0.1:8080'
+let baseUrl = 'http://192.168.103.249:5210/'
 
 //图片地址
 let baseImgPath = 'http://127.0.0.1:8080/'

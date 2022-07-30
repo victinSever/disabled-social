@@ -154,13 +154,7 @@ export default {
   data() {
     return {
       // 面包屑导航数据
-      breadcrumb: [{
-        path: '',
-        label: '控制面板'
-      },{
-        path: '/dashboard/workplace',
-        label: '工作台'
-      }],
+      breadcrumb: [],
       isCollapse: false, //控制左侧导航展开和伸缩
       // tabbar菜单
       // 图标：
@@ -172,6 +166,7 @@ export default {
   },
 
   mounted() {
+    this.breadcrumb = this.$store.state.breadcrumb
     this.getMenuLists();
     this.changeBreadcrumb()
   },
@@ -181,7 +176,6 @@ export default {
       let that = this
       this.$bus.$on('changeBreadcrumb', breadcrumb => {
         that.breadcrumb = breadcrumb
-        console.log(breadcrumb);
       })
       
     },

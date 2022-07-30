@@ -131,14 +131,23 @@
                 >
               </el-popover>
 
-              <el-button
-                type="danger"
-                size="mini"
-                class="el-icon-delete"
+              <el-popconfirm
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+                icon="el-icon-info"
+                icon-color="red"
+                title="确认删除该条动态？"
                 v-if="scope.row.status >= 2"
-                @click="handelDelete(scope.$index, scope.row)"
-                >删除</el-button
+                @confirm="handelDelete(scope.$index, scope.row)"
               >
+                <el-button
+                  type="danger"
+                  size="mini"
+                  class="el-icon-delete"                
+                  slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
             </div>
           </template>
         </el-table-column>
@@ -169,7 +178,7 @@
         :before-close="handleClose"
         size="90%"
       >
-        <activeDetail :itemData="itemData" @sendAuditResult="sendAuditResult"/>
+        <activeDetail :itemData="itemData" @sendAuditResult="sendAuditResult" />
       </el-drawer>
 
       <!-- 审核原因 -->
@@ -178,9 +187,16 @@
         width="300px"
         :before-close="handleCloseDialog"
       >
-        <el-input type="textarea" placeholder="填写不予通过原因" focus v-model="faileResult"></el-input>
+        <el-input
+          type="textarea"
+          placeholder="填写不予通过原因"
+          focus
+          v-model="faileResult"
+        ></el-input>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="sendAuditResultFaile">确 定</el-button>
+          <el-button type="primary" @click="sendAuditResultFaile"
+            >确 定</el-button
+          >
         </div>
       </el-dialog>
     </el-card>
@@ -206,7 +222,7 @@ export default {
       isPass: false, //是否通过
       drawerVisible: false,
       dialogVisible: false,
-      faileResult: '',//不通过原因
+      faileResult: "", //不通过原因
       tableData: [
         {
           id: "S74856125151",
@@ -222,7 +238,10 @@ export default {
             activeInfo: {
               publishTime: "2022/7/28 19:35",
               text: "迷迷糊糊的活着",
-              imgArray: [require("@/assets/images/role-bg.png"),require("@/assets/images/space2.jpg")],
+              imgArray: [
+                require("@/assets/images/role-bg.png"),
+                require("@/assets/images/space2.jpg"),
+              ],
             },
           },
         },
@@ -257,6 +276,7 @@ export default {
       },
     };
   },
+
   methods: {
     // 查看详情抽屉
     openDrawer(index, row) {
@@ -269,7 +289,7 @@ export default {
       this.drawerVisible = false;
     },
 
-    handleCloseDialog(){
+    handleCloseDialog() {
       this.dialogVisible = false;
     },
 
@@ -278,17 +298,17 @@ export default {
 
     // 发送审核结果
     sendAuditResult(judge, index) {
-      this.index = index
+      this.index = index;
       if (judge) {
         this.tableData[index].status = 2;
         this.$message.success("审核通过！");
       } else {
-        this.dialogVisible = true
+        this.dialogVisible = true;
       }
     },
 
-    sendAuditResultFaile(){
-      this.dialogVisible = false
+    sendAuditResultFaile() {
+      this.dialogVisible = false;
       this.tableData[this.index].status = 3;
       this.$message.error("审核未通过！原因：" + this.faileResult);
     },
@@ -301,11 +321,11 @@ export default {
 
     // 改变页大小
     handleSizeChange(val) {
-      this.page.pageSize = val
+      this.page.pageSize = val;
     },
     // 改变页码
     handleCurrentChange(val) {
-      this.page.pageNum = val
+      this.page.pageNum = val;
     },
   },
 };
@@ -331,6 +351,5 @@ export default {
   .el-button {
     margin-right: 10px;
   }
-
 }
 </style>

@@ -235,6 +235,7 @@
 <script>
 import activity from "@/components/activity/index.vue";
 import activityDetail from "@/components/activity/detail.vue";
+import { deleteAdver } from '@/api/manage'
 export default {
   components: {
     activity,activityDetail
@@ -281,8 +282,18 @@ export default {
       ],
     };
   },
+  mounted(){
+    this.getData()
+  },
   methods: {
-    //
+    // 查询数据
+    getData(){
+      const { data: res } = deleteAdver({
+        size: 4,
+        page: 1
+      })
+      console.log(res);
+    },
     // 修改单个数据请求
     saveData() {
       let data = this.$refs.activity.returnData();

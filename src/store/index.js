@@ -6,8 +6,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         userInfo: JSON.parse(localStorage.getItem('userInfo')) || {},
-        menuList: JSON.parse(localStorage.getItem('menuList')) || {},
-        recentLogin: [],
+        menuList: JSON.parse(localStorage.getItem('menuList')) || [],
+        breadcrumb: JSON.parse(localStorage.getItem('breadcrumb')) || [{
+            path: '',
+            label: '控制面板'
+          },{
+            path: '/dashboard/workplace',
+            label: '工作台'
+          }],
         logs: []
     },
     mutations: {
@@ -21,13 +27,15 @@ export default new Vuex.Store({
             localStorage.setItem('menuList', JSON.stringify(menuList)); 
             state.menuList = menuList;
         },
+        // 存储面包屑信息数组
+        setBreadcrumb(state, breadcrumb) {
+            localStorage.setItem('breadcrumb', JSON.stringify(breadcrumb)); 
+            state.breadcrumb = breadcrumb;
+        },
         addLogs(state, data) {
             state.logs.push(data);
         },
-        //七天的登陆信息
-        setRecentLogin(state, data) {
-            state.recentLogin = data;
-        },
+
     },
     actions: {},
     modules: {}

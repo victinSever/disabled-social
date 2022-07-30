@@ -15,12 +15,13 @@ import VueUeditorWrap from 'vue-ueditor-wrap'
 Vue.component('vue-ueditor-wrap', VueUeditorWrap)
 
 //基础地址
-axios.defaults.baseURL = "http://127.0.0.1:8080/";
+axios.defaults.baseURL = "http://192.168.103.249:5210/";
 
 // axios拦截请求
 axios.interceptors.request.use(config => {
     config.headers.Authorization = window.sessionStorage.getItem('token')
-        //为请求对象添加token验证的Authorization
+    // config.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:8080"
+    //为请求对象添加token验证的Authorization
     return config
 })
 Vue.prototype.$http = axios
