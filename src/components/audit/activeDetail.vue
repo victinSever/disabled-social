@@ -77,7 +77,7 @@
 
 <script>
 export default {
-  props: ['itemData'],
+  props: ['itemData','result'],
   data(){
     return {
       data: {},
@@ -89,6 +89,10 @@ export default {
     itemData: {
       immediate: true,
       handler() { this.data = this.itemData }
+    },
+    result: {
+      immediate: true,
+      handler() { this.faileResult = this.result }
     }
   },
   methods: {

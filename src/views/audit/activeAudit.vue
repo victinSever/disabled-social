@@ -272,7 +272,7 @@ export default {
         pageNum: 1,
         total: 20,
         keyword: "",
-        status: 0,
+        status: '',
       },
     };
   },

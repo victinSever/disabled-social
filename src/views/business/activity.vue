@@ -235,7 +235,7 @@
 <script>
 import activity from "@/components/activity/index.vue";
 import activityDetail from "@/components/activity/detail.vue";
-import { deleteAdver } from '@/api/manage'
+import { getActivityList } from '@/api/manage'
 export default {
   components: {
     activity,activityDetail
@@ -288,7 +288,7 @@ export default {
   methods: {
     // 查询数据
     getData(){
-      const { data: res } = deleteAdver({
+      const { data: res } = getActivityList({
         size: 4,
         page: 1
       })

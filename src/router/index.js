@@ -219,6 +219,23 @@ const routes = [{
             },
             component: () => import('@/views/audit/activeAudit.vue'),
         },
+        
+        {
+            path: 'vedioAudit',
+            meta: {
+                title: '视频审核 - MPDF',
+                role: 2
+            },
+            component: () => import('@/views/audit/vedioAudit.vue'),
+        },
+        {
+            path: 'reportAudit',
+            meta: {
+                title: '举报受理 - MPDF',
+                role: 2
+            },
+            component: () => import('@/views/audit/reportAudit.vue'),
+        },
         {
             path: 'infoAudit',
             meta: {
@@ -227,14 +244,6 @@ const routes = [{
             },
             component: () => import('@/views/audit/infoAudit.vue'),
         },
-        {
-            path: 'vedioAudit',
-            meta: {
-                title: '视频审核 - MPDF',
-                role: 2
-            },
-            component: () => import('@/views/audit/vedioAudit.vue'),
-        }
     ]
 },
 ]
