@@ -4,11 +4,7 @@
       <!-- 顶部按钮 -->
       <div class="table-header">
         <div class="table-header-left">
-          <el-button
-            type="primary"
-            class="el-icon-edit"
-            size="mini"
-            @click="handleAdd()"
+          <el-button type="primary" class="el-icon-delete" size="mini" @click="handleAdd"
             >添加</el-button
           >
           <el-button
@@ -47,7 +43,6 @@
 
       <!-- 表格 -->
       <el-table
-        ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
@@ -56,119 +51,79 @@
       >
         <el-table-column type="selection" width="55" align="center" fixed>
         </el-table-column>
-        <el-table-column prop="id" label="ID" width="50" align="center" fixed>
+        <el-table-column type="index" width="50" align="center" fixed>
         </el-table-column>
 
         <el-table-column
-          prop="festival"
-          label="节日名称"
-          width="150"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="title"
-          label="主题名称"
+          prop="name"
+          label="套餐名"
           width="150"
           align="center"
         >
         </el-table-column>
+
         <el-table-column
-          label="主题色"
+          label="时长"
           width="150"
           align="center"
         >
         <template slot-scope="scope">
-            <el-tag v-if="scope.row.theme === 0" size="mini" type="info"
-              >浪漫粉</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 1"
-              size="mini"
-              type="success"
-              >炫酷黑</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 2"
-              size="mini"
-              type="warning"
-              >优雅紫</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 3"
-              size="mini"
-              type="primary"
-              >高贵蓝</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 4"
-              size="mini"
-              type="danger"
-              >飘雪白</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 5"
-              size="mini"
-              type="danger"
-              >玛瑙红</el-tag
-            >
-          </template>
+          <span>{{scope.row.timeNum}}个月</span>
+        </template>
         </el-table-column>
-        <el-table-column label="主题状态" width="150" align="center">
+
+        <el-table-column
+          label="单月价格"
+          width="150"
+          align="center"
+        >
+        <template slot-scope="scope">
+          <span>{{scope.row.priceNum}}￥</span>
+        </template>
+        </el-table-column>
+
+        <el-table-column
+          label="价格"
+          width="150"
+          align="center"
+        >
+        <template slot-scope="scope">
+          <span>{{scope.row.totalPrice}}￥</span>
+        </template>
+        </el-table-column>
+
+        <el-table-column label="套餐状态" width="150" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 0" size="mini" type="info"
-              >未开始</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.status === 1"
-              size="mini"
-              type="success"
-              >展示中</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.status === 2"
-              size="mini"
-              type="danger"
-              >已结束</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="isAnimation"
-          label="动画"
-          width="150"
-          align="center"
-        >
-           <template slot-scope="scope">
             <el-switch
-          v-model="scope.row.isAnimation"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          disabled
-        >
-        </el-switch>
+              v-model="scope.row.status"
+              disabled
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
           </template>
         </el-table-column>
+
         <el-table-column
-          prop="startTime"
-          label="开始时间"
+          prop="isMain"
+          label="是否首推"
           width="150"
           align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="endTime"
-          label="结束时间"
-          width="150"
-          align="center"
-        ></el-table-column>
+          ><template slot-scope="scope">
+            <el-button v-if="scope.row.isMain" circle size="mini" type="success" class="el-icon-check" style="font-size: 20px;"
+              ></el-button
+            >
+          </template></el-table-column
+        >
         <el-table-column
           prop="createTime"
-          label="创建时间"
+          label="套餐创建时间"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="updateTime"
-          label="更新时间"
+          label="套餐更新时间"
           width="150"
           align="center"
         ></el-table-column>
@@ -178,17 +133,29 @@
             <el-button
               size="mini"
               class="el-icon-edit"
+              type="success"
               @click="handleEdit(scope.$index, scope.row)"
-              >更新</el-button
+              >更改</el-button
             >
 
-            <el-button
-              type="danger"
-              size="mini"
-              class="el-icon-delete"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
-            >
+            
+            <el-popconfirm
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+                icon="el-icon-info"
+                icon-color="red"
+                title="确认删除该套餐？"
+                style="margin-left: 10px;"
+                @confirm="handleDelete(scope.$index, scope.row)"
+              >
+                <el-button
+                  type="danger"
+                  size="mini"
+                  class="el-icon-delete"                
+                  slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -213,31 +180,31 @@
 
     <!-- 更新主题-->
     <el-dialog
-      :title="type === 1 ? '更新主题':'添加主题'"
+      :title="isAdd ? '添加套餐' : '更改套餐'"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="400px"
     >
-      <celebration :adverData="adverData" ref="cele" />
+      <packageItem :itemData="itemData" ref="packageItem"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveData">确 定</el-button>
+        <el-button type="primary" @click="saveData">保 存</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import celebration from "@/components/celebration/index.vue";
+import packageItem from "@/components/package/index.vue";
 export default {
   components: {
-    celebration,
+    packageItem,
   },
   data() {
     return {
       // 弹窗显示
       dialogVisible: false,
-      type: 1, //1表示更新，2表示添加
+      isAdd: false,
 
       page: {
         pageSize: 10,
@@ -246,7 +213,7 @@ export default {
       },
 
       // 将要修改的数据
-      adverData: {},
+      itemData: {},
 
       // 被选择
       multipleSelection: [],
@@ -254,70 +221,49 @@ export default {
       // 数据
       tableData: [
         {
-          id: "1",
-          festival: '七夕节',
-          title: '七夕之约',
-          theme: 0,//主题
-          isAnimation: true,//开启动画
-          status: 0,
-          startTime: "2022/7/25 14:39",
-          endTime: "2022/7/25 14:39",
+          id: "s956620200", //套餐号
+          name: "连续包年",
+          timeNum: 12,
+          priceNum: 7.92,
+          totalPrice: 95,
+          isMain: true, //是否首要推荐
+          status: true,
           createTime: "2022/7/25 14:39",
           updateTime: "2022/7/25 14:39",
         },
         {
-          id: "2",
-          festival: '情人节',
-          title: '挚爱之约',
-          theme: 1,//主题
-          isAnimation: false,//开启动画
-          status: 1,
-          startTime: "2022/7/25 14:39",
-          endTime: "2022/7/25 14:39",
+          id: "s956632432", //套餐号
+          name: "连续包季",
+          timeNum: 3,
+          priceNum: 10,
+          totalPrice: 30,
+          isMain: false, 
+          status: true,
           createTime: "2022/7/25 14:39",
           updateTime: "2022/7/25 14:39",
         },
         {
-          id: "1",
-          festival: '残疾人节',
-          title: '残疾之美',
-          theme: 2,//主题
-          isAnimation: true,//开启动画
-          status: 0,
-          startTime: "2022/7/25 14:39",
-          endTime: "2022/7/25 14:39",
+          id: "s956632432", //套餐号
+          name: "连续包月",
+          timeNum: 1,
+          priceNum: 12,
+          totalPrice: 12,
+          isMain: false, 
+          status: true,
           createTime: "2022/7/25 14:39",
           updateTime: "2022/7/25 14:39",
         },
       ],
     };
   },
-  mounted(){
-    this.getData()
-  },
   methods: {
-    // 查询数据
-    async getData(){
-      const { data: res} = await this.$http.get('/business/getFestivalList?size=4&page=1')
-      console.log(res);
-    },
-    // 修改单个数据请求
-    saveData() {
-      let data = this.$refs.cele.returnData();
-      console.log(data);
-      if(this.type === 1){
-        this.$message.success("修改成功！");
-      }else{
-        this.$message.success("添加成功！");
+    // 保存或者添加数据
+    saveData(){
+      let data = this.$refs.packageItem.returnData()
+      if(data !== false){
+        console.log(data);
+        this.dialogVisible = false
       }
-      
-      this.handleClose(); //关闭窗口
-    },
-
-
-    // 刷新页面数据
-    refreshPage() {
-      location.reload();
     },
 
     //关闭窗口
@@ -327,16 +273,31 @@ export default {
 
     // 打开详情dialog
     handleEdit(index, row) {
-      this.adverData = row;
-      this.type = 1;
+      this.itemData = row;
+      this.isAdd = false
+      this.dialogVisible = true;
+    },
+
+    handleAdd(){
+      this.itemData = {
+          id: "", 
+          name: "",
+          timeNum: 0,
+          priceNum: 0,
+          totalPrice: 0,
+          isMain: false, 
+          status: false,
+      }
+      this.isAdd = true
       this.dialogVisible = true;
     },
 
     // 删除一个
     handleDelete(index, row) {
-      console.log(index, row);
-      this.$message.warning("暂未开放功能");
+      this.tableData.splice(index, 1)
+      this.$message.success("删除成功！");
     },
+    
     // 批量删除
     handleDeleteMore() {
       // 验证是否存在选择
@@ -349,23 +310,21 @@ export default {
       console.log(this.multipleSelection);
       this.$message.warning("暂未开放功能");
     },
-    // 添加
-    handleAdd() {
-      this.type = 1;
-      this.adverData = {};
-      this.dialogVisible = true;
-    },
     // 多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
     // 改变页大小
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.pageSize = val
     },
     // 改变页码
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.pageNum = val
+    },
+    // 刷新页面数据
+    refreshPage() {
+      location.reload();
     },
   },
 };
@@ -393,4 +352,5 @@ export default {
 .demo-drawer-footer {
   margin: 30px 0;
 }
+
 </style>

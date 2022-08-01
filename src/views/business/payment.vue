@@ -5,13 +5,6 @@
       <div class="table-header">
         <div class="table-header-left">
           <el-button
-            type="primary"
-            class="el-icon-edit"
-            size="mini"
-            @click="handleAdd()"
-            >添加</el-button
-          >
-          <el-button
             type="danger"
             class="el-icon-delete"
             size="mini"
@@ -56,119 +49,115 @@
       >
         <el-table-column type="selection" width="55" align="center" fixed>
         </el-table-column>
-        <el-table-column prop="id" label="ID" width="50" align="center" fixed>
+        <el-table-column type="index" width="50" align="center" fixed>
         </el-table-column>
 
         <el-table-column
-          prop="festival"
-          label="节日名称"
+          prop="id"
+          label="订单ID"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="title"
-          label="主题名称"
+          prop="userId"
+          label="用户ID"
           width="150"
           align="center"
         >
         </el-table-column>
-        <el-table-column
-          label="主题色"
-          width="150"
-          align="center"
-        >
-        <template slot-scope="scope">
-            <el-tag v-if="scope.row.theme === 0" size="mini" type="info"
-              >浪漫粉</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 1"
-              size="mini"
-              type="success"
-              >炫酷黑</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 2"
-              size="mini"
-              type="warning"
-              >优雅紫</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 3"
-              size="mini"
-              type="primary"
-              >高贵蓝</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 4"
-              size="mini"
-              type="danger"
-              >飘雪白</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.theme === 5"
-              size="mini"
-              type="danger"
-              >玛瑙红</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column label="主题状态" width="150" align="center">
+
+        <el-table-column label="订单状态" width="150" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 0" size="mini" type="info"
-              >未开始</el-tag
+            <el-tag v-if="scope.row.status === 0" size="mini" type="warning"
+              >待支付</el-tag
             >
             <el-tag
               v-else-if="scope.row.status === 1"
               size="mini"
               type="success"
-              >展示中</el-tag
+              >支付成功</el-tag
             >
             <el-tag
               v-else-if="scope.row.status === 2"
               size="mini"
               type="danger"
-              >已结束</el-tag
+              >支付失败</el-tag
             >
           </template>
         </el-table-column>
         <el-table-column
-          prop="isAnimation"
-          label="动画"
+          prop="type"
+          label="VIP类别"
           width="150"
           align="center"
         >
            <template slot-scope="scope">
-            <el-switch
-          v-model="scope.row.isAnimation"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          disabled
-        >
-        </el-switch>
+            <el-tag v-if="scope.row.type == 0" size="mini" type="success"
+              >月包</el-tag
+            >
+            <el-tag
+              v-else-if="scope.row.type === 1"
+              size="mini"
+              type="primary"
+              >季包</el-tag
+            >
+            <el-tag
+              v-else-if="scope.row.type === 2"
+              size="mini"
+              type="danger"
+              >年包</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
+          prop="price"
+          label="价格"
+          width="150"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="way"
+          label="支付方式"
+          width="150"
+          align="center"
+        ><template slot-scope="scope">
+            <el-tag v-if="scope.row.way == 0" size="mini" type="success"
+              >微信</el-tag
+            >
+            <el-tag
+              v-else-if="scope.row.way === 1"
+              size="mini"
+              type="primary"
+              >支付宝</el-tag
+            >
+            <el-tag
+              v-else
+              size="mini"
+              type="info"
+              >其他</el-tag
+            >
+          </template></el-table-column>
+        <el-table-column
           prop="startTime"
-          label="开始时间"
+          label="特权开始时间"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="endTime"
-          label="结束时间"
+          label="特权结束时间"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
-          label="创建时间"
+          label="订单创建时间"
           width="150"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="updateTime"
-          label="更新时间"
+          label="订单更新时间"
           width="150"
           align="center"
         ></el-table-column>
@@ -177,9 +166,10 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              class="el-icon-edit"
+              class="el-icon-view"
+              type="success"
               @click="handleEdit(scope.$index, scope.row)"
-              >更新</el-button
+              >订单详情</el-button
             >
 
             <el-button
@@ -213,31 +203,26 @@
 
     <!-- 更新主题-->
     <el-dialog
-      :title="type === 1 ? '更新主题':'添加主题'"
+      title="订单详情"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="400px"
     >
-      <celebration :adverData="adverData" ref="cele" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveData">确 定</el-button>
-      </div>
+      <order :adverData="adverData"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import celebration from "@/components/celebration/index.vue";
+import order from "@/components/order/index.vue";
 export default {
   components: {
-    celebration,
+    order,
   },
   data() {
     return {
       // 弹窗显示
       dialogVisible: false,
-      type: 1, //1表示更新，2表示添加
 
       page: {
         pageSize: 10,
@@ -254,36 +239,36 @@ export default {
       // 数据
       tableData: [
         {
-          id: "1",
-          festival: '七夕节',
-          title: '七夕之约',
-          theme: 0,//主题
-          isAnimation: true,//开启动画
-          status: 0,
+          id: 's956620200',//订单号
+          userId: '96626',//用户id
+          status: 0,//0待支付，1支付成功
+          price: 95,
+          type: 0,//vip套餐类别，三种
+          way: 0,//方式
           startTime: "2022/7/25 14:39",
           endTime: "2022/7/25 14:39",
           createTime: "2022/7/25 14:39",
           updateTime: "2022/7/25 14:39",
         },
         {
-          id: "2",
-          festival: '情人节',
-          title: '挚爱之约',
-          theme: 1,//主题
-          isAnimation: false,//开启动画
-          status: 1,
+          id: 's95632400',//订单号
+          userId: '96626',//用户id
+          status: 1,//0待支付，1支付成功
+          price: 18,
+          type: 1,//vip套餐类别，三种
+          way: 0,//方式
           startTime: "2022/7/25 14:39",
           endTime: "2022/7/25 14:39",
           createTime: "2022/7/25 14:39",
           updateTime: "2022/7/25 14:39",
         },
         {
-          id: "1",
-          festival: '残疾人节',
-          title: '残疾之美',
-          theme: 2,//主题
-          isAnimation: true,//开启动画
-          status: 0,
+          id: 's956613200',//订单号
+          userId: '31231',//用户id
+          status: 2,//0待支付，1支付成功
+          price: 25,
+          type: 2,//vip套餐类别，三种
+          way: 1,//方式
           startTime: "2022/7/25 14:39",
           endTime: "2022/7/25 14:39",
           createTime: "2022/7/25 14:39",
@@ -292,28 +277,7 @@ export default {
       ],
     };
   },
-  mounted(){
-    this.getData()
-  },
   methods: {
-    // 查询数据
-    async getData(){
-      const { data: res} = await this.$http.get('/business/getFestivalList?size=4&page=1')
-      console.log(res);
-    },
-    // 修改单个数据请求
-    saveData() {
-      let data = this.$refs.cele.returnData();
-      console.log(data);
-      if(this.type === 1){
-        this.$message.success("修改成功！");
-      }else{
-        this.$message.success("添加成功！");
-      }
-      
-      this.handleClose(); //关闭窗口
-    },
-
 
     // 刷新页面数据
     refreshPage() {
@@ -328,7 +292,6 @@ export default {
     // 打开详情dialog
     handleEdit(index, row) {
       this.adverData = row;
-      this.type = 1;
       this.dialogVisible = true;
     },
 
@@ -348,12 +311,6 @@ export default {
       // 批量删除
       console.log(this.multipleSelection);
       this.$message.warning("暂未开放功能");
-    },
-    // 添加
-    handleAdd() {
-      this.type = 1;
-      this.adverData = {};
-      this.dialogVisible = true;
     },
     // 多选
     handleSelectionChange(val) {

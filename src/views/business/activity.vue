@@ -113,18 +113,17 @@
             >
           </template>
         </el-table-column>
-        <el-table-column
-          prop="views"
-          label="关注度"
-          width="150"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="signUpNum"
-          label="报名人数"
-          width="150"
-          align="center"
-        ></el-table-column>
+        <el-table-column label="发布状态" width="150" align="center">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.publishStatus"
+              disabled
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="order"
           label="序号"
@@ -213,7 +212,7 @@
     >
       <el-col :span="20" :offset="2">
         <activity :adverData="adverData" ref="activity" />
-        <div class="demo-drawer-footer">
+        <div  class="demo-drawer-footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button type="primary" @click="saveData(false)">确 定</el-button>
         </div>
@@ -267,7 +266,8 @@ export default {
           imgPath: require("@/assets/images/user.jpeg"),
           position: "约吧", //活动弹出层位置
           order: 1,
-          status: 1,
+          status: 1,//活动状态
+          publishStatus: false,//发布状态
           views: 234, //关注度
           signUpNum: 20, //报名人数
           isSignUp: false, //是否可报名
@@ -288,11 +288,11 @@ export default {
   methods: {
     // 查询数据
     getData(){
-      const { data: res } = getActivityList({
-        size: 4,
-        page: 1
-      })
-      console.log(res);
+      // const { data: res } = getActivityList({
+      //   size: 4,
+      //   page: 1
+      // })
+      // console.log(res);
     },
     // 修改单个数据请求
     saveData() {

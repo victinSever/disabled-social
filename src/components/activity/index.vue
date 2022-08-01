@@ -1,18 +1,29 @@
 <template>
-  <div>   
-      <el-form
-        ref="form"
-        :model="data"
-        label-position="right"
-        label-width="100px"
-        :rules="rules"
-        size="mini"
-      >
-        <el-row>
-          <el-form-item label="活动封面" prop="imgPath">
-            <el-upload
+  <div>
+    <el-form
+      ref="form"
+      :model="data"
+      label-position="right"
+      label-width="120px"
+      :rules="rules"
+      size="mini"
+    >
+      <el-row>
+        <el-form-item label="活动内容" prop="content">
+          <vue-ueditor-wrap
+            v-model="contents"
+            :config="myConfig"
+            style="width: 100%"
+          ></vue-ueditor-wrap>
+        </el-form-item>
+        <el-divider></el-divider>
+      </el-row>
+
+      <el-row>
+        <el-form-item label="活动主图" prop="imgPath">
+          <el-upload
             class="avatar-uploader"
-            action=""
+            action="http://222.177.66.230:9898/"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -20,99 +31,97 @@
             <img v-if="data.imgPath" :src="data.imgPath" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="活动名称" prop="title">
+            <el-input
+              placeholder="请输入活动名称"
+              v-model="data.title"
+              autofocus
+            ></el-input>
           </el-form-item>
-          
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="活动主题" prop="title">
-              <el-input
-                placeholder="请输入主题"
-                v-model="data.title"
-                autofocus
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="开始时间" prop="title">
-              <el-date-picker
-                v-model="data.startTime"
-                type="datetime"
-                placeholder="选择开始时间"
-                align="right"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="开启报名" prop="title">
-              <el-switch
-                v-model="data.isSignUp"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-              >
-              </el-switch>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="活动投放位" prop="position">
-              <el-select v-model="data.type" placeholder="请选择APP活动展示位置">
-                <el-option
-                  v-for="item in adverPosition"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="结束时间" prop="title">
-              <el-date-picker
-                v-model="data.endTime"
-                type="datetime"
-                placeholder="选择开始时间"
-                align="right"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="addGroup">新建单身群</el-button>
-            </el-form-item>
-            <el-form-item
-              v-for="(item, index) in group"
-              :label="'单身群' + index"
-              :key="item.key"
-              :prop="'item.' + index + '.value'"            
+          <el-form-item label="开始时间" prop="title">
+            <el-date-picker
+              v-model="data.startTime"
+              type="datetime"
+              placeholder="选择开始时间"
+              align="right"
             >
-              <el-input v-model="item.value" placeholder="输入群名称，默认容纳量为1000人"></el-input
-              ><el-button @click.prevent="removeGroup(item)" type="danger">删除</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-divider></el-divider>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="浏览量" prop="views">
-              <span>{{ data.views }}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="报名数" prop="signUpNum">
-              <span>{{ data.signUpNum }}</span>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-divider></el-divider>
-        <el-row>
-          <el-form-item label="活动内容" prop="content">
-            <vue-ueditor-wrap
-              v-model="contents"
-              :config="myConfig"
-              style="width: 100%"
-            ></vue-ueditor-wrap>
+            </el-date-picker>
           </el-form-item>
-        </el-row>
-      </el-form>
+          <el-form-item label="开启报名" prop="title">
+            <el-switch
+              v-model="data.isSignUp"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="活动投放位置" prop="position">
+            <el-select v-model="data.type" placeholder="请选择APP活动展示位置">
+              <el-option
+                v-for="item in adverPosition"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="结束时间" prop="title">
+            <el-date-picker
+              v-model="data.endTime"
+              type="datetime"
+              placeholder="选择开始时间"
+              align="right"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addGroup">新建单身群</el-button>
+          </el-form-item>
+          <el-form-item
+            v-for="(item, index) in group"
+            :label="item.label"
+            :key="index"
+            :prop="item.name"
+          >
+            <el-input v-model="item.name" placeholder="输入群名称"></el-input>
+            <el-button @click.prevent="removeGroup(item)" type="danger"
+              >删除</el-button
+            >
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <div style="font-size: 14px; color: skyblue; margin-bottom: 20px">
+        <p v-if="data.isSignUp">已开启报名通道！</p>
+        <p v-else style="color: red">暂未开启报名通道！</p>
+      </div>
+
+      <el-row v-if="data.isSignUp">
+        <el-divider></el-divider>
+        <el-col :span="12">
+          <el-form-item label="浏览量" prop="views">
+            <span>{{ data.views }}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="报名数" prop="signUpNum">
+            <span>{{ data.signUpNum }}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
 <script>
+// import { baseImgPath } from '@/api/base'
 export default {
   props: ["adverData"],
   data() {
@@ -138,28 +147,15 @@ export default {
       adverPosition: [
         {
           value: "1",
-          label: "首页弹框",
+          label: "推送",
         },
         {
           value: "2",
-          label: "就业模块",
-        },
-        {
-          value: "3",
-          label: "社交按钮",
-        },
-        {
-          value: "4",
-          label: "活动链接",
-        },
-        {
-          value: "5",
-          label: "互动推荐",
+          label: "主页",
         },
       ],
 
-
-      contents: '',
+      contents: "",
       myConfig: {
         autoHeightEnabled: false, // 编辑器不自动被内容撑高
         initialFrameHeight: 200, // 初始容器高度
@@ -179,9 +175,11 @@ export default {
     },
   },
   methods: {
-     // 上传生成
+    // 上传生成
     handleAvatarSuccess(res, file) {
       this.data.imageUrl = URL.createObjectURL(file.raw);
+      console.log(file);
+      console.log(this.data.imageUrl);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -192,7 +190,7 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    
+
     // 移除单身群
     removeGroup(item) {
       var index = this.group.indexOf(item);
@@ -203,8 +201,10 @@ export default {
     // 添加单身群
     addGroup() {
       this.group.push({
-        value: "",
-        key: Date.now(),
+        label: "单身群" + this.group.length,
+        name: "",
+        num: "",
+        size: 1000,
       });
     },
     // 父组件调用

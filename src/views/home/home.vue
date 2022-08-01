@@ -261,7 +261,7 @@ export default {
 
 // 主窗口
 .left-main{
-  background: #fff url(../../assets/images/role-bg.png) no-repeat;
+  // background: #fff url(../../assets/images/role-bg.png) no-repeat;
   background-size: 150% 150%;
 }
 

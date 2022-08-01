@@ -6,7 +6,7 @@ import axios from "axios"
 let baseUrl = 'http://192.168.103.249:5210/'
 
 //图片地址
-let baseImgPath = 'http://127.0.0.1:8080/'
+let baseImgPath = 'http://222.177.66.230:9898/'
 
 //本机地址
 let baseLocalUrl = 'http://127.0.0.1:4000/'

@@ -131,12 +131,28 @@ const routes = [{
             component: () => import('@/views/business/celebration.vue'),
         },
         {
+            path: 'package',
+            meta: {
+                title: '套餐管理 - MPDF',
+                role: 1
+            },
+            component: () => import('@/views/business/package.vue'),
+        },
+        {
             path: 'vip',
             meta: {
-                title: 'VIP充值 - MPDF',
+                title: '特权管理 - MPDF',
                 role: 1
             },
             component: () => import('@/views/business/vip.vue'),
+        },
+        {
+            path: 'payment',
+            meta: {
+                title: '支付记录 - MPDF',
+                role: 1
+            },
+            component: () => import('@/views/business/payment.vue'),
         }
     ]
 },
