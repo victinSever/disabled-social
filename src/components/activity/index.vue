@@ -134,7 +134,6 @@ export default {
         ],
         position: [
           { required: true, message: "请输入广告位置", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
         order: [{ required: true, message: "请输入数字", trigger: "change" }],
         status: [{ required: true, message: "请选择状态", trigger: "change" }],

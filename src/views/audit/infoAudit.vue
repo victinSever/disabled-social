@@ -1,39 +1,43 @@
 <template>
   <div>
     <el-card class="table">
-      <el-row class="top">
-        <el-col :span="4">
-          <el-input
-            v-model="page.keyword"
-            placeholder="请输入动态关键词"
-            prefix-icon="el-icon-search"
-          ></el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-select v-model="page.type" placeholder="请选择动态类型">
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="(item, i) in options.typeOptions"
-              :key="i"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-select v-model="page.status" placeholder="请选择动态状态">
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="(item, i) in options.statusOptions"
-              :key="i"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="10">
-          <el-button type="primary" @click="searchActive">搜索</el-button>
-          <el-button type="danger" @click="handleDeleteMore">删除</el-button>
-        </el-col>
-      </el-row>
+      <!-- 顶部按钮 -->
+      <div class="table-header">
+        <div class="table-header-left">
+          <el-button
+            type="danger"
+            class="el-icon-delete"
+            size="mini"
+            @click="handleDeleteMore()"
+            >删除</el-button
+          >
+        </div>
+        <div class="table-header-right">
+          <el-tooltip class="item" effect="dark" content="刷新" placement="top">
+            <el-button
+              class="el-icon-refresh right-btns"
+              size="small"
+              @click="refreshPage"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="密度" placement="top">
+            <el-button
+              class="el-icon-s-operation right-btns"
+              size="small"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="设置" placement="top">
+            <el-button
+              class="el-icon-setting right-btns"
+              size="small"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="全屏" placement="top">
+            <el-button class="el-icon-rank right-btns" size="small"></el-button>
+          </el-tooltip>
+        </div>
+      </div>
+
       <!-- 表格 -->
       <el-table
         ref="multipleTable"
@@ -45,51 +49,36 @@
       >
         <el-table-column type="selection" width="55" align="center" fixed>
         </el-table-column>
-        <el-table-column type="index" width="55" align="center" fixed>
+        <el-table-column type="index" width="50" align="center" fixed>
         </el-table-column>
 
-        <el-table-column width="150" align="center" label="ID" prop="id">
+        <el-table-column prop="userName" label="姓名" width="80" align="center">
         </el-table-column>
         <el-table-column
-          width="150"
+          prop="userCount"
+          label="用户名"
+          width="120"
           align="center"
-          label="审核类型"
-          prop="type"
         >
+        </el-table-column>
+        <el-table-column label="图片秀" align="center" width="400">
           <template slot-scope="scope">
-            <div>
-              <el-tag type="primary" size="mini" v-if="scope.row.type === 0"
-                >动态审核</el-tag
-              >
-              <el-tag
-                type="primary"
-                size="mini"
-                v-else-if="scope.row.type === 1"
-                >图片审核</el-tag
-              >
-              <el-tag
-                type="primary"
-                size="mini"
-                v-else-if="scope.row.type === 2"
-                >视频审核</el-tag
-              >
-              <el-tag
-                type="primary"
-                size="mini"
-                v-else-if="scope.row.type === 3"
-                >举报审核</el-tag
-              >
-
-            </div>
+            <el-avatar
+              shape="square"
+              :size="30"
+              :src="item"
+              v-for="(item, i) in scope.row.activeImgs"
+              :key="i"
+              style="margin: 0 5px"
+            ></el-avatar>
           </template>
         </el-table-column>
         <el-table-column
-          width="150"
-          align="center"
-          label="审核状态"
           prop="status"
-        >
-          <template slot-scope="scope">
+          label="审核状态"
+          width="120"
+          align="center"
+          ><template slot-scope="scope">
             <div>
               <el-tag type="danger" size="mini" v-if="scope.row.status === 0"
                 >草稿</el-tag
@@ -121,60 +110,75 @@
             </div>
           </template>
         </el-table-column>
+
         <el-table-column
-          width="200"
-          align="center"
-          label="发布时间"
           prop="createTime"
+          label="创建时间"
+          align="center"
+          width="150"
         >
         </el-table-column>
         <el-table-column
-          width="200"
-          align="center"
-          label="受理时间"
           prop="updateTime"
-        >
-        </el-table-column>
-        <el-table-column
-          width="150"
+          label="更新时间"
           align="center"
-          label="审核员"
-          prop="admin"
-        >
-        </el-table-column>
-        <el-table-column
           width="150"
-          align="center"
-          label="审核员ID"
-          prop="adminId"
         >
         </el-table-column>
-
-        <el-table-column width="200" align="center" label="操作" fixed="right">
+        <el-table-column label="操作" width="250" align="center" fixed="right">
           <template slot-scope="scope">
-            <div class="operation">
-
-              <el-popconfirm
-                confirm-button-text="确认"
-                cancel-button-text="取消"
-                icon="el-icon-info"
-                icon-color="red"
-                title="确认删除该条记录？"
-                @confirm="handelDelete(scope.$index, scope.row)"
-              >
+            <el-button
+              size="mini"
+              class="el-icon-view"
+              type="success"
+              @click="openDetail(scope.$index, scope.row)"
+              >详细信息</el-button
+            >
+            <el-popover placement="top" width="200" trigger="hover">
+              <div class="operation-box">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="sendAuditResult(true, scope.$index)"
+                  >Pass</el-button
+                >
                 <el-button
                   type="danger"
                   size="mini"
-                  class="el-icon-delete"                
-                  slot="reference"
-                  >删除</el-button
+                  @click="sendAuditResult(false, scope.$index)"
+                  >Faile</el-button
                 >
-              </el-popconfirm>
-            </div>
+              </div>
+              <el-button
+                type="primary"
+                size="mini"
+                class="el-icon-edit"
+                slot="reference"
+                v-if="scope.row.status < 2"
+                >审核</el-button
+              >
+            </el-popover>
+
+            <el-popconfirm
+              confirm-button-text="确认"
+              cancel-button-text="取消"
+              icon="el-icon-info"
+              icon-color="red"
+              title="确认删除该条动态审核？"
+              v-if="scope.row.status >= 2"
+              @confirm="handelDelete(scope.$index, scope.row)"
+            >
+              <el-button
+                type="danger"
+                size="mini"
+                class="el-icon-delete"
+                slot="reference"
+                >删除</el-button
+              >
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -192,161 +196,223 @@
         >
         </el-pagination>
       </div>
-
     </el-card>
+
+    <!-- 详细信息弹窗 -->
+    <el-dialog
+      title="用户信息"
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+    >
+      <UserDetail :personData="personData" />
+    </el-dialog>
+
+    <!-- 审核原因 -->
+    <el-dialog
+      :visible.sync="dialogVisible2"
+      width="300px"
+      :before-close="handleCloseDialog"
+    >
+      <el-input
+        type="textarea"
+        placeholder="填写不予通过原因"
+        focus
+        v-model="faileResult"
+      ></el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="sendAuditResultFaile"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import activeDetail from "@/components/audit/activeDetail.vue";
+import UserDetail from "@/components/user/userDetail.vue";
+import nProgress from "nprogress";
 export default {
-  components: { activeDetail },
+  components: {
+    UserDetail,
+  },
   data() {
-    const options = {
-      statusOptions: [
-        { label: "草稿", value: 0, type: 'info' },
-        { label: "审核中", value: 1, type: 'warning' },
-        { label: "审核通过", value: 2, type: 'success' },
-        { label: "审核拒绝", value: 3, type: 'danger' },
-        { label: "已发布", value: 4, type: 'success' },
-      ],
-      typeOptions: [
-        { label: "动态审核", value: 0, type: 'primary' },
-        { label: "图片审核", value: 1, type: 'primary' },
-        { label: "视屏审核", value: 2, type: 'primary' },
-        { label: "举报审核", value: 3, type: 'primary' },
-      ]
-    };
     return {
-      options,
-      isPass: false, //是否通过
-      drawerVisible: false,
-      dialogVisible: false,
-      faileResult: "", //不通过原因
-      multipleSelection: [],
-      tableData: [
-        {
-          id: "S74856125151",
-          status: 1,
-          type: 0,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
+      // 弹窗显示
+      dialogVisible: false, //详细信息
+      dialogVisible2: false,
+      personData: {
+        baseData: {
+          role: 0, //0为用户，1为管理员
+          isVip: 1, //是否vip
+          isRight: 0, //是否认证
+          onlineTime: 68, //上网时长
+          onlineTimeUnit: "时",
+          status: 0, //是否未注销
+          createTime: "2022-7-23 18:30:55",
+          updateTime: "2022-7-23 18:30:55",
+          destoryTime: "",
+
+          concern: 12, //关注数
+          beConcern: 511, //被关注数
+          dianzan: 4, //点赞数
+          sorts: 4884, //积分
+
+          personId: "1",
+          personName: "花",
+          sex: 1,
+          age: 26,
+          phone: "18412385469",
+          imagePath: require("@/assets/images/user.jpeg"),
+          disableNumber: "G500226201599999999",
+          workAddr: "理工大学",
+          householdAddr: "重庆南岸",
+          maritalStatus: "未婚",
+          height: 178,
+          weight: 120,
+          degree: "中专",
+          income: 20000,
+          occupation: "无业",
+          housingStatus: "两套别墅",
+          carStatus: "无",
+          expectedMarryTime: "半年内",
+          personIntro: "我是一个开朗的人",
+          personSign: "在天愿作比翼鸟，在地愿为连理枝",
+          longitude: 42.5,
+          latitude: 85.93,
+          wechat: "951616262",
+          wechatCodeImagesPath: require("@/assets/images/user.jpeg"),
+          qq: "1255115515",
+          email: "dsadahfdsn@qq.com",
         },
-        {
-          id: "S74856125151",
-          status: 2,
-          type: 1,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
-        },
-        {
-          id: "S74856125151",
-          status: 4,
-          type: 3,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
-        },
-        {
-          id: "S74856125151",
-          status: 3,
-          type: 0,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
-        },
-      ],
+        detailData: {},
+        marrayData: {},
+      }, //个人信息
+
       page: {
         pageSize: 10,
         pageNum: 1,
         total: 20,
-        keyword: "",
-        status: '',
-        type: ''
       },
+
+      // 被选择
+      multipleSelection: [],
+
+      // 数据
+      tableData: [
+        {
+          userId: "1",
+          userCount: "admin",
+          userName: "李华",
+          activeImgs: [
+            require("@/assets/images/user.jpeg"),
+            require("@/assets/images/user.jpeg"),
+            require("@/assets/images/user.jpeg"),
+          ],
+          status: 0, //是否未注销
+          createTime: "2022-7-23 18:30:55",
+          updateTime: "2022-7-23 18:30:55",
+          destoryTime: "",
+        },
+      ],
     };
   },
-
   methods: {
-    // 查看详情抽屉
-    openDrawer(index, row) {
-      this.itemData = row;
-      this.drawerVisible = true;
-    },
-
-    // 关闭详情抽屉
-    handleClose() {
-      this.drawerVisible = false;
-    },
-
-    handleCloseDialog() {
-      this.dialogVisible = false;
-    },
-
-    // 按条件搜索动态
-    searchActive() {},
-
-    // 删除该动态
-    handelDelete(index, row) {
-      if(this.isRight() == 1) {
-        this.tableData.splice(index, 1);
-      this.$message.success("删除该动态成功！");
+    addUserData() {
+      let data = this.$refs.userBase.returnData();
+      console.log(data);
+      if (data !== false) {
+        nProgress.start();
+        this.$message.success("添加成功");
+        this.handleClose();
+        nProgress.done();
       }
-   
     },
 
+    // 发送审核结果
+    sendAuditResult(judge, index) {
+      this.index = index;
+      if (judge) {
+        this.tableData[index].status = 2;
+        this.$message.success("审核通过！");
+      } else {
+        this.dialogVisible2 = true;
+      }
+    },
+
+    sendAuditResultFaile() {
+      if (this.faileResult) {
+        this.dialogVisible2 = false;
+        this.tableData[this.index].status = 3;
+        this.$message.error("审核未通过！原因：" + this.faileResult);
+      } else {
+        this.$message.error("请填写原因");
+      }
+    },
+
+    // 刷新页面数据
+    refreshPage() {
+      location.reload();
+    },
+
+    //关闭窗口
+    handleClose() {
+      this.dialogVisible = false;
+      this.dialogVisible2 = false;
+    },
+
+    // 打开详情diaglo
+    openDetail(index, row) {
+      this.peronData = row;
+      this.dialogVisible = true;
+    },
+
+    // 删除一个
+    handleDelete(index, row) {
+      console.log(index, row);
+      this.$message.warning("暂未开放功能");
+    },
     // 批量删除
     handleDeleteMore() {
       // 验证是否存在选择
       if (this.multipleSelection.length === 0)
         return this.$message.warning("您还未选择删除的用户！");
       // 验证是否具有权限
-      this.isRight()
+      let admin = this.$store.state.userInfo;
+      if (admin.role !== 1) return this.$message.warning("您未有该权限！");
       // 批量删除
       console.log(this.multipleSelection);
       this.$message.warning("暂未开放功能");
     },
-    // 验证权限
-    isRight(){
-      let admin = this.$store.state.userInfo;
-      if (admin.role !== 1) 
-        this.$message.warning("您的权限不足！");
-      return admin.role
-    },
+
     // 多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-
     // 改变页大小
     handleSizeChange(val) {
-      this.page.pageSize = val;
+      console.log(`每页 ${val} 条`);
     },
     // 改变页码
     handleCurrentChange(val) {
-      this.page.pageNum = val;
+      console.log(`当前页: ${val}`);
     },
   },
 };
 </script>
 
-<style scoped lang='less'>
-.top {
-  margin-bottom: 20px;
+<style lang='less' scoped>
+.el-button {
+  margin: 0 5px;
+}
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.el-col {
-  margin-right: 20px;
+.right-btns {
+  font-size: 18px;
 }
 
 .pagination {
@@ -354,11 +420,5 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-}
-
-.operation {
-  .el-button {
-    margin-right: 10px;
-  }
 }
 </style>

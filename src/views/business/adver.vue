@@ -65,28 +65,6 @@
           width="150"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="unit"
-          label="所属广告位"
-          width="150"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="广告类型" width="150" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.type == 0" size="mini" type="success"
-              >图片</el-tag
-            >
-            <el-tag v-else-if="scope.row.type == 1" size="mini" style="primary"
-              >文字</el-tag
-            >
-            <el-tag v-else-if="scope.row.type == 2" size="mini" style="warning"
-              >视频</el-tag
-            >
-            <el-tag v-else-if="scope.row.type == 3" size="mini" style="danger"
-              >链接</el-tag
-            >
-          </template>
-        </el-table-column>
         <el-table-column label="广告封面" width="150" align="center">
           <template slot-scope="scope">
             <div class="block">
@@ -98,6 +76,16 @@
             </div>
           </template>
         </el-table-column>
+        
+        <el-table-column prop="description" label="广告描述" width="400" align="center">
+        </el-table-column>
+        <el-table-column
+          prop="unit"
+          label="所属广告位"
+          width="150"
+          align="center"
+        ></el-table-column>
+        
         <el-table-column label="广告状态" width="150" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 0" size="mini" type="success"
@@ -222,7 +210,7 @@
 </template>
 
 <script>
-import updateAdver from "@/components/adver/updateAdver.vue";
+import updateAdver from "@/components/adver/index.vue";
 import { getAdvertisingList, addAdvertising, deleteAdvertsing } from '@/api/manage'
 export default {
   components: {

@@ -5,12 +5,22 @@
         <el-col :span="4">
           <el-input
             v-model="page.keyword"
-            placeholder="请输入关键词"
+            placeholder="请输入动态关键词"
             prefix-icon="el-icon-search"
           ></el-input>
         </el-col>
         <el-col :span="4">
-          <el-select v-model="page.status" placeholder="请选择状态">
+          <el-select v-model="page.type" placeholder="请选择动态类型">
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="(item, i) in options.typeOptions"
+              :key="i"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select v-model="page.status" placeholder="请选择动态状态">
             <el-option
               :label="item.label"
               :value="item.value"
@@ -19,8 +29,9 @@
             ></el-option>
           </el-select>
         </el-col>
-        <el-col :span="1">
-          <el-button type="danger" @click="searchActive">搜索</el-button>
+        <el-col :span="10">
+          <el-button type="primary" @click="searchActive">搜索</el-button>
+          <el-button type="danger" @click="handleDeleteMore">删除</el-button>
         </el-col>
       </el-row>
       <!-- 表格 -->
@@ -30,22 +41,47 @@
         tooltip-effect="dark"
         style="width: 100%"
         border
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="55" align="center" fixed>
+        </el-table-column>
         <el-table-column type="index" width="55" align="center" fixed>
         </el-table-column>
 
         <el-table-column width="150" align="center" label="ID" prop="id">
         </el-table-column>
-        <el-table-column width="150" align="center" label="举报者昵称" prop="userName">
-        </el-table-column>
-        <el-table-column width="150" align="center" label="举报者ID" prop="userId">
-        </el-table-column>
         <el-table-column
-          width="500"
+          width="150"
           align="center"
-          label="举报理由"
-          prop="reason"
+          label="审核类型"
+          prop="type"
         >
+          <template slot-scope="scope">
+            <div>
+              <el-tag type="primary" size="mini" v-if="scope.row.type === 0"
+                >动态审核</el-tag
+              >
+              <el-tag
+                type="primary"
+                size="mini"
+                v-else-if="scope.row.type === 1"
+                >图片审核</el-tag
+              >
+              <el-tag
+                type="primary"
+                size="mini"
+                v-else-if="scope.row.type === 2"
+                >视频审核</el-tag
+              >
+              <el-tag
+                type="primary"
+                size="mini"
+                v-else-if="scope.row.type === 3"
+                >举报审核</el-tag
+              >
+
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           width="150"
@@ -68,13 +104,13 @@
                 type="success"
                 size="mini"
                 v-else-if="scope.row.status === 2"
-                >无违规行为</el-tag
+                >已通过</el-tag
               >
               <el-tag
                 type="danger"
                 size="mini"
                 v-else-if="scope.row.status === 3"
-                >违规</el-tag
+                >未通过</el-tag
               >
               <el-tag
                 type="success"
@@ -95,53 +131,35 @@
         <el-table-column
           width="200"
           align="center"
-          label="更新时间"
+          label="受理时间"
           prop="updateTime"
+        >
+        </el-table-column>
+        <el-table-column
+          width="150"
+          align="center"
+          label="审核员"
+          prop="admin"
+        >
+        </el-table-column>
+        <el-table-column
+          width="150"
+          align="center"
+          label="审核员ID"
+          prop="adminId"
         >
         </el-table-column>
 
         <el-table-column width="200" align="center" label="操作" fixed="right">
           <template slot-scope="scope">
             <div class="operation">
-              <el-button
-                type="success"
-                size="mini"
-                class="el-icon-search"
-                @click="openDrawer(scope.$index, scope.row)"
-                >查看</el-button
-              >
-              <el-popover placement="bottom" width="200" trigger="hover">
-                <div class="operation-box">
-                  <el-button
-                    type="primary"
-                    size="mini"
-                    @click="sendAuditResult(true, scope.$index)"
-                    >Pass</el-button
-                  >
-                  <el-button
-                    type="danger"
-                    size="mini"
-                    @click="sendAuditResult(false, scope.$index)"
-                    >Faile</el-button
-                  >
-                </div>
-                <el-button
-                  type="primary"
-                  size="mini"
-                  class="el-icon-edit"
-                  slot="reference"
-                  v-if="scope.row.status < 2"
-                  >审核</el-button
-                >
-              </el-popover>
 
               <el-popconfirm
                 confirm-button-text="确认"
                 cancel-button-text="取消"
                 icon="el-icon-info"
                 icon-color="red"
-                title="确认删除该条举报？"
-                v-if="scope.row.status >= 2"
+                title="确认删除该条记录？"
                 @confirm="handelDelete(scope.$index, scope.row)"
               >
                 <el-button
@@ -175,34 +193,6 @@
         </el-pagination>
       </div>
 
-      <el-drawer
-        title="被举报动态详情"
-        :visible.sync="drawerVisible"
-        direction="rtl"
-        :before-close="handleClose"
-        size="90%"
-      >
-        <activeDetail :itemData="itemData" :result="faileResult" @sendAuditResult="sendAuditResult" />
-      </el-drawer>
-
-      <!-- 审核原因 -->
-      <el-dialog
-        :visible.sync="dialogVisible"
-        width="300px"
-        :before-close="handleCloseDialog"
-      >
-        <el-input
-          type="textarea"
-          placeholder="填写违规原因"
-          focus
-          v-model="faileResult"
-        ></el-input>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="sendAuditResultFaile"
-            >确 定</el-button
-          >
-        </div>
-      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -214,12 +204,18 @@ export default {
   data() {
     const options = {
       statusOptions: [
-        { label: "草稿", value: 0 },
-        { label: "审核中", value: 1 },
-        { label: "未违规", value: 2 },
-        { label: "违规", value: 3 },
-        { label: "已发布", value: 4 },
+        { label: "草稿", value: 0, type: 'info' },
+        { label: "审核中", value: 1, type: 'warning' },
+        { label: "审核通过", value: 2, type: 'success' },
+        { label: "审核拒绝", value: 3, type: 'danger' },
+        { label: "已发布", value: 4, type: 'success' },
       ],
+      typeOptions: [
+        { label: "动态审核", value: 0, type: 'primary' },
+        { label: "图片审核", value: 1, type: 'primary' },
+        { label: "视屏审核", value: 2, type: 'primary' },
+        { label: "举报审核", value: 3, type: 'primary' },
+      ]
     };
     return {
       options,
@@ -227,60 +223,56 @@ export default {
       drawerVisible: false,
       dialogVisible: false,
       faileResult: "", //不通过原因
+      multipleSelection: [],
       tableData: [
         {
           id: "S74856125151",
           status: 1,
-          userName: '我叫监管侠',
-          userId: 'S65',
-          reason: '擦边图片',
+          type: 0,
+          admin: '下雪',
+          adminId: 'S61662',
           createTime: "2022/7/28 21:46",
           updateTime: "2022/7/28 21:46",
-          activeData: {
-            userInfo: {
-              imgPath: require("@/assets/images/user.jpeg"),
-              userName: "小懒猫",
-            },
-            activeInfo: {
-              publishTime: "2022/7/28 19:35",
-              text: "迷迷糊糊的活着",
-              imgArray: [
-                require("@/assets/images/role-bg.png"),
-                require("@/assets/images/space2.jpg"),
-              ],
-            },
-          },
+          
         },
         {
-          id: "S744241",
-          status: 3,
-          userName: '我叫监管侠',
-          userId: 'S65',
-          reason: '擦边图片',
+          id: "S74856125151",
+          status: 2,
+          type: 1,
+          admin: '下雪',
+          adminId: 'S61662',
           createTime: "2022/7/28 21:46",
           updateTime: "2022/7/28 21:46",
-          activeData: {
-            userInfo: {
-              imgPath: require("@/assets/images/user.jpeg"),
-              userName: "主",
-            },
-            activeInfo: {
-              publishTime: "2022/7/28 19:35",
-              text: "只愿得一人心，白首不分离",
-              imgArray: [require("@/assets/images/role-bg.png")],
-            },
-          },
+          
+        },
+        {
+          id: "S74856125151",
+          status: 4,
+          type: 3,
+          admin: '下雪',
+          adminId: 'S61662',
+          createTime: "2022/7/28 21:46",
+          updateTime: "2022/7/28 21:46",
+          
+        },
+        {
+          id: "S74856125151",
+          status: 3,
+          type: 0,
+          admin: '下雪',
+          adminId: 'S61662',
+          createTime: "2022/7/28 21:46",
+          updateTime: "2022/7/28 21:46",
+          
         },
       ],
-      //单个动态数据
-      itemData: {},
-      index: 0,
       page: {
         pageSize: 10,
         pageNum: 1,
         total: 20,
         keyword: "",
         status: '',
+        type: ''
       },
     };
   },
@@ -304,32 +296,36 @@ export default {
     // 按条件搜索动态
     searchActive() {},
 
-    // 发送审核结果
-    sendAuditResult(judge, index) {
-      this.index = index;
-      if (judge) {
-        this.tableData[index].status = 2;
-        this.$message.success("审核通过！");
-      } else {
-        this.dialogVisible = true;
-      }
-    },
-
-    sendAuditResultFaile() {    
-      if(this.faileResult){
-        this.dialogVisible = false;
-        this.tableData[this.index].status = 3;
-        this.$message.error("你已判定该举报有效！违规原因：" + this.faileResult);
-      }else{
-        this.$message.error("未填写违规原因，审核无效！");
-      }
-      
-    },
-
     // 删除该动态
     handelDelete(index, row) {
-      this.tableData.splice(index, 1);
-      this.$message.success("删除该举报成功！");
+      if(this.isRight() == 1) {
+        this.tableData.splice(index, 1);
+      this.$message.success("删除该动态成功！");
+      }
+   
+    },
+
+    // 批量删除
+    handleDeleteMore() {
+      // 验证是否存在选择
+      if (this.multipleSelection.length === 0)
+        return this.$message.warning("您还未选择删除的用户！");
+      // 验证是否具有权限
+      this.isRight()
+      // 批量删除
+      console.log(this.multipleSelection);
+      this.$message.warning("暂未开放功能");
+    },
+    // 验证权限
+    isRight(){
+      let admin = this.$store.state.userInfo;
+      if (admin.role !== 1) 
+        this.$message.warning("您的权限不足！");
+      return admin.role
+    },
+    // 多选
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
 
     // 改变页大小

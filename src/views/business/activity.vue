@@ -67,7 +67,7 @@
         ></el-table-column>
         <el-table-column
           prop="imgPath"
-          label="活动封面"
+          label="活动主图"
           width="100"
           align="center"
         >
@@ -115,13 +115,21 @@
         </el-table-column>
         <el-table-column label="发布状态" width="150" align="center">
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.publishStatus"
-              disabled
-              active-color="#13ce66"
-              inactive-color="#ff4949"
+            <el-tag v-if="scope.row.publishStatus === 0" size="mini" type="warning"
+              >待发布</el-tag
             >
-            </el-switch>
+            <el-tag
+              v-else-if="scope.row.publishStatus === 1"
+              size="mini"
+              style="success"
+              >已发布</el-tag
+            >
+            <el-tag
+              v-else-if="scope.row.publishStatus === 2"
+              size="mini"
+              style="danger"
+              >发布结束</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -161,6 +169,7 @@
               size="mini"
               class="el-icon-view"
               type="success"
+              v-if="scope.row.isSignUp"
               @click="handleDetail(scope.$index, scope.row)"
               >报名情况</el-button
             >
@@ -267,7 +276,7 @@ export default {
           position: "约吧", //活动弹出层位置
           order: 1,
           status: 1,//活动状态
-          publishStatus: false,//发布状态
+          publishStatus: 0,//发布状态
           views: 234, //关注度
           signUpNum: 20, //报名人数
           isSignUp: false, //是否可报名

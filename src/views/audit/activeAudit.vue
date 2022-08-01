@@ -136,7 +136,7 @@
                 cancel-button-text="取消"
                 icon="el-icon-info"
                 icon-color="red"
-                title="确认删除该条动态？"
+                title="确认删除该条动态审核？"
                 v-if="scope.row.status >= 2"
                 @confirm="handelDelete(scope.$index, scope.row)"
               >

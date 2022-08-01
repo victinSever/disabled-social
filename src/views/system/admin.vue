@@ -1,17 +1,7 @@
 <template>
   <div>
     <el-card class="table">
-      <div></div>
-      <el-table
-        ref="multipleTable"
-        :data="tableData"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column>
-          <template slot="header" slot-scope="scope">
-            <div class="table-header">
+      <div class="table-header">
               <div class="table-header-left">
               <el-button type="primary" class="el-icon-edit" size="mini" @click="handleAdd(scope.row)">添加</el-button>
               <el-button type="danger" class="el-icon-delete" size="mini" @click="handleDeleteMore(scope.$index, scope.row)">删除</el-button>
@@ -29,8 +19,15 @@
               <el-tooltip class="item" effect="dark" content="全屏" placement="top">
                 <el-button class="el-icon-rank right-btns" size="small"></el-button>
               </el-tooltip>
-            </div> </div>                             
-          </template>
+            </div> </div>  
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        
           <el-table-column type="selection" width="55" align="center">
           </el-table-column>
           <el-table-column prop="userId" label="ID" width="50" align="center">
@@ -96,11 +93,11 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" align="center">
+          <el-table-column prop="createTime" label="创建时间" align="center" width="150">
           </el-table-column>
-          <el-table-column prop="updateTime" label="更新时间" align="center">
+          <el-table-column prop="updateTime" label="更新时间" align="center" width="150">
           </el-table-column>
-          <el-table-column label="操作" width="300" align="center">
+          <el-table-column label="操作" width="300" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -124,7 +121,6 @@
               >
             </template>
           </el-table-column>
-        </el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination

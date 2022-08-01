@@ -282,7 +282,9 @@ export default {
           qq: '1255115515',
           email: 'dsadahfdsn@qq.com'
         },
-        detailData: {},
+        detailData: {
+          
+        },
         marrayData: {},
       }, //个人信息
 

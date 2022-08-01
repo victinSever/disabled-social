@@ -56,55 +56,58 @@
       >
         <el-table-column type="selection" width="55" align="center" fixed>
         </el-table-column>
-        <el-table-column prop="id" label="ID" width="50" align="center" fixed>
+        <el-table-column type="index" width="50" align="center" fixed>
         </el-table-column>
-
+        <el-table-column
+          prop="title"
+          label="广告位名称"
+          width="150"
+          align="center"
+          ><template slot-scope="scope">
+            <span style="color: blue; font-weight: bold">{{
+              scope.row.title
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="description"
           label="广告位描述"
-          width="150"
+          width="500"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="place"
-          label="广告位位置"
-          width="150"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="栏目类型" width="150" align="center">
+
+        <el-table-column label="广告位使用状态" width="150" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.type === 0" size="mini" type="success"
-              >友情广告</el-tag
+            <el-switch
+              v-model="scope.row.status"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              disabled
             >
-            <el-tag v-else-if="scope.row.type === 1" size="mini" style="primary"
-              >七夕之约</el-tag
-            >
-            <el-tag v-else-if="scope.row.type === 2" size="mini" style="warning"
-              >情人节礼物</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column label="栏目状态" width="150" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 0" size="mini" type="success"
-              >使用中</el-tag
-            >
-            <el-tag
-              v-else-if="scope.row.status === 1"
-              size="mini"
-              style="primary"
-              >未使用</el-tag
-            >
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column
-          prop="size"
-          label="广告位大小"
+          prop="adverName"
+          label="已插入广告"
           width="150"
           align="center"
-        ></el-table-column>
+          ><template slot-scope="scope">
+            <span v-if="scope.row.status">{{ scope.row.adverName }}</span>
+          </template></el-table-column
+        >
         <el-table-column
-          prop="number"
+          prop="adverId"
+          label="已插入广告ID"
+          width="150"
+          align="center"
+          ><template slot-scope="scope">
+            <span v-if="scope.row.status">{{ scope.row.adverId }}</span>
+          </template></el-table-column
+        >
+
+        <el-table-column
+          prop="order"
           label="序号"
           width="80"
           align="center"
@@ -162,7 +165,7 @@
 
     <!-- 修改广告 -->
     <el-dialog
-      :title="type === 1 ? '修改广告位':'添加广告位'"
+      :title="type === 1 ? '修改广告位' : '添加广告位'"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="400px"
@@ -173,13 +176,12 @@
         <el-button type="primary" @click="saveData">确 定</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
-import adSort from "@/components/adverSort/adSort.vue";
-import { getAdvertiseplaceList } from '@/api/manage'
+import adSort from "@/components/adverSort/index.vue";
+import { getAdvertiseplaceList } from "@/api/manage";
 export default {
   components: {
     adSort,
@@ -206,31 +208,53 @@ export default {
       tableData: [
         {
           id: "1",
-          title: "首页",
-          position: "弹出层",
+          title: "首页全屏弹框",
+          description: "首页全屏弹框，用户第一时间可以看到的最优质广告位",
           order: 1,
-          type: 0,
-          status: 1,
-          size: "50 * 50",
+          status: false,
+          adverName: "七夕送暖",
+          adverId: "S1226",
           createTime: "2022/7/25 14:39",
-          pusblishTime: "2022/7/25 14:39",
+          updateTime: "2022/7/25 14:39",
+        },
+        {
+          id: "2",
+          title: "广场精彩多多",
+          description: "小按钮广告，通过广场模块的悬浮按钮进入，该广告最持久",
+          order: 1,
+          status: true,
+          adverName: "福利大放送",
+          adverId: "S1236",
+          createTime: "2022/7/25 14:39",
+          updateTime: "2022/7/25 14:39",
+        },
+        {
+          id: "3",
+          title: "动态插入广告",
+          description: "在动态列表中插入广告用户，可以出现的频率最多",
+          order: 1,
+          status: true,
+          adverName: "红包节",
+          adverId: "S1266",
+          createTime: "2022/7/25 14:39",
+          updateTime: "2022/7/25 14:39",
         },
       ],
     };
   },
-  mounted(){
-    this.getData()
+  mounted() {
+    this.getData();
   },
   methods: {
     // 查询数据
-    async getData(){
-      const { data: res} = await getAdvertiseplaceList({
+    async getData() {
+      const { data: res } = await getAdvertiseplaceList({
         size: this.page.pageSize,
-        page: this.page.pageNum
-      })
+        page: this.page.pageNum,
+      });
       console.log(res);
-      this.tableData = res.list
-      this.page.total = res.total
+      this.tableData = res.list;
+      this.page.total = res.total;
     },
     // 修改单个数据请求
     saveData() {
@@ -261,7 +285,7 @@ export default {
     // 打开详情dialog
     handleEdit(index, row) {
       this.adverData = row;
-      this.type = 1
+      this.type = 1;
       this.dialogVisible = true;
     },
 
@@ -285,7 +309,7 @@ export default {
     // 添加
     handleAdd() {
       this.adverData = {};
-      this.type = 2
+      this.type = 2;
       this.dialogVisible = true;
     },
     // 多选

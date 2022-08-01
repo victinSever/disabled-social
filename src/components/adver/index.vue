@@ -29,21 +29,20 @@
               clearable
             ></el-input>
           </el-form-item>
+          
+          
+          <el-form-item label="广告描述" prop="description">
+            <el-input
+              v-model="data.description"
+              placeholder="输入广告描述"
+              clearable
+            ></el-input>
+          </el-form-item>
+
           <el-form-item label="广告链接" prop="advertisingLinks">
             <el-input v-model="data.advertisingLinks" placeholder="输入链接" clearable
               ><template slot="prepend">Http://</template></el-input
             >
-          </el-form-item>
-          <el-form-item label="型号" prop="advertisedModel">
-            <el-select v-model="data.advertisedModel" placeholder="请选择型号">
-              <el-option
-                v-for="item in adverSize"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
           </el-form-item>
 
           <el-form-item label="序号" prop="ordinal">
@@ -56,10 +55,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="广告类型" prop="type">
-            <el-select v-model="data.type" placeholder="请选择广告位">
+          
+          <el-form-item label="所属广告位" prop="name">
+            <el-select v-model="data.unit" placeholder="请选择广告位">
               <el-option
-                v-for="item in adverType"
+                v-for="item in adverPosition"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -67,10 +67,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属广告位" prop="name">
-            <el-select v-model="data.unit" placeholder="请选择广告位">
+          <el-form-item label="广告规模" prop="advertisedModel">
+            <el-select v-model="data.advertisedModel" placeholder="请选择规模">
               <el-option
-                v-for="item in adverPosition"
+                v-for="item in adverSize"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -117,17 +117,16 @@ export default {
       rules: {
         title: [
           { required: true, message: "请输入广告标题", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
-        type: [
-          { required: true, message: "请至少选择活动类型", trigger: "change" },
+        description: [
+          { required: true, message: "请输入广告描述", trigger: "blur" },
         ],
         startTime: [
           {
             type: "date",
             required: true,
             message: "请选择开始日期",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
         endTime: [
@@ -135,7 +134,7 @@ export default {
             type: "date",
             required: true,
             message: "请选择结束时间",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
         order: [{ required: true, message: "请输入数字", trigger: "change" }],
@@ -148,43 +147,15 @@ export default {
       adverPosition: [
         {
           value: "1",
-          label: "首页弹框",
+          label: "首页全屏弹框",
         },
         {
           value: "2",
-          label: "就业模块",
+          label: "广场惊喜多多",
         },
         {
           value: "3",
-          label: "社交按钮",
-        },
-        {
-          value: "4",
-          label: "活动链接",
-        },
-        {
-          value: "5",
-          label: "互动推荐",
-        },
-      ],
-
-      //   类型
-      adverType: [
-        {
-          value: "1",
-          label: "图片",
-        },
-        {
-          value: "2",
-          label: "文字",
-        },
-        {
-          value: "3",
-          label: "视频",
-        },
-        {
-          value: "4",
-          label: "推荐",
+          label: "推荐动态",
         },
       ],
 
@@ -192,19 +163,19 @@ export default {
       adverSize: [
         {
           value: "1",
-          label: "50*50",
+          label: "链接",
         },
         {
           value: "2",
-          label: "30*30",
+          label: "图文",
         },
         {
           value: "3",
-          label: "20*20",
+          label: "视屏",
         },
         {
           value: "4",
-          label: "10*20",
+          label: "文字",
         },
       ],
 
@@ -268,30 +239,29 @@ export default {
 </script>
 
 <style scoped lang='less'>
-.avatar-uploader .el-upload {
-  border: 1px dashed #eee;
-  border-radius: 3px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  width: 50px;
-  height: 50px;
-  background-color: #ccc;
+.avatar-uploader,.el-upload{
+  height: 80px;
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  border-radius: 5px;
+  border: 2px dashed #ddd;
+
+    img{
+    width: 80px;
+    height: 80px;
+    border-radius: inherit;
+
+  }
+  
 }
+
 .avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+  border: 2px dashed #409eff;
 }
-.avatar-uploader-icon {
-  font-size: 18px;
-  color: #8c939d;
-  width: 50px;
-  height: 50px;
-  background-color: #ccc;
-  text-align: center;
-}
+
 .avatar {
-  width: 50px;
-  height: 50px;
   display: block;
 }
 </style>

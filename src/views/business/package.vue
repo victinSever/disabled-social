@@ -59,8 +59,11 @@
           label="套餐名"
           width="150"
           align="center"
-        >
+        ><template slot-scope="scope">
+            <span style="color: blue; font-weight: bold">{{scope.row.name}}</span>
+          </template>
         </el-table-column>
+
 
         <el-table-column
           label="时长"
@@ -262,6 +265,7 @@ export default {
       let data = this.$refs.packageItem.returnData()
       if(data !== false){
         console.log(data);
+        this.$message.success('修改套餐成功！')
         this.dialogVisible = false
       }
     },

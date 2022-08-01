@@ -88,6 +88,14 @@ const routes = [{
                 role: 1
             },
             component: () => import('@/views/system/menu.vue'),
+        },
+        {
+            path: 'attachment',
+            meta: {
+                title: '附件管理 - MPDF',
+                role: 1
+            },
+            component: () => import('@/views/system/attachment.vue'),
         }
     ]
 },
@@ -235,6 +243,14 @@ const routes = [{
             },
             component: () => import('@/views/audit/activeAudit.vue'),
         },
+        {
+            path: 'infoAudit',
+            meta: {
+                title: '资料审核 - MPDF',
+                role: 2
+            },
+            component: () => import('@/views/audit/infoAudit.vue'),
+        },
         
         {
             path: 'vedioAudit',
@@ -253,12 +269,12 @@ const routes = [{
             component: () => import('@/views/audit/reportAudit.vue'),
         },
         {
-            path: 'infoAudit',
+            path: 'auditList',
             meta: {
                 title: '信息审核 - MPDF',
                 role: 2
             },
-            component: () => import('@/views/audit/infoAudit.vue'),
+            component: () => import('@/views/audit/auditList.vue'),
         },
     ]
 },
