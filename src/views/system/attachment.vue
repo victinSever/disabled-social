@@ -32,7 +32,7 @@
             <div class="imgUpload">
               <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="/apisFile"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
@@ -84,7 +84,7 @@ export default {
       }else{
         this.$message.warning('检索内容不能为空！')
       }
-      
+
     },
     async send(){
       if(!this.url){
@@ -92,14 +92,14 @@ export default {
       }
       if(!this.file || !this.imageUrl){
         return this.$message.warning('你还未选择图片！')
-      }      
+      }
       try{
         let res = await this.$http.post("http://222.177.66.230:9898/upload", { file: this.file });
         console.log(res);
         this.$message.success('上传成功！')
       }catch(err){
         this.$message.error('上传失败！失败原因：' + err)
-      }    
+      }
     },
     handleChange(value) {
       console.log(value);
@@ -111,12 +111,11 @@ export default {
     },
 
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       this.imageUrl = URL.createObjectURL(file)
       this.file = file
-      return isJPG && isLt2M;
+      return  isLt2M;
     },
 
   },
