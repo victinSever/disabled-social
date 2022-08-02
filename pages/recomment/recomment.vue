@@ -18,119 +18,124 @@
 				<image @click="openPopup" src="@/static/images/home/screen.png"></image>
 			</view>
 		</view>
-
-		<!-- 主题图片组件 -->
-		<view class="home-body">
-			<movable-area :animation="animationData" class="movable-area movable-area0">
-				<movable-view id="1" :x="x" :y="y" out-of-bounds="true" class="movable-view" show-scrollbar
-					direction="all" @change="onChange" :disabled="movedisable">
-					<view class="home-swiper">
-						<view class="swiper_detail" :style="{display:header==true? 'block' : 'none'}">
-							<view class="mask">
-							</view>
-							<view class="userName">
-								小懒猫
-							</view>
-							<view class="userDetail">
-								<text>重庆九龙坡(10km)</text>
-								<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
-							</view>
-							<view class="userConstellation">
-								<text>肢体残疾（三级）</text>
-								<text>26岁</text>
-							</view>
-							<view class="control">
-								<view class="back">
-									<image src="@/static/images/home/5.png"></image>
+		
+		<template v-if="isImages">
+			<view class="home-body">
+				<movable-area :animation="animationData" class="movable-area movable-area0">
+					<movable-view id="1" :x="x" :y="y" out-of-bounds="true" class="movable-view" show-scrollbar
+						direction="all" @change="onChange" :disabled="movedisable">
+						<view class="home-swiper">
+							<view class="swiper_detail" :style="{display:header==true? 'block' : 'none'}">
+								<view class="mask">
 								</view>
-
-								<view class="cancel">
-									<image src="@/static/images/home/3.png"></image>
-								</view>
-
-								<view class="like">
-									<image src="@/static/images/home/1.png"></image>
-								</view>
-
-								<view class="collection">
-									<image src="@/static/images/home/2.png"></image>
-								</view>
-
-
-							</view>
-						</view>
-						<view class="back-detail" @click="backdetail" :style="{display:header==true? 'none' : 'block'}">
-			                	<image src="@/static/images/home/shang.png"></image>
-						</view>
-						<swiper class="swiper" indicator-dots="true" circular="true">
-							<swiper-item>
-								<view class="swiper-item">
-									<image mode="aspectFill" alt="">
-								</view>
-							</swiper-item>
-							<swiper-item>
-								<view class="swiper-item">
-									<image mode="aspectFill" alt="">
-								</view>
-							</swiper-item>
-							<swiper-item>
-								<view class="swiper-item">
-									<image mode="aspectFill" alt="">
-								</view>
-							</swiper-item>
-							<swiper-item>
-								<view class="swiper-item">
-									<image mode="aspectFill" alt="">
-								</view>
-							</swiper-item>
-						</swiper>
-
-						<view class="footer" v-show="footer">
-							<!-- 姓名 -->
-							<view class="footer-header">
 								<view class="userName">
-									<text>小懒猫</text>
-									<text class="focus">关注</text>
+									小懒猫
 								</view>
-								<view class="address">
-									<text>重庆巴南(3km)</text>
-									<text class="point">·</text>
-									<text style="color: #F95F81;">26分钟前活跃</text>
+								<view class="userDetail">
+									<text>重庆九龙坡(10km)</text>
+									<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
 								</view>
-							</view>
-
-							<!-- 相册 -->
-							<view class="photos">
-								<view class="title">
-									<text class="pic">动态相册</text>
-									<text class="look">查看全部</text>
+								<view class="userConstellation">
+									<text>肢体残疾（三级）</text>
+									<text>26岁</text>
 								</view>
-								<view class="">
-									<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-										<view id="demo1" class="scroll-view-item_H uni-bg-red"></view>
-									</scroll-view>
-								</view>
-							</view>
-
-							<!-- MV -->
-							<view class="mv">
-								<view class="title">
-									<text class="pic">个人MV</text>
-								</view>
-								<view class="">
-									暂无
+								<view class="control">
+									<view class="back">
+										<image src="@/static/images/home/5.png"></image>
+									</view>
+			
+									<view class="cancel">
+										<image src="@/static/images/home/3.png"></image>
+									</view>
+			
+									<view class="like">
+										<image src="@/static/images/home/1.png"></image>
+									</view>
+			
+									<view class="collection">
+										<image src="@/static/images/home/2.png"></image>
+									</view>
+			
+			
 								</view>
 							</view>
-
-							<homeItem title="关于我" content="美少女战士"></homeItem>
-							<homeItem title="我的标签"></homeItem>
-							<homeItem title="我的兴趣"></homeItem>
+							<view class="back-detail" @click="backdetail" :style="{display:header==true? 'none' : 'block'}">
+				                	<image src="@/static/images/home/shang.png"></image>
+							</view>
+							<swiper class="swiper" indicator-dots="true" circular="true">
+								<swiper-item>
+									<view class="swiper-item">
+										<image mode="aspectFill" alt="">
+									</view>
+								</swiper-item>
+								<swiper-item>
+									<view class="swiper-item">
+										<image mode="aspectFill" alt="">
+									</view>
+								</swiper-item>
+								<swiper-item>
+									<view class="swiper-item">
+										<image mode="aspectFill" alt="">
+									</view>
+								</swiper-item>
+								<swiper-item>
+									<view class="swiper-item">
+										<image mode="aspectFill" alt="">
+									</view>
+								</swiper-item>
+							</swiper>
+			
+							<view class="footer" v-show="footer">
+								<!-- 姓名 -->
+								<view class="footer-header">
+									<view class="userName">
+										<text>小懒猫</text>
+										<text class="focus">关注</text>
+									</view>
+									<view class="address">
+										<text>重庆巴南(3km)</text>
+										<text class="point">·</text>
+										<text style="color: #F95F81;">26分钟前活跃</text>
+									</view>
+								</view>
+			
+								<!-- 相册 -->
+								<view class="photos">
+									<view class="title">
+										<text class="pic">动态相册</text>
+										<text class="look">查看全部</text>
+									</view>
+									<view class="">
+										<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
+											<view id="demo1" class="scroll-view-item_H uni-bg-red"></view>
+										</scroll-view>
+									</view>
+								</view>
+			
+								<!-- MV -->
+								<view class="mv">
+									<view class="title">
+										<text class="pic">个人MV</text>
+									</view>
+									<view class="">
+										暂无
+									</view>
+								</view>
+			
+								<homeItem title="关于我" content="美少女战士"></homeItem>
+								<homeItem title="我的标签"></homeItem>
+								<homeItem title="我的兴趣"></homeItem>
+							</view>
 						</view>
-					</view>
-				</movable-view>
-			</movable-area>
-		</view>
-
+					</movable-view>
+				</movable-area>
+			</view>
+			
+		</template>
+		
+		<template v-else>
+			<videos></videos>
+		</template>
 		<!-- 设置按钮的弹框 -->
 		<uni-popup ref="homeSetting">
 			<recomment-setting @closePopup="closePopup"></recomment-setting>
@@ -146,9 +151,11 @@
 
 <script>
 	import homeItem from '@/components/recomment-item/recomment-item.vue'
+		import videos from './video.vue'
 	export default {
 		components: {
-			homeItem
+			homeItem,
+			videos
 		},
 		data() {
 			return {
