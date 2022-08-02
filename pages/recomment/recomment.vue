@@ -4,23 +4,21 @@
 		<!-- 头部 -->
 		<view :animation="animationHeader" class="home-header">
 			<view class="header-left">
-				<span @click="isImages = true">
-					<uni-icons v-if="isImages" type="image-filled" size="30" color="darkorange"></uni-icons>
-					<uni-icons v-else type="image" size="30" color="#777"></uni-icons>
-					<text :style="isImages?'color: darkorange; font-weight: bold':'color: #777; font-weight: normal'">图片秀</text>
-				</span>
-				<span @click="isImages = false">
-					<uni-icons v-if="isImages" type="videocam" size="30" color="#777"></uni-icons>
-					<uni-icons v-else type="videocam-filled" size="30" color="darkorange"></uni-icons>
-					<text :style="!isImages?'color: darkorange; font-weight: bold':'color: #777; font-weight: normal'">视频秀</text>
-				</span>
+				<text @click="isImages = true">
+					<text
+						:style="isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">图片秀</text>
+				</text>
+				<text @click="isImages = false">
+					<text
+						:style="!isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">视频秀</text>
+				</text>
 			</view>
 			<view class="header-right">
-				<span @click="gotoSearch"><uni-icons type="search" size="30"></uni-icons></span>
-				<span @click="openPopup"><uni-icons type="settings-filled" size="30"></uni-icons></span>
+				<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;"></image>
+				<image @click="openPopup" src="@/static/images/home/screen.png"></image>
 			</view>
 		</view>
-		
+
 		<!-- 主题图片组件 -->
 		<view class="home-body">
 			<movable-area :animation="animationData" class="movable-area movable-area0">
@@ -34,125 +32,115 @@
 								小懒猫
 							</view>
 							<view class="userDetail">
-								<span>重庆九龙坡(10km)</span><span @click="checkDetail">↑</span>
+								<text>重庆九龙坡(10km)</text>
+								<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
 							</view>
 							<view class="userConstellation">
-								<span>肢体残疾（三级）</span>
-								<span>26岁</span>
+								<text>肢体残疾（三级）</text>
+								<text>26岁</text>
 							</view>
 							<view class="control">
-								<span class="back">
-									<i class="iconfont icon-huitui"></i>
-								</span>
-								<span class="cancel">
-									<i class="iconfont icon-quxiao"></i>
-								</span>
-								<span class="like">
-									<i class="iconfont icon-xihuan"></i>
-								</span>
-								<span class="collection">
-									<i class="iconfont icon-shoucang"></i>
-								</span>
+								<view class="back">
+									<image src="@/static/images/home/5.png"></image>
+								</view>
+
+								<view class="cancel">
+									<image src="@/static/images/home/3.png"></image>
+								</view>
+
+								<view class="like">
+									<image src="@/static/images/home/1.png"></image>
+								</view>
+
+								<view class="collection">
+									<image src="@/static/images/home/2.png"></image>
+								</view>
+
+
 							</view>
 						</view>
 						<view class="back-detail" @click="backdetail" :style="{display:header==true? 'none' : 'block'}">
-							←
+			                	<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<swiper class="swiper" indicator-dots="true" circular="true">
 							<swiper-item>
 								<view class="swiper-item">
-									<image src="@/static/images/home/img4.png"
-										mode="aspectFill" alt="">
+									<image mode="aspectFill" alt="">
 								</view>
 							</swiper-item>
 							<swiper-item>
 								<view class="swiper-item">
-									<image src="@/static/images/home/img2.png"
-										mode="aspectFill" alt="">
+									<image mode="aspectFill" alt="">
 								</view>
 							</swiper-item>
 							<swiper-item>
 								<view class="swiper-item">
-									<image src="@/static/images/home/img3.png"
-										mode="aspectFill" alt="">
+									<image mode="aspectFill" alt="">
 								</view>
 							</swiper-item>
 							<swiper-item>
 								<view class="swiper-item">
-									<image src="@/static/images/home/img1.png"
-										mode="aspectFill" alt="">
+									<image mode="aspectFill" alt="">
 								</view>
 							</swiper-item>
 						</swiper>
-						
+
 						<view class="footer" v-show="footer">
 							<!-- 姓名 -->
 							<view class="footer-header">
 								<view class="userName">
-									<span>小懒猫</span>
-									<span class="focus">关注</span>
+									<text>小懒猫</text>
+									<text class="focus">关注</text>
 								</view>
 								<view class="address">
-									<span>重庆巴南(3km)</span>
-									<span class="point">·</span>
-									<span>26分钟前活跃</span>
+									<text>重庆巴南(3km)</text>
+									<text class="point">·</text>
+									<text style="color: #F95F81;">26分钟前活跃</text>
 								</view>
 							</view>
-							
+
 							<!-- 相册 -->
 							<view class="photos">
 								<view class="title">
-									<span class="pic">动态相册</span>
-									<span class="look">查看全部</span>
+									<text class="pic">动态相册</text>
+									<text class="look">查看全部</text>
 								</view>
 								<view class="">
 									<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-										<view id="demo1" class="scroll-view-item_H uni-bg-red">A</view>
-										<view id="demo2" class="scroll-view-item_H uni-bg-green">B</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
-										<view id="demo3" class="scroll-view-item_H uni-bg-blue">C</view>
+										<view id="demo1" class="scroll-view-item_H uni-bg-red"></view>
 									</scroll-view>
 								</view>
 							</view>
-							
+
 							<!-- MV -->
 							<view class="mv">
 								<view class="title">
-									<span class="pic">个人MV</span>
+									<text class="pic">个人MV</text>
 								</view>
 								<view class="">
 									暂无
 								</view>
 							</view>
-							
+
 							<homeItem title="关于我" content="美少女战士"></homeItem>
 							<homeItem title="我的标签"></homeItem>
 							<homeItem title="我的兴趣"></homeItem>
-							<homeItem class="my-account" title="我的账号"></homeItem>
 						</view>
 					</view>
 				</movable-view>
 			</movable-area>
 		</view>
-		
+
 		<!-- 设置按钮的弹框 -->
 		<uni-popup ref="homeSetting">
 			<recomment-setting @closePopup="closePopup"></recomment-setting>
 		</uni-popup>
-		
+
 		<!-- 提示或者广告按钮的弹框 -->
 		<uni-popup ref="recommentAdver" mask-background-color="rgba(0,0,0,0.2)">
 			<recomment-adver @closeAdver="closeAdver"></recomment-adver>
 		</uni-popup>
-		
+
 	</view>
 </template>
 
@@ -186,46 +174,46 @@
 				}
 			}
 		},
-		mounted(){
+		mounted() {
 			// if(!localStorage.getItem('isFirstAdver')){
-				this.loadAdver()
+			this.loadAdver()
 			// }
 		},
 		methods: {
 			// 关闭提示广告
-			closeAdver(){
+			closeAdver() {
 				this.$refs.recommentAdver.close()
 				// localStorage.setItem('isFirstAdver', true)
 			},
 			// 弹出广告
-			loadAdver(){
+			loadAdver() {
 				let $this = this
-				setTimeout(function(){
+				setTimeout(function() {
 					$this.$refs.recommentAdver.open('center')
 				}, 1000)
 			},
 			// 关闭筛选弹出层
-			closePopup(){
+			closePopup() {
 				this.$refs.homeSetting.close()
 			},
 			// 弹出筛选弹出层
-			openPopup(){
-				this.$refs.homeSetting.open('bottom')			
+			openPopup() {
+				this.$refs.homeSetting.open('bottom')
 			},
-			
+
 			// 筛选
-			shaixuan(){
+			shaixuan() {
 				uni.$showMsg('筛选功能未开放')
 			},
 			// 跳转到搜索页面
-			gotoSearch(){
+			gotoSearch() {
 				uni.navigateTo({
 					url: '/subpkg/search/search'
 				})
 			},
-			
+
 			// 详情页返回
-			backdetail(){
+			backdetail() {
 				this.header = true;
 				this.footer = false;
 				this.movedisable = false;
@@ -237,7 +225,7 @@
 				this.animation.translateY(0).width(95 + "%").height(98 + "%").top(0 + "rpx").step()
 				this.animationData = this.animation.export()
 			},
-			
+
 			// 拖动的
 			tap(e) {
 				this.x = this.old.x
@@ -247,7 +235,7 @@
 					this.y = 30
 				})
 			},
-			
+
 			// 进入详情页
 			checkDetail() {
 				this.footer = true;
@@ -262,43 +250,43 @@
 				this.animation.translateY(-50).width(100 + 'vw').height(400).top(-10 + "rpx").step()
 				this.animationData = this.animation.export()
 			},
-			
+
 			clear() {
 				this.animation.rotate(0).translateY(0).translateX(0).step()
 			},
-			
+
 			// 四种动画方式
 			moveOutlb() {
 				this.animation.translateY(230).rotate(-10).translateX(-500).step()
 				this.clear()
 				this.animationData = this.animation.export()
 			},
-			
+
 			moveOutlt() {
 				this.animation.translateY(-230).rotate(-10).translateX(-500).step()
 				this.clear()
 				this.animationData = this.animation.export()
 			},
-			
-			moveOutrb(){
+
+			moveOutrb() {
 				this.animation.translateY(230).rotate(10).translateX(500).step()
 				this.clear()
 				this.animationData = this.animation.export()
 			},
-			
+
 			moveOutrt() {
 				this.animation.translateY(-230).rotate(10).translateX(500).step()
 				this.clear()
 				this.animationData = this.animation.export()
 			},
-			
+
 			// 控制动画的播放
 			onChange(e) {
 				this.animationData = {};
 				let x = e.detail.x
 				let y = e.detail.y
 				let distance = 5 // 控制拖动长度
-				
+
 				if (Math.abs(x) >= distance && Math.abs(y) >= distance) {
 					// this.moveOutlb((e.detail.x,e.detail.y))
 					var animation = uni.createAnimation({
@@ -323,8 +311,6 @@
 </script>
 
 <style lang="scss" scoped>
-	
-	
 	wx-swiper .wx-swiper-dot {
 		position: relative;
 		bottom: 900rpx;
@@ -343,31 +329,28 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			
-			.header-left{
-				margin-left: 20rpx;	
+
+			.header-left {
+				margin-left: 20rpx;
 				display: flex;
 				height: 100%;
-				
-				&>span{
-					height: 100%;
-					margin-right: 20rpx;
-					font-size: 18px;					
-					color: darkorange;				
-					display: flex;
-					align-items: center;
-				}
-				
-				&>span:nth-child(1){
-					font-weight: 600;
+				align-items: center;
+				font-size: 40rpx;
+				font-family: PingFang SC-Bold, PingFang SC;
+				font-weight: bold;
+				color: #FB966E;
+
+				text {
+					margin-right: 40rpx;
 				}
 			}
-			
-			.header-right{
+
+			.header-right {
 				margin-right: 20rpx;
-				
-				span{
-					margin-left: 30rpx;
+
+				image {
+					width: 20px;
+					height: 20px;
 				}
 			}
 		}
@@ -407,12 +390,16 @@
 						left: 30rpx;
 						z-index: 2;
 						color: #fff;
-						font-size: 20px;
+						font-size: 40rpx;
 						font-weight: bold;
 						padding: 0 20rpx;
 						border-radius: 10rpx;
-						border: 1px solid #fff;
-						background-color: rgba(255,255,255,0.2);
+						transform: rotate(-90deg);
+
+						image {
+							width: 46rpx;
+							height: 46rpx;
+						}
 					}
 
 					.mask {
@@ -432,7 +419,7 @@
 						padding: 20rpx;
 						left: 0;
 						width: 100%;
-						height: 35%;
+						padding: 20rpx 20rpx 40rpx;
 						bottom: 0;
 						z-index: 1;
 						color: white;
@@ -448,26 +435,23 @@
 							display: flex;
 							align-items: center;
 							justify-content: space-between;
-							
-							span:last-child {
-								color: #fff;
-								font-size: 18px;
-								font-weight: bold;
-								padding: 0 30rpx;
-								border-radius: 10rpx;
-								border: 1px solid #fff;
-								background-color: rgba(255,255,255,0.2);
+
+							image {
+								width: 23px;
+								height: 23px;
 							}
 						}
 
 						.userConstellation {
 							padding: 10rpx;
+
 							// background-color: white;
-							span {
+							text {
 								padding: 6rpx 20rpx;
 								border-radius: 10rpx;
 								font-size: 12px;
-								background-color: rgba(255,255,255,0.2);
+								background-color: #56B2EA;
+								color: #ffffff;
 								margin-right: 20rpx;
 							}
 						}
@@ -476,10 +460,49 @@
 							display: flex;
 							align-items: center;
 							justify-content: space-around;
+							margin-top: 10rpx;
 							// background-color: yellow;
 
-							.iconfont {
-								font-size: 70rpx;
+							.back {
+								width: 92rpx;
+								height: 92rpx;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								border-radius: 92rpx;
+								background: #ffffff30;
+							}
+
+							.cancel {
+								width: 196rpx;
+								height: 92rpx;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								border-radius: 92rpx;
+								background: #ffffff30;
+							}
+							.like{
+								width: 198rpx;
+								height: 92rpx;
+								display: flex;
+								justify-content: center;
+								border-radius: 92rpx;
+								align-items: center;
+								background: #ffffff30;
+							}
+							.collection{
+								width: 92rpx;
+								height: 92rpx;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								border-radius: 92rpx;
+								background: #ffffff30;
+							}
+							image{
+								width: 38rpx;
+								height: 38rpx;
 							}
 						}
 					}
@@ -498,7 +521,7 @@
 							height: 100%;
 
 							image {
-								border-radius: 20rpx;
+								border-radius: 60rpx;
 								width: 100%;
 								height: 100%;
 							}
@@ -517,20 +540,20 @@
 								display: flex;
 								align-items: center;
 								justify-content: space-between;
-								font-size: 60rpx;
+								font-size: 54rpx;
 
 								.focus {
-									background-color: orangered;
-									padding: 15rpx;
+									background-color: #FB966E;
+									padding: 12rpx 22rpx;
 									border-radius: 26rpx;
 									color: white;
-									font-size: 30rpx;
+									font-size: 26rpx;
 								}
 							}
 
 							.address {
-								margin-top: 10rpx;
-								color: #8e8e90;
+								margin-top: 16rpx;
+								color: #000000;
 
 								.point {
 									&:before {
@@ -544,35 +567,26 @@
 							}
 						}
 
-						.photos, .mv {
+						.photos,
+						.mv {
 							padding-bottom: 40rpx;
 							margin-bottom: 20rpx;
-							border-bottom: 6rpx solid #e6e6e6;
+						    border-bottom: 4rpx solid #e6e6e64f;
 
 							.title {
 								display: flex;
 								align-items: center;
 								justify-content: space-between;
-								margin-bottom: 20rpx;
+								margin-bottom: 28rpx;
 
-								// .about {
-								// 	width: 100%;
-
-								// 	.content {
-								// 		width: 100%;
-								// 		display: inline-block;
-								// 		white-space: pre-wrap;
-								// 		height: auto;
-								// 	}
-								// }
 
 								.pic {
 									font-weight: 700;
-									font-size: 40rpx;
+									font-size: 32rpx;
 								}
 
 								.look {
-									color: #777777;
+									color: #D8D8D8;
 								}
 							}
 
@@ -585,16 +599,14 @@
 
 								display: inline-block;
 								margin-right: 20rpx;
-								width: 150rpx;
-								background-color: red;
-								height: 150rpx;
-								border-radius: 20rpx;
-								// line-height: 100rpx;
+								width: 164rpx;
+								height: 164rpx;
+								border-radius: 14rpx;
 								text-align: center;
 								font-size: 36rpx;
 							}
 						}
-					
+
 					}
 
 				}
@@ -613,6 +625,4 @@
 			// }
 		}
 	}
-
-	
 </style>

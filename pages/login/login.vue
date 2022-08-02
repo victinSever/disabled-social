@@ -42,7 +42,7 @@
         methods: {
             //获取当前手机手机卡信息
             getPhoneCardDetail() {
-                uni.preLogin({
+                uni.preLogin({ 
                     provider: 'univerify',
                     success: (e) => {
                         uni.login({
@@ -55,15 +55,16 @@
                                 uniCloud.callFunction({
                                     name: 'getPhoneNumber', // 云函数名称
                                     data: { //传给云函数的参数
-                                        'access_token': res.authResult
-                                        .access_token, // 客户端一键登录接口返回的access_token
-                                        'openid': res.authResult
+                                        'access_token': res.authResult.access_token, // 客户端一键登录接口返回的access_token
+                                        'openid': res.authResult 
                                             .openid // 客户端一键登录接口返回的openid
                                     },
-                                    success(callRes) {
-                                        console.log('调用云函数成功', callRes)
+                                    success(callRes) { 
                                         // 此处可获得手机号，调用后端接口
-                                        console.log(callRes.result.data)
+                                        console.log(callRes.result.data); 
+										uni.redirectTo({
+											url:"/pages/recomment/recomment"
+										})
                                     },
                                     fail(callErr) {
                                         console.log('调用云函数出错', callErr)

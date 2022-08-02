@@ -1,7 +1,7 @@
 <template>
-	<view class="about" :style="{'border-bottom':title=='我的账号' ? 'none': '6rpx solid #e6e6e6' }">
+	<view class="about" :style="{'border-bottom':title=='我的账号' ? 'none': '6rpx solid e6e6e64f' }">
 		<view class="title">
-			<span class="me">{{title}}</span>
+			<text class="me">{{title}}</text>
 		</view>
 		<text v-if="content.length>0" class="content">
 			{{content}}
@@ -13,13 +13,13 @@
 						<i class="iconfont icon-paobuji"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 				<view class="all travel">
@@ -27,13 +27,13 @@
 						<i class="iconfont icon-lvyou"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 				<view class="all popular">
@@ -41,13 +41,13 @@
 						<i class="iconfont icon-yinle"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 				<view class="all move">
@@ -55,13 +55,13 @@
 						<i class="iconfont icon-yingshi"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 				<view class="all food">
@@ -69,13 +69,13 @@
 						<i class="iconfont icon-shiwu-"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 			</view>
@@ -85,30 +85,30 @@
 						<i class="iconfont icon-biaoqian"></i>
 					</view>
 					<view class="right">
-						<span>郊游</span>
-						<span>郊游23</span>
-						<span>郊游</span>
-						<span>郊13游</span>
-						<span>郊3游</span>
-						<span>郊游21</span>
-						<span>郊游</span>
+						<text>郊游</text>
+						<text>郊游23</text>
+						<text>郊游</text>
+						<text>郊13游</text>
+						<text>郊3游</text>
+						<text>郊游21</text>
+						<text>郊游</text>
 					</view>
 				</view>
 			</view>
 			<view v-else-if="title=='关于我'" class="aboutMe">
-				<span>郊游</span>
-				<span>郊游23</span>
-				<span>郊游</span>
-				<span>郊13游</span>
-				<span>郊3游</span>
-				<span>郊游21</span>
-				<span>郊游</span>
+				<text>郊游</text>
+				<text>郊游23</text>
+				<text>郊游</text>
+				<text>郊13游</text>
+				<text>郊3游</text>
+				<text>郊游21</text>
+				<text>郊游</text>
 			</view>
 			<view v-else class="account">
 				<view>13123213</view>
 				<view class="report">
-					<span >~举报~</span>
-					<span class="report-item">小月亮</span>
+					<text >~举报~</text>
+					<text class="report-item">小月亮</text>
 				</view>
 			</view>
 		</view>
@@ -140,7 +140,7 @@
 		width: 100%;
 			padding-bottom: 30rpx;
 			margin-bottom: 80rpx;
-		// border-bottom: 6rpx solid #e6e6e6;
+		// border-bottom: 6rpx solid e6e6e64f;
 		.title {
 			display: flex;
 
@@ -150,7 +150,10 @@
 
 			.me {
 				font-weight: 700;
-				font-size: 40rpx;
+				font-size: 32rpx;
+				font-family: PingFang SC-Bold, PingFang SC;
+				font-weight: bold;
+				color: #000000;
 			}
 		}
 
@@ -188,18 +191,22 @@
 					width: 85%;
 					// background-color: blue;
 
-					span {
+					text {
 						margin-bottom: 20rpx;
 						margin-left: 30rpx;
 						height: 60rpx;
 						display: inline-block;
-						border-radius: 12rpx;
-						border: 4rpx solid #777777;
+							border-radius: 30rpx;
+						border: 4rpx solid #d8d8d833;
 						padding: 0 20rpx;
 						display: flex;
 						align-items: center;
 						justify-content: center;
 					}
+					text.select{
+						border: 4rpx solid #F95F81;
+					}
+					
 				}
 
 
@@ -213,17 +220,21 @@
 				flex-wrap: wrap;
 				align-content: space-around;
 
-				span {
+				text {
 					margin-bottom: 20rpx;
 					margin-left: 30rpx;
 					height: 60rpx;
 					display: inline-block;
 					border-radius: 12rpx;
-					border: 4rpx solid #777777;
+					border: 4rpx solid #d8d8d833;
+					border-radius: 30rpx;
 					padding: 0 20rpx;
 					display: flex;
 					align-items: center;
 					justify-content: center;
+				}
+				text.select{
+					border: 4rpx solid #F95F81;
 				}
 
 			}
