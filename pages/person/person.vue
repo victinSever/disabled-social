@@ -3,46 +3,47 @@
 		<mover></mover>
 		<!-- 顶部设置 -->
 		<view class="header">
-			<!-- 认证按钮设置区 -->		
+			<!-- 认证按钮设置区 -->
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
 					<span>认证中心</span>
 					<uni-icons type="forward" size="18"></uni-icons>
 				</view>
-			</uni-badge>		
+			</uni-badge>
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-buttons" @click="gotoConnern">
 					<uni-icons type="bars" size="25"></uni-icons>
 				</view>
 			</uni-badge>
 		</view>
-		
+
 		<!-- 主信息部分 -->
 		<view class="main">
 			<view class="main-top">
-				<view class="top-logo">
-					<img :src="personData.userImage" alt="">
-				</view>
-				<view class="top-right">
-					<view class="top-right-left">
+
+				<div class="top-left">
+					<view class="top-logo">
+						<img :src="personData.userImage" alt="">
+					</view>
+					<view class="top-left-right">
 						<h1>
-							<span>{{personData.username}}</span>							
+							<span>{{personData.username}}</span>
 						</h1>
 						<p>
 							<span>用户ID：{{personData.userId}}</span>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
-						
+
 						<p>
 							<span>我的简历</span>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
 					</view>
-					<view class="top-right-right">
-						<span v-if="!isFlag" @click="makeFlag">签到</span>
-						<span v-else class="isFlaged">已签到</span>
-					</view>
+				</div>
+				<view class="top-right">
+					<span v-if="!isFlag" @click="makeFlag">签到</span>
+					<span v-else class="isFlaged">已签到</span>
 				</view>
 			</view>
 			<view class="main-bottom">
@@ -92,14 +93,44 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- 动态 -->
 		<view class="active">
 			<view class="active-title">
 				<span>我的动态</span>
 			</view>
-			<view class="" v-if="personActiveData.length !== 0">
-				
+			<view class="active-list" v-if="personActiveData.length !== 0">
+				<view class="active-item" v-for="(item, i) in personActiveData" :key="i">
+					<view class="item-left">
+						<span class="day">11</span>
+						<span class="mouth">07月</span>
+					</view>
+					<view class="item-right" @click="gotoComment">
+						<p class="text">{{item.text}}</p>
+						<view class="img" v-if="item.img">
+							<img :src="item.img" alt="">
+						</view>
+						<view class="btns">
+							<view class="btn-info-left">
+								<uni-icons type="more" size="30"></uni-icons>
+							</view>
+							<view class="btn-info-right">
+								<view class="like">
+									<img class="icon" src="../../static/icon/active/like.png" alt="">
+									<span class="num">{{item.likes}}</span>
+								</view>
+								<view class="comment">									
+									<img class="icon" src="../../static/icon/active/comment.png" alt="">
+									<span class="num" v-if="item.contents !== 0">{{item.contents}}</span>
+									<span class="num" v-else>去评论</span>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="active-list-empty">
+					<p>没有更多了</p>
+				</view>
 			</view>
 			<view class="active-empty" v-else>
 				<span class="empty-icon">
@@ -109,15 +140,13 @@
 				<span>发布一条动态，让大家看到你</span>
 			</view>
 		</view>
-		
+
 		<!-- 发表动态按钮 -->
-		<view class="active-btn" @click="gotoShare">		
-			<span>
-				<uni-icons type="videocam-filled" size="25" color="#fff"></uni-icons>
-			</span>
+		<view class="active-btn" @click="gotoShare">
+			<uni-icons type="camera-filled" size="22" color="#fff"></uni-icons>
 			<span>发动态</span>
 		</view>
-				
+
 	</view>
 </template>
 
@@ -136,66 +165,81 @@
 					userImage: '../../static/images/user.jpg',
 					userConcern: 0,
 					userConcerned: 12,
-					userPraised: 423,//点赞
-					userFraction: 6165,//积分
+					userPraised: 423, //点赞
+					userFraction: 6165, //积分
 				},
-				personActiveData: []
+				personActiveData: [{
+					publishDate: '2022-8-2 1:59:01',
+					text: '今天的天空格外好看！',
+					img: '../../static/images/sky.jpg',
+					views: 231,
+					likes: 1023,
+					contents: 52,
+					isAudit: false,//被举报
+				}]
 			}
 		},
 		methods: {
 			// 复制id
-			copyText(){
+			copyText() {
 				uni.$showMsg("复制失败")
 			},
 			// 查看关注页面
-			gotoConnern(){
+			gotoConnern() {
 				uni.$showMsg()
 			},
 			// 签到
-			makeFlag(){
-				uni.$showMsg('签到成功')				
+			makeFlag() {
+				uni.$showMsg('签到成功')
 				this.isFlag = true
-				setTimeout(function(){
+				setTimeout(function() {
 					uni.$showMsg('积分 + 5')
-				},1000)
+				}, 1000)
 			},
 			// 跳转到vip充值页
-			gotoPrivilege(){
+			gotoPrivilege() {
 				uni.navigateTo({
-					url:'/subpkg/privilege/privilege'
+					url: '/subpkg/privilege/privilege'
 				})
 			},
 			// 跳转到评论页
-			gotoShare(){
+			gotoShare() {
 				uni.navigateTo({
-					url:'/subpkg/share/share'
-				})	
+					url: '/subpkg/share/share'
+				})
 			},
 			// 跳转到资料完善页面
-			gotoCheckPerson(){
+			gotoCheckPerson() {
 				uni.navigateTo({
-					url:'/subpkg/checkPerson/checkPerson'
-				})	
+					url: '/subpkg/checkPerson/checkPerson'
+				})
+			},
+			// 去网评论页面
+			gotoComment(){
+				uni.navigateTo({
+					url: '/subpkg/comment/comment'
+				})
 			}
 		}
 	}
 </script>
 
 <style lang='scss' scoped>
-	.root{
+	.root {
 		padding: 0 20rpx;
 		background-color: #fcfcfc;
 	}
+
 	/* 头部 */
-	.header{
+	.header {
 		height: 100rpx;
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		border-bottom: 1px solid #eee;
-		
-		.header-prove{
+
+		.header-prove {
 			display: flex;
 			align-items: center;
 			background-color: #eee;
@@ -203,189 +247,277 @@
 			border-radius: 20rpx;
 		}
 	}
-	
+
 	/* 信息页 */
-	.main{	
+	.main {
 		margin: 20rpx 0 40rpx 0;
-		
-		.main-top{
+
+		.main-top {
 			display: flex;
 			justify-content: space-between;
 			margin-bottom: 40rpx;
-			
-			.top-logo{
-				width: 180rpx;
-				height: 180rpx;
-				box-sizing: border-box;
-				
-				img{
-					width: 180rpx;
-					height: 172rpx;
-					border-radius: 50%;
-					border: 4rpx solid #fff;
-				}
-			}
-			
-			.top-right{
-				width: calc(100% - 220rpx);
+			height: 200rpx;
+
+
+			.top-left {
 				display: flex;
-				justify-content: space-between;
 				
-				.top-right-left{
-					h1,p{
-						height: 90rpx;
-						line-height: 90rpx;
+				.top-logo {
+					width: 150rpx;
+					height: 200rpx;
+					box-sizing: border-box;
+
+					img {
+						width: 150rpx;
+						height: 200rpx;
+						border-radius: 30rpx;
+						border: 4rpx solid #fff;
 					}
-					
-					h1{
+				}
+
+				.top-left-right {
+					margin-left: 30rpx;;
+
+					h1 {
+						height: 100rpx;
+						line-height: 100rpx;
 						font-size: 20px;
 					}
-					
-					p{
-						span{
+
+					p {
+						height: 50rpx;
+						line-height: 50rpx;
+						display: flex;
+						span {
 							margin-right: 10rpx;
 						}
 					}
 				}
-				
-				.top-right-right{
-					line-height: 180rpx;
-					margin-right: 10rpx;
-					
-					span{
-						padding: 10rpx 30rpx;
-						height: 60rpx;
-						border-radius: 60rpx;
-						color: #fff;
-						letter-spacing: 2rpx;
-						background: linear-gradient(90deg, #ffaa7f , #ff557f);
-					}
-					
-					.isFlaged{
-						background: #ccc;
-					}
+			}
+
+			.top-right {
+				display: flex;
+				align-items: flex-end;
+
+				span {	
+					padding: 0 30rpx;
+					height: 60rpx;
+					line-height: 60rpx;
+					border-radius: 60rpx;
+					color: #fff;
+					letter-spacing: 2rpx;
+					background: darkorange;
+				}
+
+				.isFlaged {
+					background: #ccc;
 				}
 			}
 		}
-	
-		.main-bottom{
+
+		.main-bottom {
 			display: flex;
 			justify-content: space-around;
-			
-			.bottom-item{
+
+			.bottom-item {
+				position: relative;
 				width: calc((100% - 40rpx)/4);
 				display: flex;
 				align-items: center;
 				flex-direction: column;
 				background-color: #fff;
 				padding: 10rpx 20rpx;
-				border-radius: 20rpx;
-				
-				.item-num{
+				border-radius: 20rpx;			
+
+				.item-num {
 					font-weight: bold;
 					font-size: 16px;
 				}
-				
-				.item-title{
+
+				.item-title {
 					color: #777;
 				}
 			}
+			
+			.bottom-item:not(:last-child):before{
+				content: "";
+				height: 30rpx;
+				width: 2rpx;
+				background-color: #ddd;
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 20;
+			}
 		}
 	}
-	
+
 	/* 推荐 */
-	.banner{
+	.banner {
 		display: flex;
 		justify-content: space-between;
-		
-		.section{
+
+		.section {
 			width: calc((100% - 80rpx)/2);
 			padding: 20rpx 0 20rpx 20rpx;
 			background-color: #fff;
 			border-radius: 20rpx;
-			
-			.section-one{
+			border: 4rpx solid darkorange;
+
+			.section-one {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				
-				span{
+
+				span {
 					font-weight: bold;
 					font-size: 15px;
 				}
 			}
-			
-			.section-two{
-				span{
+
+			.section-two {
+				span {
 					color: #777;
 					font-size: 12px;
 				}
 			}
-			
-			.section-three{
+
+			.section-three {
 				margin-top: 20rpx;
-	
-				span{
+
+				span {
 					color: #fff;
 					height: 60rpx;
 					line-height: 60rpx;
 					border-radius: 30rpx;
 					padding: 10rpx 50rpx;
-					background: linear-gradient(90deg,  #ffaa7f , #ff557f);
+					background: linear-gradient(90deg, #ffaa7f, #ff557f);
 				}
 			}
 		}
-		
-		.section:last-child{
-			margin-right: 20rpx;
-		}
-		
-		.banner-vip{
-			.section-three{
-				span{
-					background: linear-gradient(90deg,  #ffaa7f , darkorange);
-				}
-			}
-		}
-	}		
+
+	}
 
 	/* 动态 */
-	.active{
+	.active {
 		margin-top: 20rpx;
-		.active-title{
+
+		.active-title {
 			font-weight: bold;
+			margin-bottom: 10rpx;
 		}
-		.active-empty{
+		
+		.active-list{
+			.active-item{
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 20px;
+				
+				.item-left{
+					padding-top: 30rpx;
+					width: 100rpx;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					font-weight: bold;
+					color: #ddd;
+					margin-right: 20rpx;
+					
+					
+					.day{
+						font-size: 22px;
+					}
+					
+					.mouth{
+						font-size: 16px;
+					}
+				}
+				
+				.item-right{
+					width: calc(100% - 100rpx);
+					
+					.text{
+						line-height: 80rpx;
+						font-weight: bold;
+					}
+					.img{
+						
+						img{
+							width: calc(100% - 50rpx);
+							border-radius: 30rpx;
+						}
+					}
+					
+					.btns{
+						margin-top: 10px;
+						display: flex;
+						justify-content: space-between;
+						width: calc(100% - 50rpx);
+						
+						.btn-info-right {
+							display: flex;
+						
+							&>view {
+								display: flex;
+								align-items: center;
+								margin-left: 40rpx;
+								
+								.icon{
+									width: 40rpx;
+									height: 40rpx;
+								}
+						
+								.num {
+									font-size: 12px;
+									margin-left: 10rpx;
+									color: #a5a395;
+								}
+							}
+						}
+					}
+				}
+			}
+		
+			.active-list-empty{
+				width: 100%;
+				text-align: center;
+				margin-bottom: 50rpx;
+				color: #c6c6c6;
+			}
+		}
+
+		
+		.active-empty {
 			height: 400rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
 			color: #ccc;
-			
-			.empty-icon{
+
+			.empty-icon {
 				margin-bottom: 50rpx;
 			}
 		}
 	}
 
 	/* 动态按钮 */
-	.active-btn{
+	.active-btn {
 		position: fixed;
 		bottom: 120rpx;
 		right: 20rpx;
 		background-color: darkorange;
 		z-index: 5;
-		font-size: 18px;
+		font-size: 14px;
 		color: #fff;
 		display: flex;
 		align-items: center;
-		padding: 20rpx 50rpx;
+		padding: 20rpx 30rpx;
 		border-radius: 20rpx;
-		
-		span{
-			display: flex;
-			align-items: center;
+
+		span {
+			margin-left: 10rpx;
 		}
 	}
 </style>
