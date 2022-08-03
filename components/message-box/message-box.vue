@@ -5,33 +5,52 @@
 		</view>
 		<view class="right-box">
 			<view class="title-info">
-				<h2>{{data.userData.username}}</h2>
-				<p>
-					<span>{{data.lastTime}}{{data.lastUnit}}前</span>
-					<span>·</span>
-					<span>{{data.distance}}km</span>
+				<h2 :style="{'margin-left':data.lastTime ? '0px' : '10px'}">{{data.userData.username}}</h2>
+				<p v-if="data.lastTime">
+					<text>{{data.lastTime}}{{data.lastUnit}}前</text>
+					<text>·</text>
+					<text>{{data.distance}}km</text>
 				</p>
+				<template v-else>
+					<p style="font-size: 15px;margin: 5px 0;">
+						{{data.message}}
+					</p>
+					<view class="advertise" style="position: absolute;top: 0; right: 20px;">
+						<uni-tag  text="广告"></uni-tag>
+					</view>
+				</template>
 			</view>
 			<view class="content-info" @click="gotoComment">
-				<p>{{data.message}}</p>
+				<p v-if="data.lastTime">{{data.message}}</p>
 				<view class="cont-info-img" v-for="(item, i) in data.activeImages" :key="i">
 					<img :src="item.imgpath" alt="" model="widthFix">
 				</view>
 			</view>
 			<view class="btn-info">
-				<view class="btn-info-left">
-					<uni-icons type="more" size="30" @click="openPopu"></uni-icons>
-				</view>
-				<view class="btn-info-right">
-					<view class="like">
-						<uni-icons type="heart" size="25"></uni-icons>
-						<span>124</span>
+				<template v-if="data.lastTime">
+					<view class="btn-info-left">
+						<uni-icons type="more-filled" color="#d0d2d4" size="20" @click="openPopu"></uni-icons>
 					</view>
-					<view class="comment" @click="gotoComment">
-						<uni-icons type="chatbubble" size="25"></uni-icons>
-						<span>45</span>
+					<view class="btn-info-right">
+						<view class="like">
+							<uni-icons type="heart" size="25"></uni-icons>
+							<text>124</text>
+						</view>
+						<view class="comment" @click="gotoComment">
+							<uni-icons type="chatbubble" size="25"></uni-icons>
+							<text>45</text>
+						</view>
 					</view>
-				</view>
+				</template>
+				<template v-else>
+					<view class="btn-info-left" style="display: flex;color: #a5a5a5;font-size: 16px;">
+						<uni-icons type="paperclip" color="#d0d2d4" size="20"></uni-icons>
+						<text style="margin-left: 5px;">查看详情</text>
+					</view>
+					<view class="btn-info-right" style="margin-right: 15px;">
+						<uni-icons type="more" color="#d0d2d4" size="20" @click="openPopu"></uni-icons>
+					</view>
+				</template>
 			</view>
 		</view>
 	</view>
@@ -43,14 +62,14 @@
 		props: ['data'],
 		data() {
 			return {
-				
+
 			};
-		}
-		,methods: {
+		},
+		methods: {
 			openPopu() {
-				this.$emit('openPopu',true)
+				this.$emit('openPopu', true)
 			},
-			gotoComment(){
+			gotoComment() {
 				uni.navigateTo({
 					url: '/subpkg/comment/comment'
 				})
@@ -60,9 +79,22 @@
 </script>
 
 <style lang="scss">
-.item-box {
+	.item-box {
 		display: flex;
 		background-color: #fff;
+		position: relative;
+		margin-bottom: 20px;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 90%;
+			height: 1px;
+			background-color: #f0eef1;
+		}
 
 		.left-img {
 
@@ -78,8 +110,8 @@
 			width: calc(100vw - 56px);
 
 			.title-info {
-				height: 40px;
-
+				// height: 140px;
+				position: relative;
 
 				h2 {
 					font-size: 14px;
@@ -93,10 +125,12 @@
 					line-height: 15px;
 					color: #a5a395;
 
-					span:nth-child(2) {
+					text:nth-child(2) {
 						margin: 0 2px;
 					}
 				}
+
+
 			}
 
 			.content-info {
@@ -120,7 +154,7 @@
 
 			.btn-info {
 				margin-top: 10px;
-				margin-bottom: 20px;
+				margin-bottom: 10px;
 				display: flex;
 				justify-content: space-between;
 
@@ -131,12 +165,14 @@
 						display: flex;
 						align-items: center;
 
-						span {
+						text {
 							font-size: 12px;
-							margin-right: 10px;
+							margin-right: 8px;
 							color: #a5a395;
 						}
 					}
+
+
 				}
 			}
 		}

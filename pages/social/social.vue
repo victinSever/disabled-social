@@ -20,9 +20,12 @@
 			</view>
 		</view>
 		
+		<!-- 附近 -->
 		<uni-transition mode-class="slide-right" :show="isClose">
 			<social-close @openPopu="openPopu"></social-close>
 		</uni-transition>
+		
+		<!-- 关注 -->
 		<uni-transition mode-class="slide-left" :show="!isClose">
 			<social-concern @openPopu="openPopu"></social-concern>
 		</uni-transition>
@@ -134,10 +137,10 @@
 				text-align: center;
 				padding: 5px 10px;
 				height: 80%;
-				border-radius: 6px;
+				border-radius: 14px;
 				color: #fff;
 				font-size: 12px;
-				background-color: orange;
+				background-color: #fc966b;
 			}
 		}
 	}

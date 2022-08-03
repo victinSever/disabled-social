@@ -26,7 +26,19 @@
 					lastTime: 1,
 					lastUnit: '分钟',
 					distance: 2
-				},{
+				},
+				{
+					userData: {
+						username: "XXX服务中心",
+						imgpath: "../../static/images/user2.jpg",
+					},					
+					message: "国家认证中心",
+					activeImages: [{
+						imgpath: "../../static/images/content.jpg",
+					}],
+					
+				},
+				{
 					userData: {
 						username: "苏苏啊",
 						imgpath: "../../static/images/user2.jpg",

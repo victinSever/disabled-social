@@ -1,7 +1,6 @@
 <template>
 	<view class="root">
 		<view class="box" v-if="activeBtn.type === 'button'">
-			<img :src="button.img" alt="">
 			<text>{{button.text}}</text>
 		</view>
 	</view>
@@ -9,7 +8,7 @@
 
 <script>
 	export default {
-		name:"activity-btn",
+		name: "activity-btn",
 		props: ['activeBtn'],
 		data() {
 			return {
@@ -17,7 +16,7 @@
 					img: 'static/images/otherIcon/redbag.png',
 					text: '惊喜多多'
 				},
-				bgcColor:{
+				bgcColor: {
 					light: 'green'
 				}
 			};
@@ -26,36 +25,33 @@
 </script>
 
 <style lang="scss" scoped>
-	
-.root{
-	position: fixed;
-	right: 20rpx;
-	top: 400rpx;
-	width: 200rpx;
-	height: 200rpx;
-	border-radius: 20rpx;
-	background-color: rgba(102, 101, 70, 0.1);
-	box-shadow: 1px 1px 1px #eee;
-}
-
-.box{
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-	
-	img{
-		height: 80rpx;
-		width: 80rpx;		
+	.root {
+		position: fixed;
+		right: 20rpx;
+		// 要改top值
+			top: 350rpx;
+		// 
+		background: linear-gradient(to bottom,#F95F81 ,#FB966E);
+		width: 140rpx;
+		height: 140rpx;
+		border-radius: 50%;
+		background-color: rgba(102, 101, 70, 0.1);
+		box-shadow: 1px 1px 1px #eee;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 2px solid #FB966E;
+		.box {
+			width: 50%;
+			height: 50%;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			
+			text {
+				font-size: 15px;
+				color: white;
+			}
+		}
 	}
-	
-	text{
-		margin-top: 20rpx;
-		font-size: 20px;
-		font-weight: bold;
-		color: darkorange;
-	}
-}
 </style>
