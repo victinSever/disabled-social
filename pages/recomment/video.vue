@@ -17,6 +17,10 @@
 				x5-video-player-fullscreen=""
 				x5-video-orientation="portraint">
 				</video>
+				<view class="detail-box">
+					<view class="name">222</view>
+					<view class="detail">21343</view>
+				</view>
 			</swiper-item>
 		</swiper>
 		<cover-view>
@@ -43,13 +47,12 @@
 				current_nav:1,
 				isactive: false,
 				circular: true,
-				videoList: [],
+				videoList: [{}],
 				videoDataList: []
 			}
 		},
-		onLoad(e) {},
-		onReady() {
-			this.getVideoData();
+		mounted() {
+		 this.getVideoData();	
 		},
 		methods: {
 			navCurrent(index){
@@ -193,6 +196,30 @@
 
 	/* #endif */
 
+    .detail-box{
+		position: absolute;
+		    position: absolute;
+		    bottom: 40rpx;
+		    z-index: 4;
+		    color: #ffffff;
+		    left: 20rpx;
+			
+
+	}
+	.detail-box .name{
+		font-size: 32rpx;
+		font-family: PingFang SC-Bold, PingFang SC;
+		font-weight: bold;
+		color: #FFFFFF;
+	}
+	.detail-box .detail{
+		width: 500rpx;
+		font-size: 26rpx;
+		font-family: PingFang SC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		margin-top: 10rpx;
+	}
 	.page {
 		flex: 1;
 		width: 750rpx;
