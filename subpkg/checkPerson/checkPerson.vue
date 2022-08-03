@@ -6,10 +6,10 @@
 			<view class="header">
 				<view class="header-left">
 					<uni-icons type="back" size="25" @click="gotoBack"></uni-icons>
-					<span>编辑资料</span>
+					<text>编辑资料</text>
 				</view>
 				<view class="header-right" v-if="isPre">
-					<span class="btnSend" @click="finish">完成</span>
+					<text class="btnSend" @click="finish">完成</text>
 				</view>
 			</view>
 
@@ -153,7 +153,7 @@
 			align-items: center;
 			height: 100%;
 
-			span {
+			text {
 				font-size: 22px;
 				font-weight: bold;
 				margin-left: 10rpx;
