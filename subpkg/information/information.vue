@@ -2,7 +2,7 @@
 	<view>
 		<mover></mover>
 		<!-- 自定义头部导航 -->
-		<view class="header">
+		<view class="header" :style="{top:CustomBar+'px'}">
 			<view class="header-left">
 				<uni-icons type="back" size="30" color="#000" @click="backTo"></uni-icons>
 				<image :src="userInfo.userImage" mode="widthFix"></image>
@@ -12,13 +12,13 @@
 				</view>
 			</view>
 			<view class="header-right">
-				<uni-icons type="phone-filled" size="30" color="#777" @click="call"></uni-icons>
-				<uni-icons type="info-filled" size="30" color="#777" @click="makeSetting"></uni-icons>
+				<!-- <uni-icons type="phone-filled" size="30" color="#777" @click="call"></uni-icons> -->
+				<uni-icons type="info-filled" size="30" color="#777"></uni-icons>
 			</view>
 		</view>
 
 		<!-- 聊天区 -->
-		<view class="chatting">
+		<view class="chatting" :style="{'padding-top':CustomBar+'px'}">
 			<view class="time">
 				<span>07/13 12:55</span>
 			</view>
@@ -47,11 +47,11 @@
 				<span @click="sendMessage">发送</span>
 			</view>
 			<view class="edit-btns">
-				<uni-icons type="image-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
-				<uni-icons type="camera-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
-				<uni-icons type="mic-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
-				<uni-icons type="gift-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
-				<uni-icons type="folder-add-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
+				<uni-icons class="icons" type="image-filled" size="30" color="#777" @click="sendPic"></uni-icons>
+				<uni-icons class="icons" type="camera-filled" size="30" color="#777" @click="sendPhotograph"></uni-icons>
+				<!-- <uni-icons type="mic-filled" size="30" color="#777" @click="sendMessage"></uni-icons> -->
+<!-- 				<uni-icons type="gift-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
+				<uni-icons type="folder-add-filled" size="30" color="#777" @click="sendMessage"></uni-icons> -->
 			</view>
 		</view>
 
@@ -62,6 +62,7 @@
 	export default {
 		data() {
 			return {
+                 CustomBar: this.CustomBar,
 				// 对方的信息
 				userInfo: {
 					userImage: '/static/images/home/img1.png',
@@ -129,10 +130,29 @@
 			};
 		},
 		methods: {
-			// 发消息
-			sendMessage(){
-				uni.$showMsg()
+			// 选择图片
+			sendPic(){
+				uni.chooseImage({
+					count: 6, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: function (res) {
+						console.log(JSON.stringify(res.tempFilePaths));
+					}
+				});
 			},
+            
+            //照相机
+            sendPhotograph(){
+                uni.chooseImage({
+                	count: 6, //默认9
+                	sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+                	sourceType: ['camera'], //照相机
+                	success: function (res) {
+                		console.log(JSON.stringify(res.tempFilePaths));
+                	}
+                });
+            },
 			// 打电话
 			call() {
 				uni.$showMsg()
@@ -150,8 +170,9 @@
 
 <style lang="scss" scoped>
 	.header {
-		position: sticky;
+		position: fixed;
 		top: 70rpx;
+        width: 100%;
 		z-index: 2;
 		background-color: #fff;
 		height: 120rpx;
@@ -242,9 +263,6 @@
 			.right-content {
 				justify-content: flex-end;
 
-				.main-content {
-					background-color: darkorange;
-				}
 			}
 		}
 	}
@@ -291,7 +309,10 @@
 			height: 100rpx;
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
+            
+            .icons{
+                margin-right: 40rpx;
+            }
 		}
 	}
 </style>

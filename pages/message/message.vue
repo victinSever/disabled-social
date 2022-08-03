@@ -3,25 +3,25 @@
 		<mover></mover>
 		<!-- 头部 -->
 		<view class="message-header">
-			<span>
-				<span @click="concern">消息</span>
-				<span @click="gotoGroup">单身群</span>
-			</span>
-			<span>
+			<text>
+				<text @click="concern" style="margin-right: 40rpx;">消息</text>
+				<text @click="gotoGroup">单身群</text>
+			</text>
+			<text>
 				<uni-icons type="search" size="30"></uni-icons>
-			</span>
+			</text>
 		</view>
 
 		<!-- 推荐 -->
 		<view class="message-banner">
 			<view class="banner-title">
-				<span>推荐</span>
+				<text>推荐</text>
 			</view>
 			<view class="">
 				<scroll-view scroll-x="true" class="message-banner-inbox" scroll-left="120">
 					<view v-for="(item, i) in recommentData" :key="i" class="item">
 						<img :src="item.imgpath" alt="">
-						<span>{{item.lastTime}}{{item.lastUnit}}前</span>
+						<text>{{item.lastTime}}{{item.lastUnit}}前</text>
 					</view>
 				</scroll-view>
 			</view>
@@ -31,11 +31,11 @@
 		<view class="message-mes">
 			<view class="mes-inbox">
 				<view class="mes-title">
-					<span>消息</span>
-					<span>
+					<text>消息</text>
+					<text>
 						<i class="iconfont icon-settings" v-if="!isSetting" @click="isSetting = true"></i>
 						<i class="iconfont icon-settings1" v-else @click="isSetting = false"></i>
-					</span>
+					</text>
 				</view>
 				<view class="mes-list">
 					<uni-swipe-action>
@@ -48,11 +48,11 @@
 									</view>
 									<view class="right-box">
 										<view class="right-box-left">
-											<h3>{{item.username}}</h3>
+											<text>{{item.username}}</text>
 											<p>{{item.message}}</p>
 										</view>
 										<view class="right-box-right">
-											<span>{{item.lastTime}}{{item.lastUnit}}前</span>
+											<text>{{item.lastTime}}{{item.lastUnit}}前</text>
 										</view>
 									</view>
 								</view>
@@ -179,10 +179,10 @@
 		line-height: 80rpx;
 		padding: 0 20rpx;
 
-		&>span:first-child {
+		&>text:first-child {
 			font-size: 20px;
 
-			span:first-child {
+			text:first-child {
 				font-weight: bold;
 				margin-right: 20rpx;
 			}
@@ -197,7 +197,7 @@
 			display: flex;
 			justify-content: space-between;
 
-			&>span {
+			&>text {
 				font-weight: bold;
 			}
 		}
@@ -213,7 +213,7 @@
 				width: 180rpx;
 				height: 200rpx;
 				margin-right: 20rpx;
-				border: 6rpx solid rgba(255, 0, 0, 0.1);
+				border: 4rpx solid rgba(251, 150, 110, 1);
 				border-radius: 40rpx;
 
 				img {
@@ -225,7 +225,7 @@
 					margin-top: 15rpx;
 				}
 
-				span {
+				text {
 					display: inline-block;
 					width: 100%;
 					margin-top: 20rpx;
@@ -241,7 +241,7 @@
 		padding: 0 20rpx;
 
 		.mes-inbox {
-			border-top: 4rpx solid rgba(0, 0, 0, 0.1);
+			border-top: 1rpx solid rgba(0, 0, 0, 0.1);
 
 			.mes-title {
 				height: 80rpx;
@@ -249,7 +249,7 @@
 				display: flex;
 				justify-content: space-between;
 
-				&>span {
+				&>text {
 					font-weight: bold;
 
 					i {
@@ -289,14 +289,14 @@
 						.right-box-left {
 							width: 80%;
 
-							h3,
+							text,
 							p {
 								height: 50rpx;
 								line-height: 50rpx;
 								display: inline-block;
 							}
 							
-							h3{
+							text{
 								font-size: 14px;
 							}
 
@@ -315,7 +315,7 @@
 							justify-content: center;
 							align-items: center;
 
-							span {
+							text {
 								color: #777;
 								font-size: 10px;
 							}

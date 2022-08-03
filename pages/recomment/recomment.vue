@@ -87,7 +87,8 @@
 
 <script>
     import personage from '@/components/personage/index.vue'
-		import videos from './video.vue'
+	import videos from './video.vue'
+    import {getRecomment} from "@/apis/recomment.js"
 	export default {
 		components: {
 			videos,
@@ -115,15 +116,29 @@
 				old: {
 					x: 0,
 					y: 0
-				}
+				},
+                page:{
+                    userId:"",
+                    page:1,
+                    size:10
+                }
 			}
 		},
 		mounted() {
-			// if(!localStorage.getItem('isFirstAdver')){
-			this.loadAdver()
-			// }
+			this.loadAdver();
+            this.getRecommentList();
 		},
 		methods: {
+            
+            //获取图片秀list
+            getRecommentList(){
+               getRecomment(this.page).then(response => {
+                 
+                }).catch(error => {
+                    
+                }) 
+            },
+            
 			// 关闭提示广告
 			closeAdver() {
 				this.$refs.recommentAdver.close()
@@ -291,6 +306,7 @@
 
 			.header-right {
 				margin-right: 20rpx;
+                position: relative;z-index: 4;
 
 				image {
 					width: 20px;
@@ -327,6 +343,7 @@
 					width: 100%;
 					height: 100%;
 					position: relative;
+                    z-index: 0;
 
 					.back-detail {
 						position: absolute;
