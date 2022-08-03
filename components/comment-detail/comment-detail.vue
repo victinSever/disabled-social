@@ -3,14 +3,14 @@
 		<view class="comment-title">评论</view>
 		<view class="comment-content" v-for="(item,index) in userList" :key="index">
 			<view class="content-left">
-				<img :src="item.user.imgPath" alt="">
+				<image :src="item.user.imgPath" alt="" />
 			</view>
 
 			<view class="content-right">
 				<content-item :user="item.user"></content-item>
 
 				<uni-transition mode-class="slide-bottom" :show="item.user.flag">
-					<view v-if="item.user.flag" v-for="(item2,index) in item.comment">
+					<view v-if="item.user.flag" v-for="(item2,indexs) in item.comment" :key="indexs">
 						<content-item :user="item2"></content-item>
 					</view>
 				</uni-transition>
