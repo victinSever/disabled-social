@@ -7,10 +7,10 @@
 		<!-- images -->
 		<view class="image-active">
 			<view class="image-list">
-				<view class="image-item" v-for="(item, i) in userImages" :key="i">
+				<view class="image-item" v-for="(item, i) in userImages" :key="i" @click="uploadActiveImage(item, i)">
 					<view class="box" v-if="item.show">
-						<image :src="item.imagePath" alt=""></image>
-						<text class="close">
+						<image :src="item.imagePath" mode="aspectFill" alt=""></image>
+						<text class="close" @click="deleteActiveImage(item, i)">
 							<uni-icons type="closeempty" size="16" color="darkorange"></uni-icons>
 						</text>
 						<text v-if="i === 0" class="host">
@@ -31,7 +31,7 @@
 
 		<view class="section">
 			<text class="label">头像</text>
-			<view class="content" @click="chooseimage">
+			<view class="content" @click="chooseimage(2)">
 				<view v-if="!data.imagePath" class="camera">
 					<text>点击上传</text>
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
@@ -224,7 +224,7 @@
 
 		<view class="section">
 			<text class="label">微信二维码</text>
-			<view class="content" @click="chooseimage">
+			<view class="content" @click="chooseimage(3)">
 				<view v-if="!data.wechatCodeImagesPath" class="camera">
 					<text>点击上传</text>
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
@@ -300,10 +300,10 @@
 				},
 				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
 				userImages: [{
-					imagePath: '../../static/images/home/img1.png',
+					imagePath: '../../static/images/admin/admin1.jpg',
 					show: true
 				}, {
-					imagePath: '../../static/images/home/img2.png',
+					imagePath: '../../static/images/admin/admin2.jpg',
 					show: true
 				}, {
 					imagePath: '',
@@ -328,7 +328,7 @@
 				handler(val) {
 					this.$emit('changeProgress', returnRate(val))
 				}
-			}
+			},
 		},
 		computed: {
 			startDate() {
@@ -339,6 +339,21 @@
 			}
 		},
 		methods: {
+			// 上传动态图片
+			uploadActiveImage(item, i){
+				var that = this;
+				wx.chooseImage({
+					sizeType: ['original', 'compressed'],
+					sourceType: ['album'],
+					success: function(res) {
+						that.$set( that.userImages, i, { imagePath: res.tempFilePaths[0], show: true })
+					}
+				})
+			},
+			// 删除动态的一张图片
+			deleteActiveImage(item, i){
+				this.$set( this.userImages, i, { imagePath: "", show: false })
+			},
 			changeType(){
 				this.$emit('changeType', this.data)
 			},
@@ -386,7 +401,7 @@
 				return `${year}-${month}-${day}`;
 			},
 			// 拍照
-			chooseimage() {
+			chooseimage(uploadPostion) {
 				var that = this;
 				wx.showActionSheet({
 					itemList: ['相册', '拍照'],
@@ -394,28 +409,28 @@
 					success: function(res) {
 						if (!res.cancel) {
 							if (res.tapIndex == 0) {
-								that.chooseWxImage('album')
+								that.chooseWxImage('album',uploadPostion)
 							} else if (res.tapIndex == 1) {
-								that.chooseWxImage('camera')
+								that.chooseWxImage('camera',uploadPostion)
 							}
 						}
 					}
 				})
 			},
 			// 调用微信图片
-			chooseWxImage(type) {
+			chooseWxImage(type,uploadPostion) {
 				var that = this;
 				wx.chooseImage({
 					sizeType: ['original', 'compressed'],
 					sourceType: [type],
 					success: function(res) {
-						console.log(res);
 						// tempFilePath可以作为img标签的src属性显示图片
 						let url = res.tempFilePaths[0]
-						if (this.uploadPostion === 2) {
-							that.data.imagePath = url
-						} else if (this.uploadPostion === 3) {
+						if (uploadPostion === 2) {
+							that.$set(that.data, 'imagePath', url)
+						} else if (uploadPostion === 3) {
 							that.data.wechatCodeImagesPath = url
+							that.$set(that.data, 'wechatCodeImagesPath', url)
 						}
 					}
 				})

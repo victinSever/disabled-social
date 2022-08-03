@@ -9,7 +9,8 @@
 		</view>
 		<view class="body">
 			<button @click="closeAdver">我知道了</button>
-			<span @click="gotoCheckPerson">完善资料</span>
+			<text @click="goOver">不再提示</text>
+			<text @click="gotoCheckPerson">完善资料</text>
 		</view>
 	</view>
 </template>
@@ -17,12 +18,11 @@
 <script>
 	export default {
 		name:"recomment-adver",
-		data() {
-			return {
-				
-			};
-		},
 		methods:{
+			goOver(){
+				localStorage.setItem('tipToFileData', true)
+				this.closeAdver()
+			},
 			closeAdver(){
 				this.$emit('closeAdver', true)
 			},
@@ -80,8 +80,9 @@
 				margin-bottom: 20rpx;
 			}
 			
-			span{
+			text{
 				color: darkorange;
+				margin-top: 20rpx;
 			}
 		}
 	}

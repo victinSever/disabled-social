@@ -1,6 +1,15 @@
 <template>
 	<view class="root">
 		<mover></mover>
+		
+		<!-- 头部 -->
+		<view class="header">
+			<view class="left" @click="gotoBack">
+				<img src="../../static/icon/active/left.png" alt="">
+				<text>我的特权</text>
+			</view>
+		</view>
+		
 		<!--  -->
 		<view class="cards">
 			<view class="card-vip">
@@ -146,6 +155,9 @@
 			this.chooseVip = this.vipPrice[0]
 		},
 		methods: {
+			gotoBack(){
+				uni.navigateBack()
+			},
 			// 改变vip选择
 			changeVip(index) {
 				this.chooseVip = this.vipPrice[index]
@@ -157,6 +169,25 @@
 <style lang="scss" scoped>
 	.root {
 		padding: 0 20rpx;
+		
+		.header{
+			height: 80rpx;
+			
+			.left{
+				display: flex;
+				align-items: center;
+				
+				img{
+					height: 40rpx;
+					margin: 0 20rpx;
+				}
+				text{
+					font-size: 18px;
+					font-weight: bold;
+				}
+			}
+			
+		}
 
 		.cards {
 			.card-vip {

@@ -1,6 +1,9 @@
 <template>
 	<view class="home-container">
 		<mover></mover>
+		<view class="back-detail" v-show="!header">
+		    <image src="@/static/images/home/shang.png" @click="backdetail"></image>
+		</view>
 		<!-- 头部 -->
 		<view :animation="animationHeader" class="home-header">
 			<view class="header-left">
@@ -61,7 +64,7 @@
 							</view>
 					      </view>
                           <template v-if="!header">
-                              <personage @backdetail="backdetail" :backShow="true" :personageData="personageData"></personage>
+                              <personage @backdetail="backdetail" :backShow="true" :isTemplate="true" :personageData="personageData"></personage>
                           </template>
 					</movable-view>
 				</movable-area>
@@ -146,6 +149,7 @@
 			},
 			// 弹出广告
 			loadAdver() {
+				if(localStorage.getItem('tipToFileData')) return;
 				let $this = this
 				setTimeout(function() {
 					$this.$refs.recommentAdver.open('center')
@@ -270,6 +274,27 @@
 </script>
 
 <style lang="scss" scoped>
+	
+	.back-detail {
+	    position: absolute;
+		top: 100rpx;
+		left: 20rpx;
+		width: 100%;
+		height: 80rpx;
+	    z-index: 10;
+	    padding: 0 20rpx;
+	    border-radius: 10rpx;
+		display: flex;
+		align-items: center;    
+		background-color: #fff;
+	
+	    image{
+	        width: 46rpx;
+	        height: 46rpx;
+			transform: rotate(-90deg);
+	    }
+	}
+	
 	wx-swiper .wx-swiper-dot {
 		position: relative;
 		bottom: 900rpx;

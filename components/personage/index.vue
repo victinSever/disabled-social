@@ -1,27 +1,24 @@
 <template>
-    <view>
-        <view class="back-detail" @click="backdetail" v-show="backShow">
-            <image src="@/static/images/home/shang.png"></image>
-        </view>
+    <view>       
         <swiper class="swiper" indicator-dots="true" circular="true">
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="" />
+                    <image mode="aspectFill" src="../../static/images/admin/admin1.jpg" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="" />
+                    <image mode="aspectFill" src="../../static/images/admin/admin2.jpg" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="" />
+                    <image mode="aspectFill" src="../../static/images/admin/admin3.jpg" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="" />
+                    <image mode="aspectFill" src="../../static/images/admin/admin4.jpg" alt="" />
                 </view>
             </swiper-item>
         </swiper>
@@ -31,7 +28,7 @@
             <view class="footer-header">
                 <view class="userName">
                     <text>小懒猫</text>
-                    <text class="focus">关注</text>
+                    <text class="focus" v-if="isTemplate">关注</text>
                 </view>
                 <view class="address">
                     <text>重庆巴南(3km)</text>
@@ -72,7 +69,7 @@
 </template>
 
 <script>
-        import homeItem from '@/components/recomment-item/recomment-item.vue'
+    import homeItem from '@/components/recomment-item/recomment-item.vue'
     export default {
         name: "personage",
         components:{homeItem},
@@ -81,11 +78,13 @@
                 type: Boolean,
                 default: false
             },
+			isTemplate: {
+				type: Boolean,
+				default: false
+			},
             personageData:{
                 type: Object,
-                default: {
-
-                }
+                default: {}
             }
         },
         data() {
@@ -103,42 +102,13 @@
 
 <style lang="scss" scoped>
 
-    .back-detail {
-        position: absolute;
-        top: 50rpx;
-        left: 30rpx;
-        z-index: 2;
-        color: #fff;
-        font-size: 40rpx;
-        font-weight: bold;
-        padding: 0 20rpx;
-        border-radius: 10rpx;
-        transform: rotate(-90deg);
-
-        image{
-            width: 46rpx;
-            height: 46rpx;
-        }
-    }
-
-    .mask {
-        position: absolute;
-        background: linear-gradient(to top, black 50%, transparent);
-        left: 0;
-        z-index: -1;
-        bottom: 0;
-        width: 100%;
-        height: 80%;
-        border-radius: 20rpx;
-    }
-
-
     .swiper {
         width: 100%;
-        height: 100%;
-        background-color: yellow;
-
-
+  //       min-height: 800rpx;
+		// max-height: 900rpx;
+		height: 100%;
+		background-color: #fff;
+		
         .swiper-item {
             background-color: aliceblue;
             width: 100%;

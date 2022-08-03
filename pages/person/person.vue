@@ -2,8 +2,7 @@
 	<view class="root">
 		<mover></mover>
 		<!-- 顶部设置 -->
-		<view class="header">
-			<!-- 认证按钮设置区 -->
+<!-- 		<view class="header">
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
@@ -16,7 +15,7 @@
 					<uni-icons type="bars" size="25"></uni-icons>
 				</view>
 			</uni-badge>
-		</view>
+		</view> -->
 
 		<!-- 主信息部分 -->
 		<view class="main">

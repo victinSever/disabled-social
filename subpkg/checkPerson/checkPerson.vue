@@ -185,6 +185,7 @@
 		box-sizing: border-box;
 		font-size: 16px;
 		background-color: #fff;
+		margin-bottom: 20rpx;
 
 		view {
 			width: 80rpx;
@@ -214,7 +215,6 @@
 			box-sizing: border-box;
 			font-size: 14px;
 			height: 80rpx;
-			margin-bottom: 40rpx;
 			background-color: #fff;
 		
 			view {
