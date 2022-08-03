@@ -8,10 +8,11 @@
 				"titleNView": false
 			}
 		}
-	}, {
-		"path": "pages/recomment/recomment"
-
-	}, {
+	}, 
+    {
+    	"path": "pages/recomment/recomment"
+    
+    },{
 		"path": "pages/social/social"
 
 	}, {
@@ -83,8 +84,8 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
+        "navigationStyle": "custom",
 		"style": {
-			"navigationStyle": "custom",
 			"app-plus": {
 				"titleNView": false
 			}

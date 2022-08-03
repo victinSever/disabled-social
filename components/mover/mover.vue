@@ -1,5 +1,5 @@
 <template>
-	<view class="root" :style="[{height:(CustomBar+StatusBar) + 'px'}]">
+	<view class="root" :style="[{height:(CustomBar) + 'px'}]">
 	</view>
 </template>
 
