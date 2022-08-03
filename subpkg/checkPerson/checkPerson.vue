@@ -8,35 +8,71 @@
 					<uni-icons type="back" size="25" @click="gotoBack"></uni-icons>
 					<span>编辑资料</span>
 				</view>
-				<view class="header-right">
+				<view class="header-right" v-if="isPre">
 					<span class="btnSend" @click="finish">完成</span>
 				</view>
 			</view>
-			
+
 			<!-- 选择编辑或者预览 -->
 			<view class="banner">
-				<view class="preScan" 
-				:style="isPre ? 'border-bottom: 6rpx solid darkorange;; color: darkorange;' : 'border-bottom: 6rpx solid #eee; color: #000;'"
-				@click="isPre = true">
+				<view class="preScan"
+					:style="isPre ? 'border-bottom: 6rpx solid darkorange;; color: darkorange;' : 'border-bottom: 6rpx solid #eee; color: #000;'"
+					@click="isPre = true">
 					<text>预览</text>
 				</view>
-				<view class="edit":style="!isPre ? 'border-bottom: 6rpx solid darkorange;; color: darkorange;' : 'border-bottom: 6rpx solid #eee; color: #000;'"
-				@click="isPre = false">
+				<view class="edit"
+					:style="!isPre ? 'border-bottom: 6rpx solid darkorange;; color: darkorange;' : 'border-bottom: 6rpx solid #eee; color: #000;'"
+					@click="isPre = false">
 					<text>编辑</text>
 				</view>
 			</view>
+
+			
 		</view>
-		
-		<scroll-view scroll-y="true" >
+
+		<scroll-view scroll-y="true">
+			<view class="sedMenu" v-if="!isPre">
+				<!-- 菜单 -->
+				<view class="menu">
+					<view :class="type === 1 ? 'active' : ''" @click="type = 1">
+						<text>基本资料</text>
+					</view>
+					<view :class="type === 2 ? 'active' : ''" @click="type = 2">
+						<text>详细资料</text>
+					</view>
+					<view :class="type === 3 ? 'active' : ''" @click="type = 3">
+						<text>择偶要求</text>
+					</view>
+				</view>
+			
+				<!-- 完成度 -->
+				<view class="progress">
+					<view class="progress-box">
+						<view class="item" :style="'background-color: rgba(255, 140, 0,' +  (item*0.1) + ');'"
+							v-for="(item, i) in progressNum" :key="i">
+						</view>
+					</view>
+					<view class="progress-text">
+						当前资料完成度{{(progress*100).toFixed(0) + '%'}}
+					</view>
+				</view>
+			</view>
 			<view class="main">
 				<person-template v-if="isPre"></person-template>
-				<person-edit :isFinish="isFinish" @getData="getData" v-else></person-edit>
-			</view>	
-		</scroll-view>	
+				<view v-else>
+					<baseCom v-if="type === 1" @changeProgress="changeProgress"></baseCom>
+					<detail v-else-if="type === 2"></detail>
+					<marrary v-else></marrary>
+				</view>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
 <script>
+	import baseCom from "@/components/person-information/base/base.vue"
+	import detail from "@/components/person-information/detail/detail.vue"
+	import marrary from "@/components/person-information/marrary/marrary.vue"
 	export default {
 		name: "checkinformation",
 		data() {
@@ -44,22 +80,40 @@
 				// 是否为预览状态
 				isPre: true,
 				isFinish: false,
+				type: 1,//三类资料组件切换
+				progress: 0,//资料完成度
 				personData: {}
 			};
 		},
-		methods:{
-			gotoBack(){
+		components: {
+			baseCom, detail, marrary
+		},
+		computed: {
+			progressNum(){
+				return parseInt(Math.floor(this.progress*10))
+			}
+		},
+		methods: {
+			// 更改资料填写进度
+			changeProgress(val){
+				this.progress = val
+				console.log(val);
+			},
+			// 返回
+			gotoBack() {
 				uni.navigateBack()
 			},
-			finish(){
+			// 保存修改
+			finish() {
 				let $this = this
-				setTimeout(function(){
+				setTimeout(function() {
 					this.isFinish = true
 					console.log(this.personData);
 					uni.$showMsg("修改成功！")
-				},1000)							
+				}, 1000)
 			},
-			getData(data){
+			// 发请求
+			getData(data) {
 				this.personData = data
 				console.log(this.personData);
 			},
@@ -68,27 +122,27 @@
 </script>
 
 <style lang="scss" scoped>
-	
-	.fixed{
+	.fixed {
 		position: sticky;
 		top: 70rpx;
 		z-index: 5;
 	}
+
 	.header {
-		
+
 		height: 50px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		background-color: #fff;
 		padding: 0 30rpx;
-		
+
 
 		.header-left {
 			display: flex;
 			align-items: center;
 			height: 100%;
-			
+
 			span {
 				font-size: 22px;
 				font-weight: bold;
@@ -100,46 +154,106 @@
 		.header-right {
 			display: flex;
 			align-items: center;
-			border-radius: 20rpx;
-			padding: 10rpx 20rpx;	
-			background-color: darkorange;
+			border-radius: 50rpx;
+			padding: 10rpx 40rpx;
+			height: 50rpx;
+			background-color: #f9976f;
 
 			.btnSend {
 				display: inline-block;
 				text-align: center;
-				font-size: 16px;			
-				color: #fff;				
+				font-size: 16px;
+				color: #fff;
 			}
 		}
 	}
 
-	.banner{
+	.banner {
 		display: flex;
-		height: 100rpx;
+		justify-content: center;
+		height: 80rpx;
 		box-sizing: border-box;
 		font-size: 16px;
-		margin-bottom: 40rpx;
 		background-color: #fff;
-		
-		view{
-			width: 50%;
+
+		view {
+			width: 80rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border-bottom: 6rpx solid #eee;
+			margin: 0 40rpx;
 		}
-		
-		.preScan{
+
+		.preScan {
 			border-bottom: 6rpx solid darkorange;
 			color: darkorange;
 		}
+
+	}
+
+	
+
+	.sedMenu{
+		background-color: #fff;
+		padding: 30rpx;
 		
-		.edit{
-			
+		.menu {
+		
+			display: flex;
+			box-sizing: border-box;
+			font-size: 14px;
+			height: 80rpx;
+			margin-bottom: 40rpx;
+			background-color: #fff;
+		
+			view {
+				width: 120rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-right: 40rpx;
+			}
+		
+			.active {
+				color: darkorange;
+			}
+		}
+		
+		.progress {
+			height: 120rpx;
+			margin-bottom: 50rpx;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		
+			.progress-box {
+				height: 50rpx;
+				width: 70%;
+				background-color: #eee;
+				border-radius: 50rpx;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+		
+				.item {
+					height: 30rpx;
+					width: 30rpx;
+					border-radius: 50%;
+					background-color: rgba(255, 140, 0, 1);
+					margin: 0 10rpx;
+				}
+			}
+		
+			.progress-text {
+				margin-top: 20rpx;
+				color: #ddd;
+			}
 		}
 	}
 
-	.main{
+	.main {
 		padding: 0 30rpx;
 	}
 </style>

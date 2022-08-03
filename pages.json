@@ -1,5 +1,6 @@
 {
-	"pages": [{
+	"pages": [
+		{
 		"path": "pages/login/login",
 		"style": {
 			"navigationStyle": "custom",
@@ -8,92 +9,37 @@
 			}
 		}
 	}, {
-		"path": "pages/recomment/recomment",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
-			}
-		}
+		"path": "pages/recomment/recomment"
+
 	}, {
-		"path": "pages/social/social",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
-			}
-		}
+		"path": "pages/social/social"
+
 	}, {
-		"path": "pages/employment/employment",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
-			}
-		}
+		"path": "pages/employment/employment"
 	}, {
-		"path": "pages/message/message",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
-			}
-		}
+		"path": "pages/message/message"
 	}, {
-		"path": "pages/person/person",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
-			}
-		}
+		"path": "pages/person/person"
 	}, {
 		"path": "pages/photo/photo"
 	}, {
-		"path": "pages/register/register",
-		"style": {
-			"navigationBarBackgroundColor": "#ffb4c0",
-			"navigationBarTitleText": "注册"
-		}
-	}],
+		"path": "pages/register/register"
+	}
+    ],
 	"subPackages": [{
 		"root": "subpkg",
 		"pages": [{
-			"path": "share/share",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
+			"path": "share/share"
 		}, {
-			"path": "comment/comment",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
+			"path": "comment/comment"
 		}, {
-			"path": "information/information",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
+			"path": "information/information"
 		}, {
 			"path": "group/group"
 		}, {
 			"path": "xiangqing/xiangqing"
 		}, {
-			"path": "checkPerson/checkPerson",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
+			"path": "checkPerson/checkPerson"
 		}, {
 			"path": "privilege/privilege",
 			"style": {
@@ -137,8 +83,11 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
-		"app-plus": {
-			"background": "#fff"
+		"style": {
+			"navigationStyle": "custom",
+			"app-plus": {
+				"titleNView": false
+			}
 		}
 	},
 	"tabBar": {

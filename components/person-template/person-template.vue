@@ -9,7 +9,12 @@
 		name:"person-template",
 		data() {
 			return {
-				
+				data: {
+					imgs: [
+						"../../static/images/user.jpg",
+						"../../static/images/user.jpg",
+					]
+				}
 			};
 		}
 	}

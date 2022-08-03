@@ -1,21 +1,22 @@
 <template>
-	<view class="root">
+	<view class="root" :style="[{height:(CustomBar+StatusBar) + 'px'}]">
 	</view>
 </template>
 
 <script>
 	export default {
-		name:"mover",
+		name: "mover",
 		data() {
 			return {
-				
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar
 			};
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.root{
+	.root {
 		position: sticky;
 		top: 0;
 		background-color: #fff;
