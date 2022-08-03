@@ -1,11 +1,9 @@
 <template>
 	<view class="item-media">
-		<view class="media-content">
+		<view class="media-content" @click="goToMediaDetail">
 			<img :src="data.userData.imgpath"></img>
 			<view class="content-icon">
-				<view class="sanjiao">
-
-				</view>
+				<view class="sanjiao"></view>
 			</view>
 		</view>
 		<view class="media-detail">
@@ -36,6 +34,13 @@
 			return {
 
 			};
+		},
+		methods: {
+		goToMediaDetail(){
+			uni.navigateTo({
+				url:'/subpkg/media-detail/media-detail'
+			})
+		}
 		}
 	}
 </script>

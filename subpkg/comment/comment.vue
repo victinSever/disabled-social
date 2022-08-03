@@ -54,30 +54,9 @@
 			</view>
 		</view>
 
-		<hr>
 		<!-- 评论区 -->
 		<view class="comment-box">
-			<h2>评论</h2>
-			<view class="box-list">
-				<view v-for="(item, i) in commentData" :key="i" class="box-item">
-					<view class="left-box">
-						<img :src="item.imagePath" alt="">
-					</view>
-					<view class="right-box">
-						<view class="right-box-left">
-							<h3>{{item.userName}}</h3>
-							<p class="text">{{item.comment}}</p>
-							<p class="info">
-								<text>{{item.lastTime}}{{item.timeUnit}}前</text>
-								<text>回复</text>
-							</p>
-						</view>
-						<view class="right-box-right">
-							<uni-icons type="heart" size="20" color="#777"></uni-icons>
-						</view>
-					</view>
-				</view>
-			</view>
+			<comment-detail></comment-detail>
 		</view>
 	</view>
 </template>
@@ -170,6 +149,7 @@
 
 <style lang="scss">
 	.root {
+		box-sizing: border-box;
 		padding: 0 10px;
 	}
 
@@ -268,17 +248,19 @@
 			margin-bottom: 20px;
 			display: flex;
 			justify-content: space-between;
-			
-			.btn-info-left{
+
+			.btn-info-left {
 				display: flex;
 				align-items: center;
 			}
+
 			.btn-info-right {
 				display: flex;
 
 				&>view {
 					display: flex;
 					align-items: center;
+
 					text {
 						font-size: 12px;
 						margin-right: 5px;
@@ -289,64 +271,5 @@
 		}
 	}
 
-	.comment-box {
-
-		h2 {
-			margin-bottom: 10px;
-			font-size: 14px;
-		}
-
-		.box-list {}
-
-		.box-item {
-			margin: 25rpx 0;
-			display: flex;
-			justify-content: space-between;
-
-
-			.left-box {
-				width: 50px;
-				display: flex;
-				justify-content: center;
-
-				img {
-					width: 70rpx;
-					height: 70rpx;
-					border-radius: 50%;
-				}
-			}
-
-			.right-box {
-				width: calc(100vw - 70px);
-				display: flex;
-				justify-content: space-between;
-
-				.right-box-left {
-					h3 {
-						color: #777;
-						line-height: 15px;
-						font-size: 15px;
-					}
-
-					.text {
-						font-size: 13px;
-						line-height: 25px;
-					}
-
-					.info {
-						font-size: 11px;
-						color: #a5a395;
-
-						text {
-							margin-right: 10px;
-						}
-					}
-				}
-
-				.right-box-right {
-					margin-right: 10px;
-				}
-			}
-		}
-	}
+	.comment-box {}
 </style>
