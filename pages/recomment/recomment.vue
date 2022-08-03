@@ -59,74 +59,10 @@
 			
 								</view>
 							</view>
-							<view class="back-detail" @click="backdetail" :style="{display:header==true? 'none' : 'block'}">
-				                	<image src="@/static/images/home/shang.png"></image>
-							</view>
-							<swiper class="swiper" indicator-dots="true" circular="true">
-								<swiper-item>
-									<view class="swiper-item">
-										<image mode="aspectFill" alt="">
-									</view>
-								</swiper-item>
-								<swiper-item>
-									<view class="swiper-item">
-										<image mode="aspectFill" alt="">
-									</view>
-								</swiper-item>
-								<swiper-item>
-									<view class="swiper-item">
-										<image mode="aspectFill" alt="">
-									</view>
-								</swiper-item>
-								<swiper-item>
-									<view class="swiper-item">
-										<image mode="aspectFill" alt="">
-									</view>
-								</swiper-item>
-							</swiper>
-			
-							<view class="footer" v-show="footer">
-								<!-- 姓名 -->
-								<view class="footer-header">
-									<view class="userName">
-										<text>小懒猫</text>
-										<text class="focus">关注</text>
-									</view>
-									<view class="address">
-										<text>重庆巴南(3km)</text>
-										<text class="point">·</text>
-										<text style="color: #F95F81;">26分钟前活跃</text>
-									</view>
-								</view>
-			
-								<!-- 相册 -->
-								<view class="photos">
-									<view class="title">
-										<text class="pic">动态相册</text>
-										<text class="look">查看全部</text>
-									</view>
-									<view class="">
-										<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-											<view id="demo1" class="scroll-view-item_H uni-bg-red"></view>
-										</scroll-view>
-									</view>
-								</view>
-			
-								<!-- MV -->
-								<view class="mv">
-									<view class="title">
-										<text class="pic">个人MV</text>
-									</view>
-									<view class="">
-										暂无
-									</view>
-								</view>
-			
-								<homeItem title="关于我" content="美少女战士"></homeItem>
-								<homeItem title="我的标签"></homeItem>
-								<homeItem title="我的兴趣"></homeItem>
-							</view>
-						</view>
+					      </view>
+                          <template v-if="!header">
+                              <personage @backdetail="backdetail" :backShow="true" :personageData="personageData"></personage>
+                          </template>
 					</movable-view>
 				</movable-area>
 			</view>
@@ -150,12 +86,12 @@
 </template>
 
 <script>
-	import homeItem from '@/components/recomment-item/recomment-item.vue'
+    import personage from '@/components/personage/index.vue'
 		import videos from './video.vue'
 	export default {
 		components: {
-			homeItem,
-			videos
+			videos,
+            personage
 		},
 		data() {
 			return {
@@ -172,6 +108,7 @@
 				animationHeader: {},
 				header: true,
 				animationData: {},
+                personageData:{},
 				nowid: 3,
 				x: 0,
 				y: 0,
