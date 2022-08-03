@@ -1,29 +1,12 @@
 <template>
 	<view>
-		<swiper class="swiper" indicator-dots="true" circular="true">
-			<swiper-item>
-				<view class="swiper-item">
-					<image mode="aspectFill" src="../../static/images/admin/admin1.jpg" alt="" />
-				</view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item">
-					<image mode="aspectFill" src="../../static/images/admin/admin2.jpg" alt="" />
-				</view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item">
-					<image mode="aspectFill" src="../../static/images/admin/admin3.jpg" alt="" />
-				</view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item">
-					<image mode="aspectFill" src="../../static/images/admin/admin4.jpg" alt="" />
-				</view>
-			</swiper-item>
-		</swiper>
+		<div class="header">
+			<recomment-swiper :swiperList="personageData.imageList"></recomment-swiper>
+		</div>
 
 		<view class="footer">
+			
+			
 			<!-- 姓名 -->
 			<view class="footer-header">
 				<view class="userName">
@@ -90,7 +73,9 @@
 			}
 		},
 		data() {
-			return {};
+			return {
+				
+			};
 		},
 		methods: {
 			backdetail() {
@@ -102,24 +87,8 @@
 </script>
 
 <style lang="scss" scoped>
-	.swiper {
-		width: 100%;
-		//       min-height: 800rpx;
-		// max-height: 900rpx;
-		height: 100%;
-		background-color: #fff;
-
-		.swiper-item {
-			background-color: aliceblue;
-			width: 100%;
-			height: 100%;
-
-			image {
-				border-radius: 60rpx;
-				width: 100%;
-				height: 100%;
-			}
-		}
+	.header{
+		padding: 0 30rpx;
 	}
 
 	.footer {

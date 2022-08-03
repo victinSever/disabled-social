@@ -1,6 +1,5 @@
 <template>
 	<view class="homeSetting">
-         <mover></mover>
 		<view class="homeSetting-box">
 			<!-- 头部按钮 -->
 			<view class="homeSetting-header">

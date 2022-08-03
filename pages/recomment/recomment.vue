@@ -25,12 +25,14 @@
 					<movable-view id="1" :x="x" :y="y" out-of-bounds="true" class="movable-view" show-scrollbar
 						direction="all" @change="onChange" :disabled="movedisable">
 						<view class="back-detail" @click="backdetail" v-if="!header">
-						    <image src="@/static/images/home/shang.png"></image>
+							<image src="@/static/images/home/shang.png"></image>
 						</view>
-						<view class="home-swiper">
-							<view class="swiper_detail" :style="{display:header==true? 'block' : 'none'}">
+						<view class="home-swiper" v-if="header">
+							<recomment-swiper :swiperList="personageData.imageList"></recomment-swiper>
+							<view class="swiper_detail">
 								<view class="mask">
 								</view>
+								
 								<view class="userName">
 									小懒猫
 								</view>
@@ -62,10 +64,11 @@
 
 								</view>
 							</view>
-					      </view>
-                          <template v-if="!header">
-                              <personage @backdetail="backdetail" :backShow="true" :isTemplate="true" :personageData="personageData"></personage>
-                          </template>
+						</view>
+						<template v-else>
+							<personage @backdetail="backdetail" :backShow="true" :isTemplate="true"
+								:personageData="personageData"></personage>
+						</template>
 					</movable-view>
 				</movable-area>
 			</view>
@@ -89,13 +92,13 @@
 </template>
 
 <script>
-    import personage from '@/components/personage/index.vue'
+	import personage from '@/components/personage/index.vue'
 	import videos from './video.vue'
-    import recomment from "@/apis/recomment.js"
+	import recomment from "@/apis/recomment.js"
 	export default {
 		components: {
 			videos,
-            personage
+			personage
 		},
 		data() {
 			return {
@@ -112,7 +115,15 @@
 				animationHeader: {},
 				header: true,
 				animationData: {},
-                personageData:{},
+				personageData: {
+					imageList: [
+						"../../static/images/admin/admin1.jpg",
+						"../../static/images/admin/admin2.jpg",
+						"../../static/images/admin/admin3.jpg",
+						"../../static/images/admin/admin4.jpg",
+					],
+					
+				},
 				nowid: 3,
 				x: 0,
 				y: 0,
@@ -120,27 +131,27 @@
 					x: 0,
 					y: 0
 				},
-                page:{
-                    userId:"",
-                    page:1,
-                    size:10
-                }
+				page: {
+					userId: "",
+					page: 1,
+					size: 10
+				}
 			}
 		},
 		mounted() {
 			this.loadAdver();
-            this.getRecommentList();
+			this.getRecommentList();
 		},
 		methods: {
 
-            //获取图片秀list
-            getRecommentList(){
-               recomment.getRecomment(this.page).then(response => {
+			//获取图片秀list
+			getRecommentList() {
+				recomment.getRecomment(this.page).then(response => {
 
-                }).catch(error => {
+				}).catch(error => {
 
-                })
-            },
+				})
+			},
 
 			// 关闭提示广告
 			closeAdver() {
@@ -149,7 +160,7 @@
 			},
 			// 弹出广告
 			loadAdver() {
-				if(localStorage.getItem('tipToFileData')) return;
+				if (localStorage.getItem('tipToFileData')) return;
 				let $this = this
 				setTimeout(function() {
 					$this.$refs.recommentAdver.open('center')
@@ -273,32 +284,25 @@
 	}
 </script>
 
-<style lang="scss" scoped>	
+<style lang="scss" scoped>
 	
-	wx-swiper .wx-swiper-dot {
-		position: relative;
-		bottom: 900rpx;
-		width: 100rpx;
-		height: 3rpx;
+	.back-detail {
+		position: absolute;
+		top: 50rpx;
+		left: 30rpx;
+		z-index: 2;
 		color: #fff;
-	}
-    .back-detail {
-        position: absolute;
-        top: 50rpx;
-        left: 30rpx;
-        z-index: 2;
-        color: #fff;
-        font-size: 40rpx;
-        font-weight: bold;
-        padding: 0 20rpx;
-        border-radius: 10rpx;
-        transform: rotate(-90deg);
+		font-size: 40rpx;
+		font-weight: bold;
+		padding: 0 20rpx;
+		border-radius: 10rpx;
+		transform: rotate(-90deg);
 
-        image{
-            width: 46rpx;
-            height: 46rpx;
-        }
-    }
+		image {
+			width: 46rpx;
+			height: 46rpx;
+		}
+	}
 
 	.home-container {
 		box-sizing: border-box;
@@ -330,7 +334,8 @@
 
 			.header-right {
 				margin-right: 20rpx;
-                position: relative;z-index: 4;
+				position: relative;
+				z-index: 4;
 
 				image {
 					width: 20px;
@@ -344,7 +349,7 @@
 			width: 100%;
 			perspective: 800;
 			display: flex;
-			bottom: 0rpx;
+			bottom: -10rpx;
 			position: absolute;
 			justify-content: center;
 
@@ -364,7 +369,7 @@
 					width: 100%;
 					height: 100%;
 					position: relative;
-                    z-index: 0;
+					z-index: 0;
 
 					.back-detail {
 						position: absolute;
@@ -464,7 +469,8 @@
 								border-radius: 92rpx;
 								background: #ffffff30;
 							}
-							.like{
+
+							.like {
 								width: 198rpx;
 								height: 92rpx;
 								display: flex;
@@ -473,7 +479,8 @@
 								align-items: center;
 								background: #ffffff30;
 							}
-							.collection{
+
+							.collection {
 								width: 92rpx;
 								height: 92rpx;
 								display: flex;
@@ -482,7 +489,8 @@
 								border-radius: 92rpx;
 								background: #ffffff30;
 							}
-							image{
+
+							image {
 								width: 38rpx;
 								height: 38rpx;
 							}
@@ -553,7 +561,7 @@
 						.mv {
 							padding-bottom: 40rpx;
 							margin-bottom: 20rpx;
-						    border-bottom: 4rpx solid #e6e6e64f;
+							border-bottom: 4rpx solid #e6e6e64f;
 
 							.title {
 								display: flex;
