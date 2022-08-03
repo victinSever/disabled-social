@@ -1,6 +1,10 @@
 <template>
 	<view class="">
+		<mover></mover>
 		<view class="gruop-header">
+			<view class="group-back" @click="gotoBack">
+				<uni-icons type="back" size="25"></uni-icons>
+			</view>
 			<view class="header-item" v-for="(item,index) in titleList">
 				<text @click="changeChoose(index)"
 					:class="['header-contnet',index === active ? 'active' : '']">{{item}}</text>
@@ -28,17 +32,26 @@
 			},
 			changeChoose(index) {
 				this.active = index
+			},
+			gotoBack(){
+				uni.navigateBack()
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	
 	.gruop-header {
 		display: flex;
 		height: 40px;
 		border-bottom: 1px solid #f9f9f9;
 		margin-bottom: 40px;
+		.group-back{
+			height: 100%;
+			line-height: 40px;
+			margin-left: 10px;
+		}
 		.header-item {
 			flex: 1;
 			display: flex;
