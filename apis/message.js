@@ -26,6 +26,21 @@ const apiService = {
     getGroup(params) {
     	return http.get('/message/getGroup',params)
     },
+	
+	//每日签到
+	signIn(params) {
+		return http.put('/user/signIn',params)
+	},
+	
+	// 获取个人信息
+	getInfo(params) {
+		return http.get('user/getInfo', params)
+	},
+	
+	// 购买VIP
+	openVip(params) {
+		return http.post('user/openVip', params)
+	},
     
 }
 

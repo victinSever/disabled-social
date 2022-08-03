@@ -82,7 +82,7 @@
 				<uni-icons type="forward" size="30"></uni-icons>
 			</view>
 			<view class="buy-btn">
-				<button>
+				<button @click="openVip">
 					<text class="price">￥{{chooseVip.allprice}}</text>
 					<text>立即购买</text>
 				</button>
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+	import apiService from '@/apis/message.js'
 	export default {
 		data() {
 			return {
@@ -155,6 +156,14 @@
 			this.chooseVip = this.vipPrice[0]
 		},
 		methods: {
+			// 开通VIP
+			openVip(){
+				const res = apiService.openVip({
+					loginName: '123456',
+					month: 3
+				})
+				console.log(res);
+			},
 			gotoBack(){
 				uni.navigateBack()
 			},

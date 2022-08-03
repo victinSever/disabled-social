@@ -41,7 +41,7 @@
 					</view>
 				</div>
 				<view class="top-right">
-					<text v-if="!isFlag" @click="makeFlag">签到</text>
+					<text v-if="!isSignUp" @click="makeSignUp">签到</text>
 					<text v-else class="isFlaged">已签到</text>
 				</view>
 			</view>
@@ -150,13 +150,14 @@
 </template>
 
 <script>
+	import apiService from '@/apis/message.js'
 	export default {
 		data() {
 			return {
 				// 是否有角标
 				value: 1,
 				// 是否签到
-				isFlag: false,
+				isSignUp: false,
 				// 个人信息
 				personData: {
 					username: '小懒猫',
@@ -178,8 +179,18 @@
 				}]
 			}
 		},
+		mounted(){
+			this.getData()
+		},
 		methods: {
+	
 			// 获取信息
+			getData(){
+				const res = apiService.getInfo({
+					loginName: '123456'
+				})
+				console.log(res);
+			},
 			
 			// 复制id
 			copyText() {
@@ -190,7 +201,12 @@
 				uni.$showMsg()
 			},
 			// 签到
-			makeFlag() {
+			makeSignUp() {
+				const res = apiService.signIn({
+					reward: 5,
+					loginName: '123456'
+				})
+				console.log(res);
 				uni.$showMsg('签到成功')
 				this.isFlag = true
 				setTimeout(function() {
