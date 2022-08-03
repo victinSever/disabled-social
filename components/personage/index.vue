@@ -5,8 +5,7 @@
 		</div>
 
 		<view class="footer">
-			
-			
+						
 			<!-- 姓名 -->
 			<view class="footer-header">
 				<view class="userName">

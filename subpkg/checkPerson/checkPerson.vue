@@ -58,9 +58,9 @@
 				</view>
 			</view>
 			<view class="main">
-				<person-template v-if="isPre"></person-template>
+				<personage v-if="isPre" :backShow="false" :personageData="data"></personage>
 				<view v-else>
-					<baseCom v-if="type === 1" @changeProgress="changeProgress" @changeType="changeType"></baseCom>
+					<baseCom v-if="type === 1" @changeProgress="data" @changeType="changeType"></baseCom>
 					<detail v-else-if="type === 2" @changeProgress="changeProgress" @changeType="changeType"></detail>
 					<marrary v-else @changeProgress="changeProgress" @saveData="saveData"></marrary>
 				</view>
@@ -73,6 +73,7 @@
 	import baseCom from "@/components/person-information/base/base.vue"
 	import detail from "@/components/person-information/detail/detail.vue"
 	import marrary from "@/components/person-information/marrary/marrary.vue"
+	import personage from '@/components/personage/index.vue'
 	export default {
 		name: "checkinformation",
 		data() {
@@ -82,11 +83,18 @@
 				isFinish: false,
 				type: 1,//三类资料组件切换
 				progress: 0,//资料完成度
-				data: {}
+				data: {
+					imageList: [
+						"../../static/images/admin/admin1.jpg",
+						"../../static/images/admin/admin2.jpg",
+						"../../static/images/admin/admin3.jpg",
+						"../../static/images/admin/admin4.jpg",
+					],
+				}
 			};
 		},
 		components: {
-			baseCom, detail, marrary
+			baseCom, detail, marrary,personage
 		},
 		computed: {
 			progressNum(){
