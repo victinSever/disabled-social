@@ -1,7 +1,6 @@
 <template>
 	<view class="root">
-		<!-- <mover></mover> -->
-		<ming-pop></ming-pop>
+		<mover></mover>
 		<view class="fixed">
 			<!-- 头部 -->
 			<view class="header">
@@ -61,9 +60,9 @@
 			<view class="main">
 				<person-template v-if="isPre"></person-template>
 				<view v-else>
-					<baseCom v-if="type === 1" @changeProgress="changeProgress"></baseCom>
-					<detail v-else-if="type === 2" @changeProgress="changeProgress"></detail>
-					<marrary v-else @changeProgress="changeProgress"></marrary>
+					<baseCom v-if="type === 1" @changeProgress="changeProgress" @changeType="changeType"></baseCom>
+					<detail v-else-if="type === 2" @changeProgress="changeProgress" @changeType="changeType"></detail>
+					<marrary v-else @changeProgress="changeProgress" @saveData="saveData"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -83,7 +82,7 @@
 				isFinish: false,
 				type: 1,//三类资料组件切换
 				progress: 0,//资料完成度
-				personData: {}
+				data: {}
 			};
 		},
 		components: {
@@ -95,6 +94,16 @@
 			}
 		},
 		methods: {
+			saveData(data){
+				this.data = {...data}
+				console.log(this.data);
+			},
+			// 进入下一页
+			changeType(data){
+				this.data = {...data}
+				this.type++
+				console.log(this.data)
+			},
 			// 更改资料填写进度
 			changeProgress(val){
 				this.progress = val
@@ -109,14 +118,14 @@
 				let $this = this
 				setTimeout(function() {
 					this.isFinish = true
-					console.log(this.personData);
+					console.log(this.data);
 					uni.$showMsg("修改成功！")
 				}, 1000)
 			},
 			// 发请求
 			getData(data) {
-				this.personData = data
-				console.log(this.personData);
+				this.data = data
+				console.log(this.data);
 			},
 		}
 	}
@@ -223,7 +232,6 @@
 		
 		.progress {
 			height: 120rpx;
-			margin-bottom: 50rpx;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
