@@ -1,19 +1,18 @@
 <template>
 	<view>
-		模板
+		<personage :backShow="false" :personageData="data"></personage>
 	</view>
 </template>
 
 <script>
+	import personage from '@/components/personage/index.vue'
 	export default {
 		name:"person-template",
+		components: {personage},
 		data() {
 			return {
 				data: {
-					imgs: [
-						"../../static/images/user.jpg",
-						"../../static/images/user.jpg",
-					]
+					
 				}
 			};
 		}

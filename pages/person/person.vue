@@ -7,7 +7,7 @@
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
-					<span>认证中心</span>
+					<text>认证中心</text>
 					<uni-icons type="forward" size="18"></uni-icons>
 				</view>
 			</uni-badge>
@@ -28,40 +28,40 @@
 					</view>
 					<view class="top-left-right">
 						<h1>
-							<span>{{personData.username}}</span>
+							<text>{{personData.username}}</text>
 						</h1>
 						<p>
-							<span>用户ID：{{personData.userId}}</span>
+							<text>用户ID：{{personData.userId}}</text>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
 
 						<p>
-							<span>我的简历</span>
+							<text>我的简历</text>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
 					</view>
 				</div>
 				<view class="top-right">
-					<span v-if="!isFlag" @click="makeFlag">签到</span>
-					<span v-else class="isFlaged">已签到</span>
+					<text v-if="!isFlag" @click="makeFlag">签到</text>
+					<text v-else class="isFlaged">已签到</text>
 				</view>
 			</view>
 			<view class="main-bottom">
 				<view class="bottom-item" @click="gotoConnern">
-					<span class="item-num">{{personData.userConcern}}</span>
-					<span class="item-title">关注</span>
+					<text class="item-num">{{personData.userConcern}}</text>
+					<text class="item-title">关注</text>
 				</view>
 				<view class="bottom-item" @click="gotoConnern">
-					<span class="item-num">{{personData.userConcerned}}</span>
-					<span class="item-title">被关注</span>
+					<text class="item-num">{{personData.userConcerned}}</text>
+					<text class="item-title">被关注</text>
 				</view>
 				<view class="bottom-item" @click="gotoConnern">
-					<span class="item-num">{{personData.userPraised}}</span>
-					<span class="item-title">点赞</span>
+					<text class="item-num">{{personData.userPraised}}</text>
+					<text class="item-title">点赞</text>
 				</view>
 				<view class="bottom-item" @click="gotoConnern">
-					<span class="item-num">{{personData.userFraction}}</span>
-					<span class="item-title">积分</span>
+					<text class="item-num">{{personData.userFraction}}</text>
+					<text class="item-title">积分</text>
 				</view>
 			</view>
 		</view>
@@ -70,26 +70,26 @@
 		<view class="banner">
 			<view class="banner-vip section" @click="gotoPrivilege">
 				<view class="section-one">
-					<span>我的特权</span>
+					<text>我的特权</text>
 					<uni-icons type="forward" size="20"></uni-icons>
 				</view>
 				<view class="section-two">
-					<span>特权享更多权益·飞速脱单</span>
+					<text>特权享更多权益·飞速脱单</text>
 				</view>
 				<view class="section-three">
-					<span>开通特权</span>
+					<text>开通特权</text>
 				</view>
 			</view>
 			<view class="banner-info section" @click="gotoCheckPerson">
 				<view class="section-one">
-					<span>完善资料</span>
+					<text>完善资料</text>
 					<uni-icons type="forward" size="20"></uni-icons>
 				</view>
 				<view class="section-two">
-					<span>完成度越高越容易推荐</span>
+					<text>完成度越高越容易推荐</text>
 				</view>
 				<view class="section-three">
-					<span>20%</span>
+					<text>20%</text>
 				</view>
 			</view>
 		</view>
@@ -97,13 +97,13 @@
 		<!-- 动态 -->
 		<view class="active">
 			<view class="active-title">
-				<span>我的动态</span>
+				<text>我的动态</text>
 			</view>
 			<view class="active-list" v-if="personActiveData.length !== 0">
 				<view class="active-item" v-for="(item, i) in personActiveData" :key="i">
 					<view class="item-left">
-						<span class="day">11</span>
-						<span class="mouth">07月</span>
+						<text class="day">11</text>
+						<text class="mouth">07月</text>
 					</view>
 					<view class="item-right" @click="gotoComment">
 						<p class="text">{{item.text}}</p>
@@ -117,12 +117,12 @@
 							<view class="btn-info-right">
 								<view class="like">
 									<img class="icon" src="../../static/icon/active/like.png" alt="">
-									<span class="num">{{item.likes}}</span>
+									<text class="num">{{item.likes}}</text>
 								</view>
 								<view class="comment">									
 									<img class="icon" src="../../static/icon/active/comment.png" alt="">
-									<span class="num" v-if="item.contents !== 0">{{item.contents}}</span>
-									<span class="num" v-else>去评论</span>
+									<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
+									<text class="num" v-else>去评论</text>
 								</view>
 							</view>
 						</view>
@@ -133,18 +133,18 @@
 				</view>
 			</view>
 			<view class="active-empty" v-else>
-				<span class="empty-icon">
+				<text class="empty-icon">
 					<uni-icons type="compose" size="60" color="#ccc">
 					</uni-icons>
-				</span>
-				<span>发布一条动态，让大家看到你</span>
+				</text>
+				<text>发布一条动态，让大家看到你</text>
 			</view>
 		</view>
 
 		<!-- 发表动态按钮 -->
 		<view class="active-btn" @click="gotoShare">
 			<uni-icons type="camera-filled" size="22" color="#fff"></uni-icons>
-			<span>发动态</span>
+			<text>发动态</text>
 		</view>
 
 	</view>
@@ -180,6 +180,8 @@
 			}
 		},
 		methods: {
+			// 获取信息
+			
 			// 复制id
 			copyText() {
 				uni.$showMsg("复制失败")
@@ -288,7 +290,7 @@
 						height: 50rpx;
 						line-height: 50rpx;
 						display: flex;
-						span {
+						text {
 							margin-right: 10rpx;
 						}
 					}
@@ -299,7 +301,7 @@
 				display: flex;
 				align-items: flex-end;
 
-				span {	
+				text {	
 					padding: 0 30rpx;
 					height: 60rpx;
 					line-height: 60rpx;
@@ -370,14 +372,14 @@
 				align-items: center;
 				justify-content: space-between;
 
-				span {
+				text {
 					font-weight: bold;
 					font-size: 15px;
 				}
 			}
 
 			.section-two {
-				span {
+				text {
 					color: #777;
 					font-size: 12px;
 				}
@@ -386,7 +388,7 @@
 			.section-three {
 				margin-top: 20rpx;
 
-				span {
+				text {
 					color: #fff;
 					height: 60rpx;
 					line-height: 60rpx;
@@ -516,7 +518,7 @@
 		padding: 20rpx 30rpx;
 		border-radius: 20rpx;
 
-		span {
+		text {
 			margin-left: 10rpx;
 		}
 	}

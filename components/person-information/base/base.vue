@@ -10,12 +10,12 @@
 				<view class="image-item" v-for="(item, i) in userImages" :key="i">
 					<view class="box" v-if="item.show">
 						<image :src="item.imagePath" alt=""></image>
-						<span class="close">
+						<text class="close">
 							<uni-icons type="closeempty" size="16" color="darkorange"></uni-icons>
-						</span>
-						<span v-if="i === 0" class="host">
+						</text>
+						<text v-if="i === 0" class="host">
 							<text>主头像</text>
-						</span>
+						</text>
 					</view>
 					<view class="" v-else>
 						<uni-icons type="auth" size="50" color="#eee"></uni-icons>
