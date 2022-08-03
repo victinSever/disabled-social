@@ -21,29 +21,34 @@
 
 		<!-- 信息添加 -->
 		<view class="share-more">
-			<view class="share-tag">
-				<span>#加话题</span>
-				<span>#我的夏日</span>
-				<span>#残疾日</span>
+			<view class="share-top">
+				<view class="share-tag">
+					<span>#加话题</span>
+					<span>#我的夏日</span>
+					<span>#残疾日</span>
+				</view>
+				<view class="share-public">
+						<span>公开</span>
+						<uni-icons type="right" size="25"></uni-icons>
+				</view>
 			</view>
 			<view class="share-button">
-				<view class="share-button-left">
 					<span>
-						<uni-icons type="image" size="30"></uni-icons>
+						<img src="../../static/icon/active/picture.png" alt="">
+						<!-- <uni-icons type="image" size="30"></uni-icons> -->
 					</span>
 					<span>
-						<uni-icons type="camera-filled" size="30"></uni-icons>
+						<img src="../../static/icon/active/photo.png" alt="">
+						<!-- <uni-icons type="camera-filled" size="30"></uni-icons> -->
 					</span>
 					<span>
-						<uni-icons type="mic-filled" size="30"></uni-icons>
+						<img src="../../static/icon/active/voice.png" alt="">
+						<!-- <uni-icons type="mic-filled" size="30"></uni-icons> -->
 					</span>
 					<span>
-						<uni-icons type="map-pin-ellipse" size="30"></uni-icons>
-					</span>
-				</view>
-				<view class="share-button-right">
-					<span><span>公开</span><uni-icons type="right" size="25"></uni-icons></span>
-				</view>
+						<img src="../../static/icon/active/position.png" alt="">
+						<!-- <uni-icons type="map-pin-ellipse" size="30"></uni-icons> -->
+					</span>				
 			</view>
 		</view>
 	</view>
@@ -107,14 +112,16 @@
 		.share-header-right {
 			display: flex;
 			align-items: center;
+			height: 50rpx;
 			border-radius: 20rpx;
-			padding: 10rpx 5rpx 10rpx 20rpx;	
+			padding: 10rpx 15rpx 10rpx 30rpx;	
+			border-radius: 50rpx;
 
 			.btnSend {
 				display: inline-block;
 				text-align: center;
 				font-size: 16px;			
-				color: #fff;				
+				color: #fff;								
 			}
 		}
 	}
@@ -134,45 +141,41 @@
 		position: sticky;
 		bottom: 0;
 		z-index: 2;
+		padding: 0 30rpx;
 
-		.share-tag {
-			height: 60rpx;
-			margin-left: 10px;
-
-			span {
-				font-size: 13px;
-				padding: 10rpx 20rpx;
-				margin-right: 15rpx;
-				background-color: #f2f2f2;
-				border-radius: 30rpx;
-
+		.share-top {
+			display: flex;
+			justify-content: space-between;
+			
+			.share-tag {
+				height: 60rpx;
+				margin-left: 10px;
+			
+				span {
+					font-size: 13px;
+					padding: 10rpx 20rpx;
+					margin-right: 20rpx;
+					background-color: #fddfd0;
+					color: #d5836a;
+					border-radius: 30rpx;		
+				}
+			}
+			
+			.share-public{
+				display: flex;
+				align-items: center;
 			}
 		}
 		
 		.share-button {		
 			padding: 0 10px;
 			display: flex;
-			height: 50px;
+			height: 100rpx;
+			justify-content: space-between;
+			align-items: center;
 			
-			.share-button-left {
-				width: 70%;
-				display: flex;
-				justify-content: space-around;
-				align-items: center;
-			}
-			
-			.share-button-right {
-				width: 30%;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-				font-size: 14px;
-				
-				span{
-					line-height: 50px;
-					display: flex;
-					align-items: center;
-				}
+			img{
+				height: 60rpx;
 			}
 		}
 	}

@@ -1,13 +1,21 @@
-
 <script>
+	import Vue from 'vue'
 	export default {
 		onLaunch: function() {
+			uni.getSystemInfo({
+				success: function(e) {
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					if (e.platform == 'android') {
+						Vue.prototype.CustomBar = e.statusBarHeight + 50;
+					} else {
+						Vue.prototype.CustomBar = e.statusBarHeight + 45;
+					};
+				}
+			})
 		},
-		onShow: function() {
-		},
-		onHide: function() {
+		onShow: function() {},
+		onHide: function() {}
 		}
-	}
 </script>
 
 <style lang="scss">
