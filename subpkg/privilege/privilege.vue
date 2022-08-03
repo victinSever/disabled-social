@@ -375,7 +375,7 @@
 
 				button {
 					width: 90%;
-					background-color: darkorange;
+					background: linear-gradient(#ffaa7f, #ff557f);
 					border-radius: 20rpx;
 
 					text {

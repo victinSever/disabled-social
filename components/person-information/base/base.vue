@@ -28,94 +28,210 @@
 			</view>
 		</view>
 
-		<view class="detail">
 
-			<view class="section">
-				<text class="label">头像</text>
-				<view class="content" @click="chooseimage">
-					<view v-if="!data.userImage" class="camera">
-						<text>点击上传</text>
-						<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
-					</view>
-					<text v-else>已上传成功！</text>
+		<view class="section">
+			<text class="label">头像</text>
+			<view class="content" @click="chooseimage">
+				<view v-if="!data.userImage" class="camera">
+					<text>点击上传</text>
+					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
 				</view>
+				<text v-else>已上传成功！</text>
 			</view>
+		</view>
 
-			<view class="section">
-				<text class="label">生日</text>
-				<view class="content">
-					<picker mode="date" :value="data.date" :start="startDate" @change="bindDateChange" :end="endDate">
-						<view v-if="data.date" class="uni-input">{{data.date}}</view>
-						<view v-else>请选择</view>
-					</picker>
-				</view>
+		<view class="section">
+			<text class="label">生日</text>
+			<view class="content">
+				<picker mode="date" :value="data.date" :start="startDate" @change="bindDateChange" :end="endDate">
+					<view v-if="data.date" class="uni-input">{{data.date}}</view>
+					<view v-else>请选择</view>
+				</picker>
 			</view>
+		</view>
 
-			<view class="section">
-				<text class="label">身高</text>
-				<view class="content">
-					<input type="text" class="input" placeholder="请输入" v-model="data.height">
-				</view>
+		<view class="section">
+			<text class="label">身高</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.height">
 			</view>
-			
-			<view class="section">
-				<text class="label">体重</text>
-				<view class="content">
-					<input type="text" class="input" placeholder="请输入" v-model="data.weight">
-				</view>
+		</view>
+
+		<view class="section">
+			<text class="label">体重</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.weight">
 			</view>
-			
-			<view class="section">
-				<text class="label">工作地区</text>
-				<view class="content">
-					<picker mode="multiSelector" @change="bindWorkPlaceChange" :range="area" :value="data.workplace">
-						<view v-if="data.workplace" class="uni-input">
+		</view>
+
+		<view class="section">
+			<text class="label">工作地区</text>
+			<view class="content">
+				<picker mode="multiSelector" @change="bindWorkPlaceChange" :range="area" :value="data.workplace">
+					<view v-if="data.workplace" class="uni-input">
 						{{area[0][data.workplace[0]]}} {{area[1][data.workplace[1]]}}
-						</view>
-						<view v-else>请选择</view>
-					</picker>
-				</view>
+					</view>
+					<view v-else>请选择</view>
+				</picker>
 			</view>
-			
-			<view class="section">
-				<text class="label">户籍情况</text>
-				<view class="content">
-					<picker mode="multiSelector" @change="bindDomicileeChange" :range="domicile" :value="data.domicile">
-						<view v-if="data.domicile" class="uni-input">
+		</view>
+
+		<view class="section">
+			<text class="label">户籍情况</text>
+			<view class="content">
+				<picker mode="multiSelector" @change="bindDomicileeChange" :range="domicile" :value="data.domicile">
+					<view v-if="data.domicile" class="uni-input">
 						{{domicile[0][data.domicile[0]]}} {{domicile[1][data.domicile[1]]}}
-						</view>
-						<view v-else>请选择</view>
-					</picker>
-				</view>
+					</view>
+					<view v-else>请选择</view>
+				</picker>
 			</view>
-			
-			<view class="section section-bottom">
-				<text class="label">婚姻情况</text>
-				<view class="content">
-					<picker @change="bindMarraryChange" :range="marrary" :value="data.marrary">
-						<view v-if="data.marrary" class="uni-input">
+		</view>
+
+		<view class="section section-bottom">
+			<text class="label">婚姻情况</text>
+			<view class="content">
+				<picker @change="bindMarraryChange" :range="marrary" :value="data.marrary">
+					<view v-if="data.marrary" class="uni-input">
 						{{marrary[data.marrary]}}
-						</view>
-						<view v-else>请选择</view>
-					</picker>
-				</view>
+					</view>
+					<view v-else>请选择</view>
+				</picker>
 			</view>
-			
-			
+		</view>
+
+		<view class="section">
+			<text class="label">学历</text>
+			<view class="content">
+				<picker @change="bindMarraryChange" :range="levels" :value="data.level">
+					<view v-if="data.level" class="uni-input">
+						{{levels[data.level]}}
+					</view>
+					<view v-else>请选择</view>
+				</picker>
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">月收入</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">职业</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">住房</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">住房情况</text>
+			<view class="content">
+				<picker @change="bindHouseChange" :range="house" :value="data.house">
+					<view v-if="data.house" class="uni-input">
+						{{house[data.house]}}
+					</view>
+					<view v-else>请选择</view>
+				</picker>
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">购车情况</text>
+			<view class="content">
+				<picker @change="bindCarChange" :range="car" :value="data.car">
+					<view v-if="data.car" class="uni-input">
+						{{car[data.car]}}
+					</view>
+					<view v-else>请选择</view>
+				</picker>
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">期待结婚时间</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.marrayTime">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">自我介绍</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.selfIntroduction">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">微信</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.weChat">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">微信二维码</text>
+			<view class="content" @click="chooseimage">
+				<view v-if="!data.weChatImage" class="camera">
+					<text>点击上传</text>
+					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
+				</view>
+				<text v-else>已上传成功！</text>
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">QQ</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.qq">
+			</view>
+		</view>
+
+		<view class="section">
+			<text class="label">邮箱</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.email">
+			</view>
+		</view>
+
+		<view class="btn-next">
+			<button>下一步</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { returnRate } from '@/apis/tools.js'
 	export default {
 		data() {
-			const area = [['南岸区','巴南区'], ['红光大道','渝中达到']]
-			const domicile = [['重庆','四川'],['南岸','渝北','渝中','巴南']]
-			const marrary = ['请选择','未婚','二婚','已婚']
+			const area = [
+				['南岸区', '巴南区'],
+				['红光大道', '渝中达到']
+			]
+			const domicile = [
+				['重庆', '四川'],
+				['南岸', '渝北', '渝中', '巴南']
+			]
+			const marrary = ['请选择', '未婚', '二婚', '已婚']
+			const levels = ['请选择’,小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
+			const house = ['请选择', '已买房', '未买房']
+			const car = ['请选择', '已买车', '未买车']
 			return {
 				area,
 				domicile,
 				marrary,
+				levels,
+				house,
+				car,
 				data: {
 					userImage: '',
 					date: '',
@@ -123,15 +239,18 @@
 					// sex: 1,
 					height: '',
 					weight: '',
-					workplace: '',//工作地
-					domicile: '',//户籍
-					marrary: '',//婚姻情况
+					workplace: '', //工作地
+					domicile: '', //户籍
+					marrary: '', //婚姻情况
+					level: '', //学历
+					incomes: '', //收入
 				},
+				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
 				userImages: [{
-					imagePath: '/static/images/home/img1.png',
+					imagePath: '../../static/images/home/img1.png',
 					show: true
 				}, {
-					imagePath: '/static/images/home/img2.png',
+					imagePath: '../../static/images/home/img2.png',
 					show: true
 				}, {
 					imagePath: '',
@@ -146,23 +265,21 @@
 					imagePath: '',
 					show: false
 				}],
-				progress: 0,//完成度
+				progress: 0, //完成度
 			};
 		},
 		watch: {
 			data: {
+				immediate: true,
 				deep: true,
 				handler(val) {
-					let sum = 0, finish = 0				
-					for(let key in val){
-						sum++
-						if(val[key] != '' && val[key] != 0) finish++
-						console.log(val[key]);
-					}
-					this.$emit('changeProgress', (finish/sum).toFixed(2))
+					this.$emit('changeProgress', returnRate(val))
 				}
 			}
 		},
+		// mounted(){
+		// 	this.$emit('changeProgress', returnRate(this.data))
+		// },
 		computed: {
 			startDate() {
 				return this.getDate('start');
@@ -172,16 +289,24 @@
 			}
 		},
 		methods: {
+			//选择买房
+			bindHouseChange(e) {
+				this.data.house = e.detail.value
+			},
+			// 选择买车
+			bindCarChange(e) {
+				this.data.car = e.detail.value
+			},
 			// 选择婚姻情况
-			bindMarraryChange(e){
+			bindMarraryChange(e) {
 				this.data.marrary = e.detail.value
 			},
 			// 选择户籍地区
-			bindDomicileeChange(e){
+			bindDomicileeChange(e) {
 				this.data.domicile = e.detail.value
 			},
 			// 选择工作地区
-			bindWorkPlaceChange(e){
+			bindWorkPlaceChange(e) {
 				this.data.workplace = e.detail.value
 			},
 			// 选择生日
@@ -229,7 +354,12 @@
 					success: function(res) {
 						console.log(res);
 						// tempFilePath可以作为img标签的src属性显示图片
-						that.data.userImage = res.tempFilePaths[0]
+						let url = res.tempFilePaths[0]
+						if (this.uploadPostion === 2) {
+							that.data.userImage = url
+						} else if (this.uploadPostion === 3) {
+							that.data.weChatImage = url
+						}
 					}
 				})
 			},
@@ -319,54 +449,61 @@
 		}
 	}
 
-	.detail {
-		margin-top: 40rpx;
 
-		.section {
-			height: 100rpx;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
+	.section {
+		height: 100rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 
-			.label {
-				font-weight: bold;
-			}
+		.label {
+			font-weight: bold;
+		}
 
-			.content {
-				color: #989898;
+		.content {
+			color: #989898;
 
-				.camera {
-					border: 2rpx solid #ffb795;
-					display: flex;
-					align-items: center;
-					height: 50rpx;
-					padding: 0 20rpx;
-					border-radius: 50rpx;
+			.camera {
+				border: 2rpx solid #ffb795;
+				display: flex;
+				align-items: center;
+				height: 50rpx;
+				padding: 0 20rpx;
+				border-radius: 50rpx;
 
-					text {
-						color: #ffb795;
-					}
-
-					.icon-camera {
-						margin-left: 20rpx;
-					}
+				text {
+					color: #ffb795;
 				}
-				
-				.input{
-					width: 100rpx;
-					font-size: 14px;
-					text-align: right;
+
+				.icon-camera {
+					margin-left: 20rpx;
 				}
 			}
 
+			.input {
+				width: 100rpx;
+				font-size: 14px;
+				text-align: right;
+			}
 		}
 
-		.section:not(:last-child) {
-			border-bottom: 2rpx solid #eee;
-		}
-		
-		.section-bottom{
-			border-bottom: 6rpx solid #eee;
+	}
+
+	.section:not(:last-child) {
+		border-bottom: 2rpx solid #eee;
+	}
+
+	.section-bottom {
+		border-bottom: 8rpx solid #eee;
+	}
+
+	.btn-next {
+		margin: 30rpx 0;
+
+		button {
+			border-radius: 20rpx;
+			color: #fff;
+			background: linear-gradient(#ffaa7f, #ff557f);
 		}
 	}
 </style>

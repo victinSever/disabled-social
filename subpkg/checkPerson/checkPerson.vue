@@ -1,6 +1,7 @@
 <template>
 	<view class="root">
-		<mover></mover>
+		<!-- <mover></mover> -->
+		<ming-pop></ming-pop>
 		<view class="fixed">
 			<!-- 头部 -->
 			<view class="header">
@@ -61,8 +62,8 @@
 				<person-template v-if="isPre"></person-template>
 				<view v-else>
 					<baseCom v-if="type === 1" @changeProgress="changeProgress"></baseCom>
-					<detail v-else-if="type === 2"></detail>
-					<marrary v-else></marrary>
+					<detail v-else-if="type === 2" @changeProgress="changeProgress"></detail>
+					<marrary v-else @changeProgress="changeProgress"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -256,4 +257,6 @@
 	.main {
 		padding: 0 30rpx;
 	}
+	
+	
 </style>
