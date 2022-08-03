@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="gruop-content">
-			
+			<group-item></group-item>
 		</view>
 	</view>
 </template>
@@ -36,10 +36,9 @@
 <style lang="scss" scoped>
 	.gruop-header {
 		display: flex;
-		// background-color: wheat;
 		height: 40px;
 		border-bottom: 1px solid #f9f9f9;
-
+		margin-bottom: 40px;
 		.header-item {
 			flex: 1;
 			display: flex;
