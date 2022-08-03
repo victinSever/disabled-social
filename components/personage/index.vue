@@ -6,22 +6,22 @@
         <swiper class="swiper" indicator-dots="true" circular="true">
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="">
+                    <image mode="aspectFill" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="">
+                    <image mode="aspectFill" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="">
+                    <image mode="aspectFill" alt="" />
                 </view>
             </swiper-item>
             <swiper-item>
                 <view class="swiper-item">
-                    <image mode="aspectFill" alt="">
+                    <image mode="aspectFill" alt="" />
                 </view>
             </swiper-item>
         </swiper>
@@ -84,7 +84,7 @@
             personageData:{
                 type: Object,
                 default: {
-                    
+
                 }
             }
         },
@@ -151,21 +151,21 @@
             }
         }
     }
-    
+
     .footer {
     	box-sizing: border-box;
     	padding: 20rpx;
-    
+
     	.footer-header {
     		margin-bottom: 60rpx;
     		// background-color: bisque;
-    
+
     		.userName {
     			display: flex;
     			align-items: center;
     			justify-content: space-between;
     			font-size: 54rpx;
-    
+
     			.focus {
     				background-color: #FB966E;
     				padding: 12rpx 22rpx;
@@ -174,53 +174,53 @@
     				font-size: 26rpx;
     			}
     		}
-    
+
     		.address {
     			margin-top: 16rpx;
     			color: #000000;
-    
+
     			.point {
     				&:before {
     					content: " ";
     				}
-    
+
     				&:after {
     					content: " ";
     				}
     			}
     		}
     	}
-    
+
     	.photos,
     	.mv {
     		padding-bottom: 40rpx;
     		margin-bottom: 20rpx;
     	    border-bottom: 4rpx solid #e6e6e64f;
-    
+
     		.title {
     			display: flex;
     			align-items: center;
     			justify-content: space-between;
     			margin-bottom: 28rpx;
-    
-    
+
+
     			.pic {
     				font-weight: 700;
     				font-size: 32rpx;
     			}
-    
+
     			.look {
     				color: #D8D8D8;
     			}
     		}
-    
+
     		.scroll-view_H {
     			white-space: nowrap;
     			width: 100%;
     		}
-    
+
     		.scroll-view-item_H {
-    
+
     			display: inline-block;
     			margin-right: 20rpx;
     			width: 164rpx;
@@ -230,8 +230,8 @@
     			font-size: 36rpx;
     		}
     	}
-    
+
     }
-    
-    
+
+
     </style>
