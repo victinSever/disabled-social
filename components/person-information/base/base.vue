@@ -32,7 +32,7 @@
 		<view class="section">
 			<text class="label">头像</text>
 			<view class="content" @click="chooseimage">
-				<view v-if="!data.userImage" class="camera">
+				<view v-if="!data.imagePath" class="camera">
 					<text>点击上传</text>
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
 				</view>
@@ -49,6 +49,27 @@
 				</picker>
 			</view>
 		</view>
+		
+		<view class="section">
+			<text class="label">用户名</text>
+			<view class="content">
+				<text>{{data.personName}}</text>
+			</view>
+		</view>
+		
+		<view class="section">
+			<text class="label">年龄</text>
+			<view class="content">
+				<text>{{data.age}}</text>
+			</view>
+		</view>
+		
+		<view class="section">
+			<text class="label">性别</text>
+			<view class="content">
+				<text>{{data.sex}}</text>
+			</view>
+		</view>
 
 		<view class="section">
 			<text class="label">身高</text>
@@ -63,13 +84,17 @@
 				<input type="text" class="input" placeholder="请输入" v-model="data.weight">
 			</view>
 		</view>
+		
+		<view class="diliver">
+			
+		</view>
 
 		<view class="section">
 			<text class="label">工作地区</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindWorkPlaceChange" :range="area" :value="data.workplace">
-					<view v-if="data.workplace" class="uni-input">
-						{{area[0][data.workplace[0]]}} {{area[1][data.workplace[1]]}}
+				<picker mode="multiSelector" @change="bindworkAddrChange" :range="workAddr" :value="data.workAddr">
+					<view v-if="data.workAddr" class="uni-input">
+						{{area[0][data.workAddr[0]]}} {{area[1][data.workAddr[1]]}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -79,16 +104,16 @@
 		<view class="section">
 			<text class="label">户籍情况</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindDomicileeChange" :range="domicile" :value="data.domicile">
-					<view v-if="data.domicile" class="uni-input">
-						{{domicile[0][data.domicile[0]]}} {{domicile[1][data.domicile[1]]}}
+				<picker mode="multiSelector" @change="bindhouseholdAddreChange" :range="householdAddr" :value="data.householdAddr">
+					<view v-if="data.householdAddr" class="uni-input">
+						{{householdAddr[0][data.householdAddr[0]]}} {{householdAddr[1][data.householdAddr[1]]}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
 			</view>
 		</view>
 
-		<view class="section section-bottom">
+		<view class="section">
 			<text class="label">婚姻情况</text>
 			<view class="content">
 				<picker @change="bindMarraryChange" :range="marrary" :value="data.marrary">
@@ -99,13 +124,15 @@
 				</picker>
 			</view>
 		</view>
+		
+		
 
 		<view class="section">
 			<text class="label">学历</text>
 			<view class="content">
-				<picker @change="bindMarraryChange" :range="levels" :value="data.level">
-					<view v-if="data.level" class="uni-input">
-						{{levels[data.level]}}
+				<picker @change="binddegreeChange" :range="degree" :value="data.degree">
+					<view v-if="data.degree" class="uni-input">
+						{{degree[data.degree]}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -115,30 +142,27 @@
 		<view class="section">
 			<text class="label">月收入</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
+				<input type="text" class="input" placeholder="请输入" v-model="data.income">
 			</view>
+		</view>
+		
+		<view class="diliver">
+			
 		</view>
 
 		<view class="section">
 			<text class="label">职业</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
-			</view>
-		</view>
-
-		<view class="section">
-			<text class="label">住房</text>
-			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.incomes">
+				<input type="text" class="input" placeholder="请输入" v-model="data.occupation">
 			</view>
 		</view>
 
 		<view class="section">
 			<text class="label">住房情况</text>
 			<view class="content">
-				<picker @change="bindHouseChange" :range="house" :value="data.house">
-					<view v-if="data.house" class="uni-input">
-						{{house[data.house]}}
+				<picker @change="bindhousingStatusChange" :range="housingStatus" :value="data.housingStatus">
+					<view v-if="data.housingStatus" class="uni-input">
+						{{housingStatus[data.housingStatus]}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -148,40 +172,60 @@
 		<view class="section">
 			<text class="label">购车情况</text>
 			<view class="content">
-				<picker @change="bindCarChange" :range="car" :value="data.car">
-					<view v-if="data.car" class="uni-input">
-						{{car[data.car]}}
+				<picker @change="bindcarStatusChange" :range="carStatus" :value="data.carStatus">
+					<view v-if="data.carStatus" class="uni-input">
+						{{carStatus[data.carStatus]}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
 			</view>
 		</view>
+		
+		
 
 		<view class="section">
 			<text class="label">期待结婚时间</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.marrayTime">
+				<input type="text" class="input" placeholder="请输入" v-model="data.expectedMarryTime">
 			</view>
 		</view>
 
 		<view class="section">
 			<text class="label">自我介绍</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.selfIntroduction">
+				<input type="text" class="input" placeholder="请输入" v-model="data.personIntro">
+			</view>
+		</view>
+		
+		<view class="section">
+			<text class="label">爱情宣言</text>
+			<view class="content">
+				<input type="text" class="input" placeholder="请输入" v-model="data.personSign">
+			</view>
+		</view>
+		
+		<view class="diliver">
+			
+		</view>
+		
+		<view class="section">
+			<text class="label">手机</text>
+			<view class="content">
+				<text>{{data.phone}}</text>
 			</view>
 		</view>
 
 		<view class="section">
 			<text class="label">微信</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.weChat">
+				<input type="text" class="input" placeholder="请输入" v-model="data.wechat">
 			</view>
 		</view>
 
 		<view class="section">
 			<text class="label">微信二维码</text>
 			<view class="content" @click="chooseimage">
-				<view v-if="!data.weChatImage" class="camera">
+				<view v-if="!data.wechatCodeImagesPath" class="camera">
 					<text>点击上传</text>
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
 				</view>
@@ -204,7 +248,7 @@
 		</view>
 
 		<view class="btn-next">
-			<button>下一步</button>
+			<button @click="changeType">下一步</button>
 		</view>
 	</view>
 </template>
@@ -213,37 +257,46 @@
 	import { returnRate } from '@/apis/tools.js'
 	export default {
 		data() {
-			const area = [
+			const workAddr = [
 				['南岸区', '巴南区'],
 				['红光大道', '渝中达到']
 			]
-			const domicile = [
+			const householdAddr = [
 				['重庆', '四川'],
 				['南岸', '渝北', '渝中', '巴南']
 			]
 			const marrary = ['请选择', '未婚', '二婚', '已婚']
-			const levels = ['请选择’,小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
-			const house = ['请选择', '已买房', '未买房']
-			const car = ['请选择', '已买车', '未买车']
+			const degree = ['请选择’,小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
+			const housingStatus = ['请选择', '已买房', '未买房']
+			const carStatus = ['请选择', '已买车', '未买车']
 			return {
-				area,
-				domicile,
+				workAddr,
+				householdAddr,
 				marrary,
-				levels,
-				house,
-				car,
+				degree,
+				housingStatus,
+				carStatus,
 				data: {
 					userImage: '',
+					personName: '小懒猫',
 					date: '',
-					// age: 18,
-					// sex: 1,
+					age: 18,
+					sex: 1,
+					phone: '12355552223',
 					height: '',
 					weight: '',
-					workplace: '', //工作地
-					domicile: '', //户籍
+					workAddr: '', //工作地
+					householdAddr: '', //户籍
 					marrary: '', //婚姻情况
-					level: '', //学历
-					incomes: '', //收入
+					degree: '', //学历
+					income: '', //收入
+					housingStatus: '',
+					carStatus: '',
+					expectedMarryTime: '',
+					personIntro: '',
+					personSign: '',
+					wechat: '',
+					wechatCodeImagesPath: '',
 				},
 				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
 				userImages: [{
@@ -277,9 +330,6 @@
 				}
 			}
 		},
-		// mounted(){
-		// 	this.$emit('changeProgress', returnRate(this.data))
-		// },
 		computed: {
 			startDate() {
 				return this.getDate('start');
@@ -289,25 +339,32 @@
 			}
 		},
 		methods: {
+			changeType(){
+				this.$emit('changeType', this.data)
+			},
+			//学历
+			binddegreeChange(e) {
+				this.data.degree = e.detail.value
+			},
 			//选择买房
-			bindHouseChange(e) {
-				this.data.house = e.detail.value
+			bindhousingStatusChange(e) {
+				this.data.housingStatus = e.detail.value
 			},
 			// 选择买车
-			bindCarChange(e) {
-				this.data.car = e.detail.value
+			bindcarStatusChange(e) {
+				this.data.carStatus = e.detail.value
 			},
 			// 选择婚姻情况
 			bindMarraryChange(e) {
 				this.data.marrary = e.detail.value
 			},
 			// 选择户籍地区
-			bindDomicileeChange(e) {
-				this.data.domicile = e.detail.value
+			bindhouseholdAddreChange(e) {
+				this.data.householdAddr = e.detail.value
 			},
 			// 选择工作地区
-			bindWorkPlaceChange(e) {
-				this.data.workplace = e.detail.value
+			bindworkAddrChange(e) {
+				this.data.workAddr = e.detail.value
 			},
 			// 选择生日
 			bindDateChange(e) {
@@ -356,9 +413,9 @@
 						// tempFilePath可以作为img标签的src属性显示图片
 						let url = res.tempFilePaths[0]
 						if (this.uploadPostion === 2) {
-							that.data.userImage = url
+							that.data.imagePath = url
 						} else if (this.uploadPostion === 3) {
-							that.data.weChatImage = url
+							that.data.wechatCodeImagesPath = url
 						}
 					}
 				})
@@ -451,7 +508,7 @@
 
 
 	.section {
-		height: 100rpx;
+		height: 110rpx;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -493,8 +550,10 @@
 		border-bottom: 2rpx solid #eee;
 	}
 
-	.section-bottom {
-		border-bottom: 8rpx solid #eee;
+	.diliver{
+		width: 100%;
+		height: 8rpx;
+		background-color: #eee;
 	}
 
 	.btn-next {
