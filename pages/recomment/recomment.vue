@@ -2,7 +2,7 @@
 	<view class="home-container">
 		<mover></mover>
 		<!-- 头部 -->
-		<view :animation="animationHeader" class="home-header">
+		<view :animation="animationHeader" class="home-header" v-if="header">
 			<view class="header-left">
 				<text @click="isImages = true">
 					<text
@@ -18,12 +18,15 @@
 				<image @click="openPopup" src="@/static/images/home/screen.png"></image>
 			</view>
 		</view>
-		
+
 		<template v-if="isImages">
 			<view class="home-body">
 				<movable-area :animation="animationData" class="movable-area movable-area0">
 					<movable-view id="1" :x="x" :y="y" out-of-bounds="true" class="movable-view" show-scrollbar
 						direction="all" @change="onChange" :disabled="movedisable">
+						<view class="back-detail" @click="backdetail" v-if="!header">
+						    <image src="@/static/images/home/shang.png"></image>
+						</view>
 						<view class="home-swiper">
 							<view class="swiper_detail" :style="{display:header==true? 'block' : 'none'}">
 								<view class="mask">
@@ -43,32 +46,32 @@
 									<view class="back">
 										<image src="@/static/images/home/5.png"></image>
 									</view>
-			
+
 									<view class="cancel">
 										<image src="@/static/images/home/3.png"></image>
 									</view>
-			
+
 									<view class="like">
 										<image src="@/static/images/home/1.png"></image>
 									</view>
-			
+
 									<view class="collection">
 										<image src="@/static/images/home/2.png"></image>
 									</view>
-			
-			
+
+
 								</view>
 							</view>
 					      </view>
                           <template v-if="!header">
-                              <personage @backdetail="backdetail" :backShow="true" :personageData="personageData"></personage>
+                              <personage  :backShow="true" :personageData="personageData"></personage>
                           </template>
 					</movable-view>
 				</movable-area>
 			</view>
-			
+
 		</template>
-		
+
 		<template v-else>
 			<videos></videos>
 		</template>
@@ -88,7 +91,7 @@
 <script>
     import personage from '@/components/personage/index.vue'
 	import videos from './video.vue'
-    import {getRecomment} from "@/apis/recomment.js"
+    import recomment from "@/apis/recomment.js"
 	export default {
 		components: {
 			videos,
@@ -129,16 +132,16 @@
             this.getRecommentList();
 		},
 		methods: {
-            
+
             //获取图片秀list
             getRecommentList(){
-               getRecomment(this.page).then(response => {
-                 
+               recomment.getRecomment(this.page).then(response => {
+
                 }).catch(error => {
-                    
-                }) 
+
+                })
             },
-            
+
 			// 关闭提示广告
 			closeAdver() {
 				this.$refs.recommentAdver.close()
@@ -277,6 +280,23 @@
 		height: 3rpx;
 		color: #fff;
 	}
+    .back-detail {
+        position: absolute;
+        top: 50rpx;
+        left: 30rpx;
+        z-index: 2;
+        color: #fff;
+        font-size: 40rpx;
+        font-weight: bold;
+        padding: 0 20rpx;
+        border-radius: 10rpx;
+        transform: rotate(-90deg);
+
+        image{
+            width: 46rpx;
+            height: 46rpx;
+        }
+    }
 
 	.home-container {
 		box-sizing: border-box;
@@ -288,6 +308,8 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			position: relative;
+			z-index: 2;
 
 			.header-left {
 				margin-left: 20rpx;

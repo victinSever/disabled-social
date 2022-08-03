@@ -1,8 +1,6 @@
 <template>
     <view>
-        <view class="back-detail" @click="backdetail" v-show="backShow">
-            <image src="@/static/images/home/shang.png"></image>
-        </view>
+
         <swiper class="swiper" indicator-dots="true" circular="true">
             <swiper-item>
                 <view class="swiper-item">
@@ -103,23 +101,6 @@
 
 <style lang="scss" scoped>
 
-    .back-detail {
-        position: absolute;
-        top: 50rpx;
-        left: 30rpx;
-        z-index: 2;
-        color: #fff;
-        font-size: 40rpx;
-        font-weight: bold;
-        padding: 0 20rpx;
-        border-radius: 10rpx;
-        transform: rotate(-90deg);
-
-        image{
-            width: 46rpx;
-            height: 46rpx;
-        }
-    }
 
     .mask {
         position: absolute;

@@ -62,76 +62,17 @@
 				</view>
 			</view>
 		</view>
+	
 	</view>
 </template>
 
 <script>
+	 import message from "@/apis/message.js"
 	export default {
 		data() {
 			return {
-				recommentData:[{
-					imgpath: "../../static/images/user.jpg",
-					lastTime: 5,
-					lastUnit: '分钟'
-				},{
-					imgpath: "../../static/images/user2.jpg",
-					lastTime: 33,
-					lastUnit: '分钟'
-				},{
-					imgpath: "../../static/images/content.jpg",
-					lastTime: 2,
-					lastUnit: '小时'
-				}],
-				messageData: [{
-						"username": "小懒猫",
-						"imgpath": "../../static/images/user.jpg",
-						"message": "快来找我呀",
-						lastTime: 5,
-						lastUnit: '分钟'
-					},
-					{
-						"username": "可爱狗",
-						"imgpath": "../../static/images/user2.jpg",
-						"message": "cpdd",
-						lastTime: 24,
-						lastUnit: '分钟'
-					},
-					{
-						"username": "雨末微量",
-						"imgpath": "../../static/images/content.jpg",
-						"message": "求关注",
-						lastTime: 30,
-						lastUnit: '分钟'
-					},
-					{
-						"username": "来生",
-						"imgpath": "../../static/images/content2.jpg",
-						"message": "新版 iconfont 支持两种方式引用多色图标：SVG symbol 引用方式和彩色字体图标模式。",
-						lastTime: 1,
-						lastUnit: '小时'
-					},
-					{
-						"username": "趋势日苦多",
-						"imgpath": "../../static/images/home/img4.png",
-						"message": "是的？",
-						lastTime: 10,
-						lastUnit: '小时'
-					},
-					{
-						"username": "Suny Boy",
-						"imgpath": "../../static/images/home/img2.png",
-						"message": "哈哈？",
-						lastTime: 2,
-						lastUnit: '天'
-					},
-					{
-						"username": "Wind",
-						"imgpath": "../../static/images/home/img1.png",
-						"message": "行吧？",
-						lastTime: 5,
-						lastUnit: '天'
-					},
-				],
+				recommentData:[],
+				messageData: [],
 				options: [{
 					text: '删除', // 显示的文本内容
 					style: {
@@ -142,10 +83,33 @@
 				
 			}
 		},
+		mounted() {
+			this.getrecommendList();
+			this.getMessageList();
+		},
 		
 		methods: {
+			//获取推荐ren
 			
-
+			getrecommendList(){
+				message.recommendList().then(response => {
+                 
+                }).catch(error => {
+                    
+                }) 
+			},
+			
+			//获取用户列表
+			getMessageList(){
+				message.messageList().then(response => {
+			     
+			    }).catch(error => {
+			        
+			    }) 
+			},
+			
+			
+			
 			gotoMessageDetail(item) {
 				uni.navigateTo({
 					url: '/subpkg/information/information?username=' + item.username
