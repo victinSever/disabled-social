@@ -81,7 +81,8 @@
 
 <style lang="scss" scoped>
 	.popup-content {
-		margin-top: 80rpx;
+		// wait change
+		margin-top: 100rpx;
 		background-color: transparent;
 
 		.content-box {
