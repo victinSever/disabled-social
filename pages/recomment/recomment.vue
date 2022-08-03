@@ -322,15 +322,12 @@
 			display: flex;
 			bottom: 0rpx;
 			position: absolute;
-			// top: 30rpx;
-			// align-items: center;	
 			justify-content: center;
 
 			.movable-area,
 				{
 				width: 95%;
 				height: 98%;
-				// background-color: red;
 				position: absolute;
 
 				.movable-view {

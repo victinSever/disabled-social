@@ -1,108 +1,75 @@
 <template>
 	<view class="">
-		<view class="anniu">
-			<view class="an">
-				<image src="@/static/images/bgc/empty.png" mode="widthFix"></image>
-				<text>最新</text>
-			</view>
-			<view class="an">
-				<image src="@/static/images/bgc/empty.png" mode="widthFix"></image>
-				<text>我的</text>
-			</view>
-			<view class="an">
-				<image src="@/static/images/bgc/empty.png" mode="widthFix"></image>
-				<text>筛选</text>
+		<view class="gruop-header">
+			<view class="header-item" v-for="(item,index) in titleList">
+				<text @click="changeChoose(index)"
+					:class="['header-contnet',index === active ? 'active' : '']">{{item}}</text>
 			</view>
 		</view>
-		<view class="information" >
-			<view class="in" v-for="item in 5" :key="item">
-				<view class="touxiang">
-					<image src="@/static/images/user.jpg" mode="widthFix"></image>
-				</view>
-				<view class="xiaoxi">
-					<text class="mingzi">全国聋人单身群</text>
-					<text class="xinxi">专注于...</text>
-				</view>
-				<button @click="add">+加群</button>
-			</view>
+		<view class="gruop-content">
+			
 		</view>
 	</view>
 </template>
 
 <script>
-	export default{
-		methods:{
-			add(){
+	export default {
+		data() {
+			return {
+				titleList: ['最新', '我的', '筛选'],
+				active: 0
+			}
+		},
+		methods: {
+			add() {
 				uni.navigateTo({
 					url: '/subpkg/xiangqing/xiangqing'
 				})
+			},
+			changeChoose(index) {
+				this.active = index
 			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.gruop-header {
+		display: flex;
+		// background-color: wheat;
+		height: 40px;
+		border-bottom: 1px solid #f9f9f9;
 
-	.anniu{
-		display: flex;
-		flex-direction: row;
-		background-color: aliceblue;
-		margin:10rpx 20rpx;
-		border-radius: 20rpx;
-	}
-	.an{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width:120rpx;
-		margin:0 55rpx;
-	}
-	image{
-		width:60rpx;
-	}
-	.information{
-		display: flex;
-		flex-direction: column;
-		width: 95%;
-		background-color: aliceblue;
-		margin-left: 20rpx;
-		border-radius: 20rpx;
-	}
-	.in{
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		height:120rpx;
-		margin-top: 10rpx;
-	}
-	.touxiang{
-		margin-left: 15rpx;
-		height: 100rpx;
-		color: aqua;
-	}
-	.touxiang image{
-		width:100rpx;
-		border-radius: 50%;
-	}
-	.xiaoxi{
-		margin-left: 15rpx;
-		display: flex;
-		flex-direction: column;
-	}
-	.xiaoxi .mingzi{
-		font-weight: 800;
-		font-size: 34rpx;
-	}
-	.xiaoxi .xinxi{
-		color: darkgrey;
-	}
-	button{
-		height:80rpx;
-		border-radius: 40rpx;
-		text-align: center;
-		line-height: 80rpx;
-		border: 2rpx solid red;
-		margin-left: 170rpx;
+		.header-item {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+
+			.header-contnet {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+
+				&.active {
+					color: #f79667;
+
+					&::before {
+						position: absolute;
+						content: '';
+						height: 1px;
+						width: 100%;
+						background-color: red;
+						bottom: 0;
+						left: 0;
+					}
+				}
+
+			}
+
+		}
 	}
 </style>

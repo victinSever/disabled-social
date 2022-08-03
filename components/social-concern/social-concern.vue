@@ -1,50 +1,52 @@
 <template>
-	<view>
-		<view class="concern-header">
-			<span v-for="(item, i) in concern" :key="i">
-				<img :src="item.imgpath" alt="">
-			</span>
-		</view>
-				
+	<view class="media-container">
 		<view class="main">
-			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
+			<message-media :data="item" v-for="(item, i) in acitveData"></message-media>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		name:"social-concern",
+		name: "social-concern",
 		data() {
 			return {
-				concern:[
-					{
-						imgpath: "static/images/user.jpg",
-					},{
-						imgpath: "static/images/user2.jpg",
-					},{
-						imgpath: "static/images/content.jpg",
-					},{
-						imgpath: "static/images/content2.jpg",
-					}
-				],
+				concern: [{
+					imgpath: "static/images/user.jpg",
+				}, {
+					imgpath: "static/images/user2.jpg",
+				}, {
+					imgpath: "static/images/content.jpg",
+				}, {
+					imgpath: "static/images/content2.jpg",
+				}],
 				acitveData: [{
 					userData: {
 						username: "雨末微凉",
 						imgpath: "static/images/user.jpg",
-					},					
-					message: "虽然手有点问题，但待人我是专心的",
+					},
+					message: "虽然手有点问题，但待人我是专心的但待但待人人我是专心的但待人我是专心的但待但待人但待人人我是专心的",
 					activeImages: [{
 						imgpath: "static/images/content2.jpg",
 					}],
 					lastTime: 1,
 					lastUnit: '分钟',
 					distance: 24
-				},{
+				}, {
+					userData: {
+						username: "XXXX服务中心",
+						imgpath: "static/images/user.jpg",
+					},
+					message: "国家认证中心",
+					activeImages: [{
+						imgpath: "static/images/content2.jpg",
+					}],
+
+				}, {
 					userData: {
 						username: "雨末微凉",
 						imgpath: "static/images/user.jpg",
-					},					
+					},
 					message: "哈哈",
 					activeImages: [{
 						imgpath: "static/images/content.jpg",
@@ -56,7 +58,7 @@
 			};
 		},
 		methods: {
-			openPopu(){
+			openPopu() {
 				this.$emit('openPopu', true)
 			},
 		}
@@ -64,28 +66,18 @@
 </script>
 
 <style lang="scss" scoped>
-	.concern-header {
-		height: 50px;
-		padding-left: 10px;
-		padding-bottom: 20px;
-		background-color: #fff;
-		border-bottom: 6rpx solid #eee;
-		display: flex;
-		align-items: center;
-		
-		span{
-			height: 40px;
-			
-			img{
-				height: 40px;
-				width: 40px;
-				border-radius: 50%;
-				margin-right: 15px;
-			}
+	.media-container {
+		padding: 0 10px;
+
+		.main {
+			// background-color: red;
+			padding-top: 20px;
+			padding-bottom: 10px;
+			border-top: 1px solid #EBEBEB;
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
 		}
-	}
-	
-	.main{
-		margin-top: 40rpx;
 	}
 </style>
