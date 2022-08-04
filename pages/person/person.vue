@@ -187,20 +187,14 @@
 	
 			// 获取信息
 			async getData(){
-				// apiService.getInfo({
-				// 	loginName: '123456'
-				// }).then(response => {
-				// 	console.log(response);
-				// }).catch(error => {
-				// 	console.log(error);
-				// })
 				const { data: res} = await apiService.getBaseData({
 					personId: 1
 				})
 				if(res.resultCode === 200){
 					this.personData = res.data
+				}else{
+					uni.$showMsg('获取信息失败！')
 				}
-				console.log(res);
 			},
 			
 			// 复制id

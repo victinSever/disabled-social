@@ -147,7 +147,6 @@
 			//获取图片秀list
 			getRecommentList() {
 				recomment.getRecomment(this.page).then(response => {
-
 				}).catch(error => {
 
 				})
