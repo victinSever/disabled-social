@@ -190,8 +190,9 @@
 				// form.append('loginName','123456')
 				// const res = apiService.getInfo(form)
 				// console.log(res);
-				apiService.getInfo({
-					loginName: '123456'
+				apiService.openVip({
+					loginName: '123456',
+                    month:3
 				}).then(response => {
 					console.log(response);
 				}).catch(error => {

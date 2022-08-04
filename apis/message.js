@@ -39,7 +39,7 @@ const apiService = {
 	
 	// 购买VIP
 	openVip(params) {
-		return http.post('/user/openVip', params)
+		return http.post('/user/openVip',null,params)
 	},
     
 }
