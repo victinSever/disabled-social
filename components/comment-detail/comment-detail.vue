@@ -1,19 +1,19 @@
 <template>
 	<view class="comment-container">
 		<view class="comment-title">评论</view>
-		<view class="comment-content" v-for="(item,index) in userList" :key="index">
+		<view class="comment-content" v-for="(item,index) in data" :key="index">
 			<view class="content-left">
-				<image :src="item.user.imgPath" alt="" />
+				<img :src="item.user.imgPath" alt="" />
 			</view>
 
 			<view class="content-right">
-				<content-item :user="item.user"></content-item>
+				<content-item :user="item.comment"></content-item>
 
-				<uni-transition mode-class="slide-bottom" :show="item.user.flag">
+				<!-- <uni-transition mode-class="slide-bottom" :show="item.user.flag">
 					<view v-if="item.user.flag" v-for="(item2,indexs) in item.comment" :key="indexs">
 						<content-item :user="item2"></content-item>
 					</view>
-				</uni-transition>
+				</uni-transition> -->
 
 				<view class="btn-moreInfo" @click="showComment(item.user)">
 					<text>—— 展开1510条回复</text>
@@ -26,13 +26,15 @@
 </template>
 
 <script>
+	import comment from '../../apis/comment.js'
 	export default {
 		name: "comment-detail",
+		props: ['data'],
 		data() {
 			return {
 				userList: [{
 						user: {
-							imgPath: 'static/images/user.jpg',
+							imgPath: '../../static/images/user.jpg',
 							userName: ['柚子'],
 							commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
 							time: '7月12日',
@@ -81,6 +83,9 @@
 			showComment(item) {
 				item.flag = !item.flag
 			}
+		},
+		mounted() {
+			console.log(this.data);
 		}
 	}
 </script>

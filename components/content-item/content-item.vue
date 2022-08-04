@@ -2,26 +2,26 @@
 	<view class="item-container">
 		<view class="item-left">
 			<view class="user-name" style="color:#a9a9a9">
-				<view class="travel-img" v-if="user.userName[1]">
+				<!-- <view class="travel-img" v-if="user.userName[1]">
 					<img :src="user.imgPath" alt="">
-				</view>
-				<text>{{user.userName[0]}}</text>
+				</view> -->
+				<text>{{user.commentatorName}}</text>
 
-				<template v-if="user.userName[1]">
+				<!-- <template v-if="user.userName[1]">
 					<view class="travel-tag">
 						<text class="tag-content">回复</text>
 						<uni-icons type="paperplane" size="14"></uni-icons>
 					</view>
 					<text>{{user.userName[1]}}</text>
-				</template>
+				</template> -->
 
 			</view>
 			<view class="user-comment">
-				{{user.commentContnet}}
+				{{user.commentBody}}
 			</view>
 			<view class="user-comment-time">
 				<view class="time-detail">
-					{{user.time}}
+					{{user.commentCreateTime}}
 				</view>
 				<view class="btn-comment" style="color: #797a82;">
 					回复

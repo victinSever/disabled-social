@@ -55,16 +55,20 @@
 		</view>
 
 		<!-- 评论区 -->
-		<view class="comment-box">
-			<comment-detail></comment-detail>
+		<view class="comment-box" v-if="showComments">
+			<comment-detail :data="data"></comment-detail>
 		</view>
 	</view>
 </template>
 
 <script>
+	import comment from '../../apis/comment.js'
 	export default {
 		data() {
 			return {
+				showComments: false,
+				diaryId: 0,
+				data: [],
 				userData: {
 					imagePath: 'static/images/user.jpg',
 					activeData: {
@@ -76,73 +80,26 @@
 						}]
 					},
 				},
-				commentData: [{
-					imagePath: 'static/images/user2.jpg',
-					userName: '雏菊',
-					comment: '哈哈',
-					lastTime: 5,
-					timeUnit: '分钟'
-				}, {
-					imagePath: 'static/images/user.jpg',
-					userName: '萨达',
-					comment: '哈哈',
-					lastTime: 2,
-					timeUnit: '天'
-				}, {
-					imagePath: 'static/images/user.jpg',
-					userName: '大萨达',
-					comment: '水电费收费',
-					lastTime: 50,
-					timeUnit: '分钟'
-				}, {
-					imagePath: 'static/images/user2.jpg',
-					userName: 'ad胜多负少的范德萨',
-					comment: '哈哈',
-					lastTime: 20,
-					timeUnit: '分钟'
-				}, {
-					imagePath: 'static/images/user.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}, {
-					imagePath: 'static/images/user2.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}, {
-					imagePath: 'static/images/user.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}, {
-					imagePath: 'static/images/user2.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}, {
-					imagePath: 'static/images/user.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}, {
-					imagePath: 'static/images/user2.jpg',
-					userName: '个梵蒂冈',
-					comment: '师傅的说法三分大赛',
-					lastTime: 6,
-					timeUnit: '小时'
-				}]
 			};
 		},
 		methods: {
 			gotoBack() {
 				uni.navigateBack()
+			},
+			getComments(diaryId) {
+				let _this = this;
+				comment.getCommentList({
+					diaryId,
+					page: 1,
+					size: 10
+				}).then(res => {
+					_this.data = res.data
+					_this.showComments = true
+				})
 			}
+		},
+		onLoad(options) {
+			this.getComments(options.diaryId)
 		}
 	}
 </script>

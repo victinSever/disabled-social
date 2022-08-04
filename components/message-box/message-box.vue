@@ -1,44 +1,49 @@
 <template>
 	<view class="item-box">
 		<view class="left-img">
-			<img :src="data.userData.imgpath" alt="">
+			<img :src="data.headPicture" alt="">
 		</view>
 		<view class="right-box">
 			<view class="title-info">
-				<h2 :style="{'margin-left':data.lastTime ? '0px' : '10px'}">{{data.userData.username}}</h2>
-				<p v-if="data.lastTime">
-					<text>{{data.lastTime}}{{data.lastUnit}}前</text>
+				<h2 :style="{'margin-left':data.flag ? '0px' : '10px'}">{{data.diary.diaryUserName}}</h2>
+				<!-- 如果不是广告 -->
+				<p v-if="data.flag">
+					<text>{{0}}{{data.lastUnit}}前</text>
 					<text>·</text>
-					<text>{{data.distance}}km</text>
+					<text>{{20}}km</text>
 				</p>
+				<!-- 如果是广告 -->
 				<template v-else>
 					<p style="font-size: 15px;margin: 5px 0;">
-						{{data.message}}
+						{{data.diary.diaryContent}}
 					</p>
 					<view class="advertise" style="position: absolute;top: 0; right: 20px;">
-						<uni-tag  text="广告"></uni-tag>
+						<uni-tag text="广告"></uni-tag>
 					</view>
 				</template>
 			</view>
 			<view class="content-info" @click="gotoComment">
-				<p v-if="data.lastTime">{{data.message}}</p>
-				<view class="cont-info-img" v-for="(item, i) in data.activeImages" :key="i">
-					<img :src="item.imgpath" alt="" model="widthFix">
+				<!-- 不是广告 -->
+				<p v-if="data.flag">{{data.diary.diaryContent}}</p>
+				<view class="cont-info-img">
+					<img :src="item" alt="" v-for="(item, i) in data.picture" :key="i" model="widthFix">
 				</view>
 			</view>
 			<view class="btn-info">
-				<template v-if="data.lastTime">
+				<template v-if="data.flag">
 					<view class="btn-info-left">
 						<uni-icons type="more-filled" color="#d0d2d4" size="20" @click="openPopu"></uni-icons>
 					</view>
 					<view class="btn-info-right">
 						<view class="like">
-							<uni-icons type="heart" size="25"></uni-icons>
-							<text>124</text>
+							<uni-icons type="heart" size="25" @click="addLike"
+								:style="data.alreadyLike == 1 ? 'color:red' : (code == 1 ? 'color:red' : '')">
+							</uni-icons>
+							<text>{{data.diary.diaryLove < 100 ? data.diary.diaryLove : '99+' }}</text>
 						</view>
 						<view class="comment" @click="gotoComment">
 							<uni-icons type="chatbubble" size="25"></uni-icons>
-							<text>45</text>
+							<text>{{data.diary.diaryComment < 100 ? data.diary.diaryComment : '99+' }}</text>
 						</view>
 					</view>
 				</template>
@@ -57,12 +62,13 @@
 </template>
 
 <script>
+	import around from '../../apis/around.js'
 	export default {
 		name: "message-box",
 		props: ['data'],
 		data() {
 			return {
-
+				code: false
 			};
 		},
 		methods: {
@@ -71,10 +77,26 @@
 			},
 			gotoComment() {
 				uni.navigateTo({
-					url: '/subpkg/comment/comment'
+					url: '/subpkg/comment/comment?diaryId=' + this.data.diary.diaryId
+				})
+			},
+			// 添加喜欢
+			addLike() {
+				let _this = this
+				this.data.alreadyLike = false
+
+				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
+				around.addLike({
+					userId: 1,
+					diaryId: this.data.diary.diaryId
+				}).then(res => {
+					// console.log(res);
+					_this.data.diary.diaryLove = res.data.map.total
+					_this.code = res.data.code
 				})
 			}
-		}
+		},
+		mounted() {}
 	}
 </script>
 
@@ -108,6 +130,8 @@
 
 		.right-box {
 			width: calc(100vw - 56px);
+			box-sizing: border-box;
+			padding-right: 10px;
 
 			.title-info {
 				// height: 140px;
@@ -144,8 +168,10 @@
 				.cont-info-img {
 					margin-top: 10px;
 
+					// background-color: red;
 					img {
 						width: 130px;
+						margin-right: 5px;
 						height: 130px;
 						border-radius: 10px;
 					}
@@ -167,7 +193,7 @@
 
 						text {
 							font-size: 12px;
-							margin-right: 8px;
+							margin-right: 3px;
 							color: #a5a395;
 						}
 					}
