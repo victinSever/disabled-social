@@ -5,7 +5,7 @@
 		<!-- 头部 -->
 		<view class="header">
 			<view class="left" @click="gotoBack">
-				<img src="../../static/icon/active/left.png" alt="">
+				<image src="../../static/icon/active/left.png" alt="" />
 				<text>我的特权</text>
 			</view>
 		</view>
@@ -15,29 +15,30 @@
 			<view class="card-vip">
 				<view class="vip-innerbox">
 					<view class="vip-top">
-						<span><text>VIP</text> 会员</span>
+						<text><text>VIP</text> 会员</text>
 					</view>
 					<view class="vip-bottom">
-						<img src="@/static/images/user.jpg" alt="">
-						<span>暂未激活会员</span>
+						<image src="@/static/images/user.jpg" alt="">
+						<text v-if="!isVip">暂未激活会员</text>
+						<text v-else>会员用户<text style="margin-left: 10rpx;">{{vipDuring}}</text></text>
 					</view>
 				</view>
 			</view>
 		</view>
 
 		<!-- 充值卡片 -->
-		<view class="cardChoose">
+		<view class="cardChoose" v-if="!isVip || isBuy">
 			<view :class="'choose-item ' + (chooseVip.id == item.id ? 'choose-active' : '') "
 				v-for="(item, i) in vipPrice" :key="i" @click="changeVip(i)">
-				<span class="one"><span>{{item.time}}</span>个月</span>
-				<span class="two">￥{{item.price}}/月</span>
-				<span class="three">￥{{(item.time * item.price).toFixed(0)}}</span>
+				<text class="one"><text>{{item.time}}</text>个月</text>
+				<text class="two">￥{{item.price}}/月</text>
+				<text class="three">￥{{(item.time * item.price).toFixed(0)}}</text>
 				<view class="name">{{item.name}}</view>
 			</view>
 		</view>
 
 		<!-- 续费 -->
-		<view class="choosePro">
+		<view class="choosePro" v-if="!isVip">
 			<checkbox :checked="checked" color="darkorange" />
 			<text>
 				同意
@@ -46,15 +47,21 @@
 				，到期后以{{chooseVip.allprice}}元/{{chooseVip.name}}自动续费，可随时取消
 			</text>
 		</view>
+		
+		<!-- 按钮 -->
+		<view class="xufei" v-if="isVip && !isBuy">
+			<text @click="isBuy = true">继续充值</text>
+			<text @click="closeChecked">关闭续费</text>
+		</view>
 
 		<!-- 特权 -->
 		<view class="privileges">
 			<view class="privilege-title">
-				<span>VIP特权</span>
+				<text>VIP特权</text>
 			</view>
 			<view class="privilege-list">
 				<view class="privilege-item" v-for="(item, i) in privileges" :key="i">
-					<img :src="item.icon" alt="">
+					<image :src="item.icon" alt="">
 					<view class="item-right">
 						<h3>{{item.name}}</h3>
 						<p>{{item.description}}</p>
@@ -64,22 +71,24 @@
 		</view>
 
 		<!-- 购买 -->
-		<view class="buy">
-			<view class="buy-top" v-if="isWechat">
+		<view class="buy" v-if="!isVip || isBuy">
+			<view class="buy-top" v-if="isWechat" @click="isWechat = false">
 				<view class="top-left">
-					<img src="@/static/images/wechat.png" alt="">
-					<span>微信</span>
+					<image src="@/static/images/wechat.png" alt="">
+					<text>微信</text>
 				</view>
 				<view class="top-right">
 					<uni-icons type="forward" size="25" color="#777"></uni-icons>
 				</view>
 			</view>
-			<view class="buy-top" v-else>
+			<view class="buy-top" v-else @click="isWechat = true">
 				<view class="top-left">
-					<img src="static/images/pay.png" alt="">
-					<span>微信</span>
+					<image src="static/images/pay.png" alt="">
+					<text>支付宝</text>
 				</view>
-				<uni-icons type="forward" size="30"></uni-icons>
+				<view class="top-right">
+					<uni-icons type="forward" size="25" color="#777"></uni-icons>
+				</view>
 			</view>
 			<view class="buy-btn">
 				<button @click="openVip">
@@ -93,6 +102,7 @@
 
 <script>
 	import apiService from '@/apis/message.js'
+	import { returnDuringTime } from '@/apis/tools.js'
 	export default {
 		data() {
 			return {
@@ -100,6 +110,9 @@
 				isWechat: true,
 				// 勾选同意协议
 				checked: true,
+				
+				isVip: false,//vip的判断
+				isBuy: false,//继续付费
 
 				vipPrice: [{
 					id: '1',
@@ -152,16 +165,48 @@
 
 			};
 		},
+		computed: {
+			vipDuring(){
+				return returnDuringTime(this.chooseVip.time)
+			}
+		},
 		created() {
 			this.chooseVip = this.vipPrice[0]
 		},
+		mounted(){
+			this.getData()
+		},
 		methods: {
+			// 获取信息
+			async getData(){
+				apiService.getInfo({
+					loginName: '123456'
+				}).then(response => {
+					if(response.data.resultCode === 200) {
+						this.isVip = response.data.data.isVip === 1 ? true : false
+					}
+				}).catch(error => {
+					uni.$showMsg('服务器出错咯！')
+				})
+			},
+			// 关闭续费
+			closeChecked(){
+				this.checked = false
+				uni.$showMsg('连续续费已关闭')
+			},
 			// 开通VIP
 			async openVip(){
-				const res = await apiService.openVip({
+				const {data: res} = await apiService.openVip({
 					loginName: '123456',
-					month: 3
+					month: this.chooseVip.time
 				})
+				if(res.resultCode === 200){
+					uni.$showMsg(res.message)
+					this.isVip = true
+					this.isBuy = false
+				}else{
+					uni.$showMsg(res.message)
+				}
 				console.log(res);
 			},
 			gotoBack(){
@@ -186,8 +231,9 @@
 				display: flex;
 				align-items: center;
 				
-				img{
-					height: 40rpx;
+				image{
+					height: 35rpx;
+					width: 35rpx;
 					margin: 0 20rpx;
 				}
 				text{
@@ -237,7 +283,7 @@
 						color: #fbfcda;
 						font-size: 12px;
 
-						img {
+						image {
 							width: 40rpx;
 							height: 40rpx;
 							border-radius: 50%;
@@ -264,10 +310,10 @@
 				padding-top: 20rpx;
 				position: relative;
 
-				span {
+				text {
 					margin-top: 15rpx;
 
-					span {
+					text {
 						font-size: 24px;
 					}
 				}
@@ -334,6 +380,20 @@
 				}
 			}
 		}
+		
+		.xufei{
+			width: 100%;
+			display: flex;
+			justify-content: space-around;
+			height: 80rpx;
+			align-items: center;
+			color: #ddd;
+			margin-top: 20rpx;
+			
+			text:first-child{
+				color: orange;
+			}
+		}
 
 		.privileges {
 			margin-top: 40rpx;
@@ -343,7 +403,7 @@
 				height: 60rpx;
 				line-height: 60rpx;
 
-				span {
+				text {
 					color: #777;
 					font-weight: bold;
 				}
@@ -356,7 +416,7 @@
 					align-items: center;
 					margin: 25rpx 0;
 
-					img {
+					image {
 						height: 100rpx;
 						width: 100rpx;
 						margin-right: 30rpx;
@@ -398,7 +458,7 @@
 					display: flex;
 					align-items: center;
 
-					img {
+					image {
 						height: 40rpx;
 						width: 40rpx;
 						margin-right: 30rpx;

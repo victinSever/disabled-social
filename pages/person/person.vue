@@ -23,14 +23,15 @@
 
 				<div class="top-left">
 					<view class="top-logo">
-						<img :src="personData.userImage" alt="">
+						<image v-if="personData.headPicPath" :src="personData.headPicPath" alt="" />
+						<image v-else src="../../static/images/bgc/empty.png" alt="" />
 					</view>
 					<view class="top-left-right">
 						<h1>
 							<text>{{personData.username}}</text>
 						</h1>
 						<p>
-							<text>用户ID：{{personData.userId}}</text>
+							<text>用户ID：{{personData.personId}}</text>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
 
@@ -46,20 +47,20 @@
 				</view>
 			</view>
 			<view class="main-bottom">
-				<view class="bottom-item" @click="gotoConnern">
-					<text class="item-num">{{personData.userConcern}}</text>
+				<view class="bottom-item" @click="gotoBillBoard(1)">
+					<text class="item-num">{{personData.attentionCount}}</text>
 					<text class="item-title">关注</text>
 				</view>
-				<view class="bottom-item" @click="gotoConnern">
-					<text class="item-num">{{personData.userConcerned}}</text>
-					<text class="item-title">被关注</text>
+				<view class="bottom-item" @click="gotoBillBoard(2)">
+					<text class="item-num">{{personData.fanCount}}</text>
+					<text class="item-title">粉丝</text>
 				</view>
-				<view class="bottom-item" @click="gotoConnern">
-					<text class="item-num">{{personData.userPraised}}</text>
+				<view class="bottom-item">
+					<text class="item-num">{{personData.like}}</text>
 					<text class="item-title">点赞</text>
 				</view>
-				<view class="bottom-item" @click="gotoConnern">
-					<text class="item-num">{{personData.userFraction}}</text>
+				<view class="bottom-item">
+					<text class="item-num">{{personData.love}}</text>
 					<text class="item-title">积分</text>
 				</view>
 			</view>
@@ -106,8 +107,8 @@
 					</view>
 					<view class="item-right" @click="gotoComment">
 						<p class="text">{{item.text}}</p>
-						<view class="img" v-if="item.img">
-							<img :src="item.img" alt="">
+						<view class="image" v-if="item.image">
+							<image :src="item.image" alt="">
 						</view>
 						<view class="btns">
 							<view class="btn-info-left">
@@ -115,11 +116,11 @@
 							</view>
 							<view class="btn-info-right">
 								<view class="like">
-									<img class="icon" src="../../static/icon/active/like.png" alt="">
+									<image class="icon" src="../../static/icon/active/like.png" alt="">
 									<text class="num">{{item.likes}}</text>
 								</view>
 								<view class="comment">									
-									<img class="icon" src="../../static/icon/active/comment.png" alt="">
+									<image class="icon" src="../../static/icon/active/comment.png" alt="">
 									<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
 									<text class="num" v-else>去评论</text>
 								</view>
@@ -171,7 +172,7 @@
 				personActiveData: [{
 					publishDate: '2022-8-2 1:59:01',
 					text: '今天的天空格外好看！',
-					img: '../../static/images/sky.jpg',
+					image: '../../static/images/sky.jpg',
 					views: 231,
 					likes: 1023,
 					contents: 52,
@@ -185,18 +186,21 @@
 		methods: {
 	
 			// 获取信息
-			getData(){
-				// const form = new FormData()
-				// form.append('loginName','123456')
-				// const res = apiService.getInfo(form)
-				// console.log(res);
-				apiService.getInfo({
-					loginName: '123456'
-				}).then(response => {
-					console.log(response);
-				}).catch(error => {
-					console.log(error);
+			async getData(){
+				// apiService.getInfo({
+				// 	loginName: '123456'
+				// }).then(response => {
+				// 	console.log(response);
+				// }).catch(error => {
+				// 	console.log(error);
+				// })
+				const { data: res} = await apiService.getBaseData({
+					personId: 1
 				})
+				if(res.resultCode === 200){
+					this.personData = res.data
+				}
+				console.log(res);
 			},
 			
 			// 复制id
@@ -204,8 +208,10 @@
 				uni.$showMsg("复制失败")
 			},
 			// 查看关注页面
-			gotoConnern() {
-				uni.$showMsg()
+			gotoBillBoard(type) {
+				uni.navigateTo({
+					url: '/subpkg/billboard/billboard?type=' + type
+				})
 			},
 			// 签到
 			async makeSignUp() {
@@ -295,7 +301,7 @@
 					height: 200rpx;
 					box-sizing: border-box;
 
-					img {
+					image {
 						width: 150rpx;
 						height: 200rpx;
 						border-radius: 30rpx;
@@ -469,9 +475,9 @@
 						line-height: 80rpx;
 						font-weight: bold;
 					}
-					.img{
+					.image{
 						
-						img{
+						image{
 							width: calc(100% - 50rpx);
 							border-radius: 30rpx;
 						}

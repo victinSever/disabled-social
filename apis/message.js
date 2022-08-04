@@ -34,12 +34,17 @@ const apiService = {
 	
 	// 获取个人信息
 	getInfo(params) {
-		return http.get('/user/getInfo', params)
+		return http.post('/user/getInfo', null, params)
 	},
 	
 	// 购买VIP
 	openVip(params) {
-		return http.post('/user/openVip', params)
+		return http.post('/user/openVip', null,  params)
+	},
+	
+	// 获取主页个人基本信息
+	getBaseData(params) {
+		return http.post('/user/getBaseData', null, params)
 	},
     
 }
