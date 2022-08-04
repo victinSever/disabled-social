@@ -23,8 +23,10 @@
 
 				<div class="top-left">
 					<view class="top-logo">
-						<image v-if="personData.headPicPath" :src="personData.headPicPath" alt="" />
-						<image v-else src="../../static/images/bgc/empty.png" alt="" />
+						<image v-if="personData.headPicPath" :src="personData.headPicPath" alt="" />					
+						<view class="empty-image" v-else>
+							<uni-icons type="person-filled" size="80" color="#eee"></uni-icons>
+						</view>
 					</view>
 					<view class="top-left-right">
 						<h1>
@@ -37,7 +39,7 @@
 
 						<p>
 							<text>我的简历</text>
-							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
+							<uni-icons type="compose" size="16" @click="gotoResume"></uni-icons>
 						</p>
 					</view>
 				</div>
@@ -60,7 +62,7 @@
 					<text class="item-title">点赞</text>
 				</view>
 				<view class="bottom-item">
-					<text class="item-num">{{personData.love}}</text>
+					<text class="item-num">{{personData.sorts}}</text>
 					<text class="item-title">积分</text>
 				</view>
 			</view>
@@ -161,13 +163,13 @@
 				isSignUp: false,
 				// 个人信息
 				personData: {
-					username: '小懒猫',
-					userId: '16515516',
-					userImage: '../../static/images/user.jpg',
-					userConcern: 0,
-					userConcerned: 12,
-					userPraised: 423, //点赞
-					userFraction: 6165, //积分
+					username: 'xxx',
+					personId: '',
+					headPicPath: '',
+					attentionCount: 0,
+					fanCount: 0,
+					like: 0, //点赞
+					sorts: 0, //积分
 				},
 				personActiveData: [{
 					publishDate: '2022-8-2 1:59:01',
@@ -192,6 +194,7 @@
 				})
 				if(res.resultCode === 200){
 					this.personData = res.data
+					console.log(res);
 				}else{
 					uni.$showMsg('获取信息失败！')
 				}
@@ -201,6 +204,10 @@
 			copyText() {
 				uni.$showMsg("复制失败")
 			},
+			// 打开简历
+			gotoResume(){
+				uni.$showMsg("该功能未开放！")
+			},
 			// 查看关注页面
 			gotoBillBoard(type) {
 				uni.navigateTo({
@@ -209,19 +216,16 @@
 			},
 			// 签到
 			async makeSignUp() {
-				apiService.signIn({
+				const { data: res } = await apiService.signIn({
 					reward: 5,
 					loginName: '123456'
-				}).then(response => {
-					console.log(response);
-					uni.$showMsg('签到成功')
-					this.isFlag = true
-					setTimeout(function() {
-						uni.$showMsg('积分 + 5')
-					}, 1000)
-				}).catch(error => {
-					console.log(error);
 				})
+				console.log(response);
+				uni.$showMsg('签到成功')
+				this.isFlag = true
+				setTimeout(function() {
+					uni.$showMsg('积分 + 5')
+				}, 1000)
 				
 			},
 			// 跳转到vip充值页
@@ -300,6 +304,18 @@
 						height: 200rpx;
 						border-radius: 30rpx;
 						border: 4rpx solid #fff;
+					}
+					
+					.empty-image{
+						height: 200rpx;
+						width: 100%;
+						display: flex;
+						justify-content: center;
+						flex-direction: column;
+						align-items: center;
+						font-size: 20px;
+						border-radius: 30rpx;
+						border: 4rpx solid #eee;
 					}
 				}
 
