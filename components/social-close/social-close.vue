@@ -1,99 +1,56 @@
 <template>
 	<view>
-		
-		
 		<!-- 附近的社交盒子滑动 -->
-		<scroll-view scroll-y="true" class="social-close">			
+		<scroll-view scroll-y="true" class="social-close" v-if="getInfo">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
+	import around from '../../apis/around.js'
 	export default {
 		name: "social-close",
 		data() {
 			return {
-				acitveData: [{
-					userData: {
-						username: "雨末微凉",
-						imgpath: "../../static/images/user.jpg",
-					},					
-					message: "虽然手有点问题，但待人我是专心的",
-					activeImages: [{
-						imgpath: "../../static/images/content2.jpg",
-					}],
-					lastTime: 1,
-					lastUnit: '分钟',
-					distance: 2
-				},
-				{
-					userData: {
-						username: "XXX服务中心",
-						imgpath: "../../static/images/user2.jpg",
-					},					
-					message: "国家认证中心",
-					activeImages: [{
-						imgpath: "../../static/images/content.jpg",
-					}],
-					
-				},
-				{
-					userData: {
-						username: "苏苏啊",
-						imgpath: "../../static/images/user2.jpg",
-					},					
-					message: "快来找我呀",
-					activeImages: [{
-						imgpath: "../../static/images/content.jpg",
-					}],
-					lastTime: 5,
-					lastUnit: '分钟',
-					distance: 24
-				},{
-					userData: {
-						username: "才子佳人",
-						imgpath: "../../static/images/home/img1.png",
-					},					
-					message: "有没有文案的",
-					activeImages: [{
-						imgpath: "../../static/images/content.jpg",
-					}],
-					lastTime: 5,
-					lastUnit: '分钟',
-					distance: 24
-				},{
-					userData: {
-						username: "苏苏啊",
-						imgpath: "../../static/images/user2.jpg",
-					},					
-					message: "快来找我呀",
-					activeImages: [{
-						imgpath: "../../static/images/content.jpg",
-					}],
-					lastTime: 5,
-					lastUnit: '分钟',
-					distance: 24
-				}]
+				getInfo: false,
+				acitveData: []
 			};
 		},
 		methods: {
-			openPopu(){
+			openPopu() {
 				this.$emit('openPopu', true)
 			},
-			gotoComment(){
+			gotoComment() {
 				uni.navigateTo({
 					url: '/subpkg/comment/comment'
 				})
+			},
+			// 获取附近用户信息
+			getAroundInfo() {
+				let _this = this;
+				uni.showLoading({
+					title: '加载中'
+				});
+				around.getRecomment({
+					page: 1,
+					size: 10
+				}).then(res => {
+					_this.acitveData = res.data
+					_this.getInfo = true;
+					// console.log(_this.acitveData);
+					uni.hideLoading()
+				})
 			}
+		},
+		mounted() {
+			this.getAroundInfo()
 		}
+
 	}
 </script>
 
 <style lang="scss">
-	
-	
-	
 	// 单个信息盒子
 	.item-box {
 		display: flex;

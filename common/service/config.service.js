@@ -1,7 +1,7 @@
 let BASE_URL = ''
 
 
-BASE_URL = 'http://120.26.7.136:8082/'
+BASE_URL = 'http://192.168.2.24:5211/'
 
 let staticDomainURL = BASE_URL+ '/sys/common/static';//预留图片路径
 
