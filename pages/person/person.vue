@@ -186,10 +186,17 @@
 	
 			// 获取信息
 			getData(){
-				const res = apiService.getInfo({
+				// const form = new FormData()
+				// form.append('loginName','123456')
+				// const res = apiService.getInfo(form)
+				// console.log(res);
+				apiService.getInfo({
 					loginName: '123456'
+				}).then(response => {
+					console.log(response);
+				}).catch(error => {
+					console.log(error);
 				})
-				console.log(res);
 			},
 			
 			// 复制id
@@ -201,17 +208,21 @@
 				uni.$showMsg()
 			},
 			// 签到
-			makeSignUp() {
-				const res = apiService.signIn({
+			async makeSignUp() {
+				apiService.signIn({
 					reward: 5,
 					loginName: '123456'
+				}).then(response => {
+					console.log(response);
+					uni.$showMsg('签到成功')
+					this.isFlag = true
+					setTimeout(function() {
+						uni.$showMsg('积分 + 5')
+					}, 1000)
+				}).catch(error => {
+					console.log(error);
 				})
-				console.log(res);
-				uni.$showMsg('签到成功')
-				this.isFlag = true
-				setTimeout(function() {
-					uni.$showMsg('积分 + 5')
-				}, 1000)
+				
 			},
 			// 跳转到vip充值页
 			gotoPrivilege() {

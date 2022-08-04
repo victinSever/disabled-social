@@ -157,8 +157,8 @@
 		},
 		methods: {
 			// 开通VIP
-			openVip(){
-				const res = apiService.openVip({
+			async openVip(){
+				const res = await apiService.openVip({
 					loginName: '123456',
 					month: 3
 				})
