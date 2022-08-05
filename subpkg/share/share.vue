@@ -44,7 +44,7 @@
 					<view class="" @click="chooseImg">
 						<image src="../../static/icon/active/picture.png" mode=""></image>
 					</view>
-					<view class="">
+					<view class="" @click="chooseVideo">
 
 						<image src="../../static/icon/active/photo.png" mode=""></image>
 
@@ -78,14 +78,70 @@
 		},
 		methods: {
 			chooseImg() {
+                let _that=this;
 				uni.chooseImage({
 					count: 6, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: function(res) {
-						console.log(JSON.stringify(res.tempFilePaths));
+                        
+                        res.tempFilePaths.forEach((item)=>{
+                            uni.uploadFile({
+                            	// 需要上传的地址
+                            	url: _that.vuex_uploadAction,
+                            	// filePath  需要上传的文件
+                            	filePath: item,
+                            	name: 'file',
+                            	header: {
+                            		token: ""		// 挂载请求头为用户的 token
+                            	},
+                            	success:function (arr) {
+                            		let data = JSON.parse(arr.data);
+                                    
+                                    // data就是上传的成功的路径
+                            	}
+                            });
+                        })
+
+                        
 					}
 				});
+			},
+			chooseVideo(){
+				uni.showLoading({
+					mask: true,
+					title: '上传中...'
+				})
+				// uploadFile 存储需要上传的文件
+				let uploadFile = '';
+				let _that = this;
+				// 1.选择要上传的视频
+	           uni.chooseVideo({
+					maxDuration: 10,		// 拍摄视频最长拍摄时间，单位秒。最长支持 60 秒。
+					sourceType: ['album'],		// album 从相册选视频，camera 使用相机拍摄，默认为：['album', 'camera']
+					success:function (res) {
+						uploadFile = res.tempFilePath;
+						// console.log(uploadFile);
+						// 2.上传所选视频到服务器
+						uni.uploadFile({
+							// 需要上传的地址
+							url: _that.vuex_uploadAction,
+							// filePath  需要上传的文件
+							filePath: uploadFile,
+							name: 'file',
+							header: {
+								token: ""		// 挂载请求头为用户的 token
+							},
+							success:function (arr) {
+								let data = JSON.parse(arr.data);
+                                
+                                // data就是上传的成功的路径
+							}
+						});
+
+					}
+				});
+
 			},
 			goBack() {
 				uni.navigateBack()
