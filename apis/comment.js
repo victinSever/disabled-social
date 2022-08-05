@@ -9,6 +9,10 @@ const apiService = {
 	getCommentList(params) {
 		return http.get('/social/active/getCommentList', params)
 	},
+	
+	getComments(params){
+		return http.get('/social/active/getReplyList',params)
+	}
 
 }
 

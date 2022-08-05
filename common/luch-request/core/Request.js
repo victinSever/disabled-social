@@ -197,6 +197,7 @@ export default class Request {
     return this.request({
       url,
       data,
+	  params,
       method: 'PUT',
       ...options
     })
