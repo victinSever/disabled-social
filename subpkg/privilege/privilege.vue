@@ -91,9 +91,13 @@
 				</view>
 			</view>
 			<view class="buy-btn">
-				<button @click="openVip">
+				<button @click="openVip" v-if="!isVip">
 					<text class="price">￥{{chooseVip.allprice}}</text>
 					<text>立即购买</text>
+				</button>
+				<button @click="renewalVip" v-else>
+					<text class="price">￥{{chooseVip.allprice}}</text>
+					<text>立即续费</text>
 				</button>
 			</view>
 		</view>
@@ -101,7 +105,7 @@
 </template>
 
 <script>
-	import apiService from '@/apis/message.js'
+	import apiService from '@/apis/my.js'
 	import { returnDuringTime } from '@/apis/tools.js'
 	export default {
 		data() {
@@ -139,6 +143,7 @@
 
 				// 选择的vip
 				chooseVip: {},
+				vipTime: '',//过期时间
 
 				// vip特权
 				privileges: [{
@@ -167,7 +172,10 @@
 		},
 		computed: {
 			vipDuring(){
-				return returnDuringTime(this.chooseVip.time)
+				if(!this.vipTime)
+					return returnDuringTime(this.chooseVip.time)
+				else 
+					return '会员到期' + this.vipTime.split('T')[0]
 			}
 		},
 		created() {
@@ -201,13 +209,26 @@
 					month: this.chooseVip.time
 				})
 				if(res.resultCode === 200){
+					this.vipTime = res.data;
 					uni.$showMsg(res.message)
 					this.isVip = true
 					this.isBuy = false
 				}else{
 					uni.$showMsg(res.message)
 				}
-				console.log(res);
+			},
+			// 续费VIP
+			async renewalVip(){
+				const {data: res} = await apiService.renewalVip({
+					loginName: '123456',
+					month: this.chooseVip.time
+				})
+				if(res.resultCode === 200){
+					this.vipTime = res.data;
+					this.isVip = true
+					this.isBuy = false
+				}
+				uni.$showMsg(res.message)
 			},
 			gotoBack(){
 				uni.navigateBack()
