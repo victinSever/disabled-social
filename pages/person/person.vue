@@ -154,9 +154,8 @@
 
 <script>
 	import apiService from '@/apis/my.js'
-	import {
-		returnRate
-	} from '@/apis/tools.js'
+	import {returnRate} from '@/apis/tools.js'
+	import { mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -201,6 +200,8 @@
 			}
 		},
 		methods: {
+			...mapMutations('common', ['setBaseInfo', 'setMoreInfo']),
+			
 			// 获取信息
 			async getData() {
 				const { data: res1 } = await apiService.getBaseData({
@@ -209,12 +210,10 @@
 				const { data: res2 } = await apiService.getAllData({
 					personId: 1
 				})
-				if (res1.resultCode !== 200 || res2.resultCode !== 200) {
-					return uni.$showMsg('服务器出错了！')				
-				} else {
-					this.baseData = res1.data
-					this.moreData = res2.data
-				}
+				this.baseData = res1.data
+				this.moreData = res2.data
+				this.setBaseInfo(this.baseData)
+				this.setMoreInfo(this.moreData)
 			},
 
 			// 复制id

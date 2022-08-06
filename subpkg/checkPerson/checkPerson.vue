@@ -75,6 +75,7 @@
 	import marrary from "@/components/person-information/marrary/marrary.vue"
 	import personage from '@/components/personage/index.vue'
 	import apiService from '@/apis/my.js'
+	import { mapState } from 'vuex'
 	export default {
 		name: "checkinformation",
 		data() {
@@ -103,26 +104,14 @@
 				return parseInt(Math.floor(this.progress*10))
 			}
 		},
+		mounted(){
+			this.getAllData()
+		},
 		methods: {
 			// 获取信息
 			async getAllData(){
-				const { data: res1} = await apiService.getPersonBasicInfo({
-					personId: 750576
-				})
-				const { data: res2} = await apiService.getPersonDetailInfo({
-					personId: 14205
-				})
-				const { data: res3} = await apiService.getRequirements({
-					personId: 12718
-				})
-				if(res1.resultCode !== 200 || res2.resultCode !== 200 || res3.resultCode !== 200){
-					return uni.$showMsg('服务器出错了！')				
-				}
-				this.personData = {
-					basicInfo: res1.data,
-					detailInfo: res2.data,
-					marraryInfo: res3.data
-				}
+				let data = this.$store.state.baseInfo
+				console.log(data);
 			},
 			
 			saveData(data){
