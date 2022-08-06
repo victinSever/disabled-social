@@ -5,18 +5,18 @@
 		<view class="social-header">
 			<!-- 关注和附近按钮切换 -->
 			<view class="social-header-left"  >
-				<span :style="!isClose? activeStyle: ''" id="concern" @click="isClose = false">关注</span>
-				<span :style="isClose? activeStyle: ''" id="close" @click="isClose = true">附近</span>				
-				<span>
+				<text :style="!isClose? activeStyle: ''" id="concern" @click="isClose = false">关注</text>
+				<text :style="isClose? activeStyle: ''" id="close" @click="isClose = true">附近</text>				
+				<text>
 					<uni-icons type="list" size="30" color="darkorange"
 						@click="changeSetting()">					
 					</uni-icons>
-				</span>
+				</text>
 			</view>	
 			
 			<!-- 右侧动态按钮 -->
 			<view class="social-header-right">
-				<span class="btnSend" @click="gotoShare">发动态</span>
+				<text class="btnSend" @click="gotoShare">发动态</text>
 			</view>
 		</view>
 		
@@ -33,10 +33,10 @@
 		<!-- 举报和关注弹窗 -->
 		<uni-popup ref="tip" background-color="#fff">
 			<view class="tip-content">
-				<span>关注</span>
-				<span>匿名举报</span>
+				<text>关注</text>
+				<text>匿名举报</text>
 				<hr>
-				<span>取消</span>
+				<text>取消</text>
 			</view>
 		</uni-popup>
 		
@@ -64,7 +64,6 @@
 				},
 				isClose: true,
 				activeStyle: 'font-weight: bold;color: black;', //active样式
-				
 			};
 		},
 		mounted(){
@@ -115,7 +114,7 @@
 			line-height: 100rpx;
 			justify-content: space-around;
 			align-items: center;
-			span {
+			text {
 				margin-right: 15px;
 				color: gray;
 				font-size: 18px;
@@ -161,12 +160,12 @@
 			background-color: #ccc;
 		}
 		
-		span{
+		text{
 			display: inline-block;
 			line-height: 40px;
 		}
 		
-		span:nth-child(2) {
+		text:nth-child(2) {
 			color: orange;
 		}
 	}

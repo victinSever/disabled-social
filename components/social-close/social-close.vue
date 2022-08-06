@@ -2,7 +2,8 @@
 	<view>
 		<!-- 附近的社交盒子滑动 -->
 		<scroll-view scroll-y="true" class="social-close" v-if="getInfo">
-			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
+			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu">
+			</message-box>
 		</scroll-view>
 	</view>
 </template>
@@ -29,6 +30,7 @@
 			// 获取附近用户信息
 			getAroundInfo() {
 				let _this = this;
+				_this.acitveData = []
 				uni.showLoading({
 					title: '加载中'
 				});
@@ -38,14 +40,17 @@
 				}).then(res => {
 					_this.acitveData = res.data
 					_this.getInfo = true;
-					// console.log(_this.acitveData);
 					uni.hideLoading()
 				})
+			},
+			backUpdate() {
+				this.getAroundInfo()
 			}
 		},
 		mounted() {
 			this.getAroundInfo()
-		}
+			this.$bus.$on('backUpdate', this.backUpdate)
+		},
 
 	}
 </script>

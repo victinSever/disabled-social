@@ -45,8 +45,9 @@
 			}
 		},
 		mounted() {
-			this.getAroundInfo()
-		}
+			this.getAroundInfo();
+			
+		},
 
 	}
 </script>
