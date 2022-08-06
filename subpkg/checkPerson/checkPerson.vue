@@ -85,10 +85,7 @@
 				progress: 0,//资料完成度
 				data: {
 					imageList: [
-						"../../static/images/admin/admin1.jpg",
-						"../../static/images/admin/admin2.jpg",
-						"../../static/images/admin/admin3.jpg",
-						"../../static/images/admin/admin4.jpg",
+						"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
 					],
 				}
 			};

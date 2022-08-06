@@ -6,18 +6,10 @@
 				<view class="quick-login">
 					<text class="quick-text">快捷登录</text>
 				</view>
-				<!-- #ifdef MP-WEIXIN-->
 				<button style="border: 0; background-color: #FBFBFB;" open-type="getPhoneNumber"
 					@getphonenumber="wxOneLogin">
 					<image class="icon-wechat" :src="imgUrls+'login/wechat.png'" mode="scaleToFill"></image>
 				</button>
-				<!-- #endif -->
-				<!-- #ifdef MP-ALIPAY-->
-				<button style="border: 0; background-color: #FBFBFB;" open-type="getPhoneNumber"
-					@getphonenumber="alipayOneLogin">
-					<image class="icon-wechat" :src="imgUrls+'my/alipay.png'" mode="scaleToFill"></image>
-				</button>
-				<!-- #endif -->
 			</view>
 			<!-- #endif -->
 		</view>

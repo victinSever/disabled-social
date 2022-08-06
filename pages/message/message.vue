@@ -13,7 +13,7 @@
 		</view>
 
 		<!-- 推荐 -->
-		<view class="message-banner">
+		<view class="message-banner" v-if="recommentData.length>0">
 			<view class="banner-title">
 				<text>推荐</text>
 			</view>
@@ -62,16 +62,16 @@
 				</view>
 			</view>
 		</view>
-	
+
 	</view>
 </template>
 
 <script>
-	 import message from "@/apis/message.js"
+	import message from "@/apis/message.js"
 	export default {
 		data() {
 			return {
-				recommentData:[],
+				recommentData: [],
 				messageData: [],
 				options: [{
 					text: '删除', // 显示的文本内容
@@ -80,54 +80,44 @@
 					}
 				}],
 				isSetting: false, //是否点击设置
-				
+
 			}
 		},
 		mounted() {
 			this.getrecommendList();
 			this.getMessageList();
-            
-            //接受消息数据
-            uni.$on("messageData",(data)=>{
-                if(data.type==1){
-                }
-            })
+
+			//接受消息数据
+			uni.$on("messageData", (data) => {
+				if (data.type == 1) {}
+			})
 		},
-		
+
 		methods: {
-            
-            
+
+
 			//获取推荐人
-			getrecommendList(){
+			getrecommendList() {
 				message.recommendList().then(response => {
-                 
-                }).catch(error => {
-                    
-                }) 
+					this.recommentData = response.data ? response.data : []
+				}).catch(error => {
+
+				})
 			},
-			
+
 			//获取用户列表
-			getMessageList(){
+			getMessageList() {
 				message.messageList().then(response => {
-			     
-			    }).catch(error => {
-			        
-			    }) 
+
+				}).catch(error => {
+
+				})
 			},
-            
-            //创建聊天用户
-			addUserMessage(){
-				message.addMessageUser().then(response => {
-			     
-			    }).catch(error => {
-			        
-			    }) 
-			},
-			
-			
+
+
 			gotoMessageDetail(item) {
 				uni.navigateTo({
-					url: '/subpkg/information/information?username=' + item.username
+					url: '/subpkg/information/information?userId=' + item.id
 				})
 			},
 			gotoGroup() {
@@ -144,8 +134,6 @@
 </script>
 
 <style lang="scss" scoped>
-	
-
 	// 头部
 	.message-header {
 		position: sticky;
@@ -251,7 +239,7 @@
 						display: flex;
 						align-items: center;
 						width: 100rpx;
-						
+
 						img {
 							height: 80rpx;
 							width: 80rpx;
@@ -274,12 +262,12 @@
 								line-height: 50rpx;
 								display: inline-block;
 							}
-							
-							text{
+
+							text {
 								font-size: 14px;
 							}
 
-							p {	
+							p {
 								width: 100%;
 								font-size: 13px;
 								color: #777;
