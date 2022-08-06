@@ -2,7 +2,7 @@
 	<view class="root">
 		<mover></mover>
 		<!-- 顶部设置 -->
-		<!-- 		<view class="header">
+<!-- 				<view class="header">
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
@@ -16,6 +16,9 @@
 				</view>
 			</uni-badge>
 		</view> -->
+		<view class="head">
+			
+		</view>
 
 		<!-- 主信息部分 -->
 		<view class="main">
@@ -153,7 +156,7 @@
 </template>
 
 <script>
-	import apiService from '@/apis/my.js'
+	import my from '@/apis/my.js'
 	import {returnRate} from '@/apis/tools.js'
 	import { mapMutations } from 'vuex'
 	export default {
@@ -200,20 +203,30 @@
 			}
 		},
 		methods: {
-			...mapMutations('common', ['setBaseInfo', 'setMoreInfo']),
+			...mapMutations('common', ['setBaseInfo', 'setMoreInfo','setAlbumInfo']),
 			
 			// 获取信息
 			async getData() {
-				const { data: res1 } = await apiService.getBaseData({
+				// 系统信息
+				const { data: res1 } = await my.getBaseData({
 					personId: 1
 				})
-				const { data: res2 } = await apiService.getAllData({
+				// 用户信息
+				const { data: res2 } = await my.getAllData({
 					personId: 1
 				})
 				this.baseData = res1.data
 				this.moreData = res2.data
 				this.setBaseInfo(this.baseData)
 				this.setMoreInfo(this.moreData)
+				
+				// 相册
+				const { data: res3 } = await my.getPictureAlbumList({
+					start: 1,
+					limit: 6
+				})
+				this.setAlbumInfo(res3.data)
+				
 			},
 
 			// 复制id
@@ -234,12 +247,12 @@
 			async makeSignUp() {
 				const {
 					data: res
-				} = await apiService.signIn({
+				} = await my.signIn({
 					reward: 5,
 					loginName: '123456'
 				})
 				uni.$showMsg(res.message)
-				this.isFlag = true
+				this.isSignUp = true
 				setTimeout(function() {
 					uni.$showMsg('积分 + 5')
 				}, 1000)
@@ -277,6 +290,10 @@
 	.root {
 		padding: 0 20rpx;
 		background-color: #fcfcfc;
+	}
+	
+	.head{
+		border-bottom: 2rpx solid #eee;
 	}
 
 	/* 头部 */

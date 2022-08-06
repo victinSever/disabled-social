@@ -41,3 +41,9 @@ export const returnDuringTime = function(allMouth) {
 	str += year + '-' + month + '-' + day
 	return str
 }
+
+export const objArrayToArray = function(data) {
+	return data.map(item => {
+		return null
+	})
+}

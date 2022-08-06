@@ -3,18 +3,28 @@ import my from "@/apis/my"
 export default {
     namespaced: true,
     state: {
-        userDetail:{},//个人信息
+        baseData:{},//个人统计信息
+		detailData: {},//个人详细信息（基础信息，详细信息，择偶信息）
     },
     mutations: {},
     actions: {
-        //更新用户信息
-        UpdateUserAllData({commit}, data) {
+        //更新用户个人统计信息
+        UpdateUserBaseData({commit}, data) {
             return new Promise((resolve, reject) => {
-                my.getAllData(data).then(response => {
-					state.userDetail= response.data;
+                my.getBaseData(data).then(response => {
+					state.baseData= response.data;
                  }).catch(error => {
                 })
             })
         },
+		//更新用户个人详细信息
+		UpdateUserAllData({commit}, data) {
+		    return new Promise((resolve, reject) => {
+		        my.getAllData(data).then(response => {
+					state.detailData= response.data;
+		         }).catch(error => {
+		        })
+		    })
+		},
     }
 }

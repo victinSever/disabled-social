@@ -44,25 +44,14 @@
 						<text>择偶要求</text>
 					</view>
 				</view>
-			
-				<!-- 完成度 -->
-				<view class="progress">
-					<view class="progress-box">
-						<view class="item" :style="'background-color: rgba(255, 140, 0,' +  (item*0.1) + ');'"
-							v-for="(item, i) in progressNum" :key="i">
-						</view>
-					</view>
-					<view class="progress-text">
-						当前资料完成度{{(progress*100).toFixed(0) + '%'}}
-					</view>
-				</view>
+							
 			</view>
 			<view class="main">
 				<personage v-if="isPre" :backShow="false" :personageData="data"></personage>
-				<view v-else>
-					<baseCom v-if="type === 1" :data="personData.basicInfo" @changeProgress="data" @changeType="changeType"></baseCom>
-					<detail v-else-if="type === 2" :data="personData.detailInfo" @changeProgress="changeProgress" @changeType="changeType"></detail>
-					<marrary v-else :data="personData.marraryInfo" @changeProgress="changeProgress" @saveData="saveData"></marrary>
+				<view v-else>								
+					<baseCom v-if="type === 1" @changeType="changeType"></baseCom>
+					<detail v-else-if="type === 2" @changeType="changeType"></detail>
+					<marrary v-else  @saveData="saveData"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -84,7 +73,7 @@
 				isPre: true,
 				isFinish: false,
 				type: 1,//三类资料组件切换
-				progress: 0,//资料完成度
+				
 				data: {
 					imageList: [
 						"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
@@ -94,12 +83,11 @@
 			};
 		},
 		components: {
-			baseCom, detail, marrary,personage
+			baseCom, detail, marrary, personage
 		},
 		computed: {
-			progressNum(){
-				return parseInt(Math.floor(this.progress*10))
-			}
+			// 引入个人数据
+			...mapState('common',['baseInfo','moreInfo']),
 		},
 		mounted(){
 			this.getAllData()
@@ -107,13 +95,11 @@
 		methods: {
 			// 获取信息
 			async getAllData(){
-				let data = this.$store.state.baseInfo
-				console.log(data);
+				this.personData = this.moreInfo
 			},
 			
-			saveData(data){
-				this.data = {...data}
-				console.log(this.data);
+			gotoPre(data){
+				this.isPre = true
 			},
 			// 进入下一页
 			changeType(data){
@@ -121,14 +107,11 @@
 				this.type++
 				console.log(this.data)
 			},
-			// 更改资料填写进度
-			changeProgress(val){
-				this.progress = val
-				console.log(val);
-			},
 			// 返回
 			gotoBack() {
-				uni.navigateBack()
+				uni.switchTab({
+					url: '/pages/person/person'
+				})
 			},
 			// 保存修改
 			finish() {
@@ -247,36 +230,7 @@
 			}
 		}
 		
-		.progress {
-			height: 120rpx;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-		
-			.progress-box {
-				height: 50rpx;
-				width: 70%;
-				background-color: #eee;
-				border-radius: 50rpx;
-				display: flex;
-				align-items: center;
-				justify-content: flex-start;
-		
-				.item {
-					height: 30rpx;
-					width: 30rpx;
-					border-radius: 50%;
-					background-color: rgba(255, 140, 0, 1);
-					margin: 0 10rpx;
-				}
-			}
-		
-			.progress-text {
-				margin-top: 20rpx;
-				color: #ddd;
-			}
-		}
+
 	}
 
 	.main {

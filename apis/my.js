@@ -75,6 +75,30 @@ const apiService = {
 	getRequirements(params) {
 		return http.get('/requirements/personId', params)
 	},
+	
+	// 修改基本信息
+	changePersonBasicInfo(params) {
+		return http.put('/personBasicInfo/update', null, params)
+	},
+	
+	// 修改详细信息
+	changePersonDetailInfo(params) {
+		return http.put('/personDetailInfo/update', null, params)
+	},
+	
+	// 修改择偶信息
+	changeRequirements(params) {
+		return http.put('/requirements/update', null, params)
+	},
+	
+	/**************************************
+		相册
+	*************************************/
+	
+	// 获取详细信息
+	getPictureAlbumList(params) {
+		return http.get('/pictureAlbum/list', params)
+	},
 }
 
 export default apiService;
