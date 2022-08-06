@@ -42,16 +42,6 @@
 				<text v-else>已上传成功！</text>
 			</view>
 		</view>
-
-		<view class="section">
-			<text class="label">生日</text>
-			<view class="content">
-				<picker mode="date" :value="data.date" :start="startDate" @change="bindDateChange" :end="endDate">
-					<view v-if="data.date" class="uni-input">{{data.date}}</view>
-					<view v-else>请选择</view>
-				</picker>
-			</view>
-		</view>
 		
 		<view class="section">
 			<text class="label">用户名</text>
@@ -292,12 +282,6 @@
 		},
 		computed: {
 			...mapState('common', ['moreInfo','albumInfo']),
-			startDate() {
-				return this.getDate('start');
-			},
-			endDate() {
-				return this.getDate('end');
-			}
 		},
 		created(){
 			this.data = this.moreInfo.personBasicInfo
@@ -359,25 +343,7 @@
 			bindworkAddrChange(e) {
 				this.data.workAddr = e.detail.value
 			},
-			// 选择生日
-			bindDateChange(e) {
-				this.data.date = e.detail.value
-			},
-			getDate(type) {
-				const date = new Date();
-				let year = date.getFullYear();
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
 
-				if (type === 'start') {
-					year = year - 60;
-				} else if (type === 'end') {
-					year = year + 2;
-				}
-				month = month > 9 ? month : '0' + month;
-				day = day > 9 ? day : '0' + day;
-				return `${year}-${month}-${day}`;
-			},
 			// 拍照
 			chooseimage(uploadPostion) {
 				var that = this;
@@ -531,7 +497,6 @@
 			}
 
 			.input {
-				width: 100rpx;
 				font-size: 14px;
 				text-align: right;
 			}

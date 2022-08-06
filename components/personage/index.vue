@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<div class="header">
-			<recomment-swiper :swiperList="personageData.imageList"></recomment-swiper>
+			<recomment-swiper :swiperList="imageList"></recomment-swiper>
 		</div>
 
 		<view class="footer">
@@ -69,12 +69,23 @@
 			personageData: {
 				type: Object,
 				default: {}
+			},
+			baseData: {
+				type: Object,
+				default: {}
+			},
+			imageList: {
+				type: Array,
+				default: []
 			}
 		},
 		data() {
 			return {
 				
 			};
+		},
+		mounted(){
+			console.log(this.imageList);
 		},
 		methods: {
 			backdetail() {

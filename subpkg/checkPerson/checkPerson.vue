@@ -47,11 +47,11 @@
 							
 			</view>
 			<view class="main">
-				<personage v-if="isPre" :backShow="false" :personageData="data"></personage>
+				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
 				<view v-else>								
 					<baseCom v-if="type === 1" @changeType="changeType"></baseCom>
 					<detail v-else-if="type === 2" @changeType="changeType"></detail>
-					<marrary v-else  @saveData="saveData"></marrary>
+					<marrary v-else  @gotoPre="gotoPre"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -63,7 +63,7 @@
 	import detail from "@/components/person-information/detail/detail.vue"
 	import marrary from "@/components/person-information/marrary/marrary.vue"
 	import personage from '@/components/personage/index.vue'
-	import apiService from '@/apis/my.js'
+	import my from '@/apis/my.js'
 	import { mapState } from 'vuex'
 	export default {
 		name: "checkinformation",
@@ -76,10 +76,12 @@
 				
 				data: {
 					imageList: [
-						"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
+						
 					],
 				},
-				personData: {}
+				baseData: {},
+				personData: {},
+				albumData: [],
 			};
 		},
 		components: {
@@ -87,15 +89,27 @@
 		},
 		computed: {
 			// 引入个人数据
-			...mapState('common',['baseInfo','moreInfo']),
+			...mapState('common',['albumInfo']),
 		},
 		mounted(){
-			this.getAllData()
+			this.getData()
 		},
 		methods: {
 			// 获取信息
-			async getAllData(){
-				this.personData = this.moreInfo
+			async getData() {
+				const { data: res1 } = await my.getBaseData({
+					personId: 1
+				})
+				const { data: res2 } = await my.getAllData({
+					personId: 1
+				})
+				const { data: res3 } = await my.getPictureAlbumList({
+					start: 1,
+					limit: 6
+				})
+				this.baseData = res1.data
+				this.moreData = res2.data	
+				this.albumData = res3.data
 			},
 			
 			gotoPre(data){
@@ -121,11 +135,6 @@
 					console.log(this.data);
 					uni.$showMsg("修改成功！")
 				}, 1000)
-			},
-			// 发请求
-			getData(data) {
-				this.data = data
-				console.log(this.data);
 			},
 		}
 	}

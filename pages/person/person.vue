@@ -2,7 +2,7 @@
 	<view class="root">
 		<mover></mover>
 		<!-- 顶部设置 -->
-<!-- 				<view class="header">
+		<!-- 				<view class="header">
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
@@ -17,7 +17,7 @@
 			</uni-badge>
 		</view> -->
 		<view class="head">
-			
+
 		</view>
 
 		<!-- 主信息部分 -->
@@ -37,7 +37,7 @@
 						</h1>
 						<p>
 							<text>用户ID：{{baseData.personId}}</text>
-							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
+							<uni-icons type="compose" size="16" @click="copyText(baseData.personId)"></uni-icons>
 						</p>
 
 						<p>
@@ -157,8 +157,12 @@
 
 <script>
 	import my from '@/apis/my.js'
-	import {returnRate} from '@/apis/tools.js'
-	import { mapMutations } from 'vuex'
+	import {
+		returnRate
+	} from '@/apis/tools.js'
+	import {
+		mapMutations
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -203,35 +207,53 @@
 			}
 		},
 		methods: {
-			...mapMutations('common', ['setBaseInfo', 'setMoreInfo','setAlbumInfo']),
-			
+			...mapMutations('common', ['setBaseInfo', 'setMoreInfo', 'setAlbumInfo']),
+
 			// 获取信息
 			async getData() {
 				// 系统信息
-				const { data: res1 } = await my.getBaseData({
+				const {
+					data: res1
+				} = await my.getBaseData({
 					personId: 1
 				})
 				// 用户信息
-				const { data: res2 } = await my.getAllData({
+				const {
+					data: res2
+				} = await my.getAllData({
 					personId: 1
+				})
+				// 相册
+				const {
+					data: res3
+				} = await my.getPictureAlbumList({
+					start: 1,
+					limit: 6
 				})
 				this.baseData = res1.data
 				this.moreData = res2.data
 				this.setBaseInfo(this.baseData)
 				this.setMoreInfo(this.moreData)
-				
-				// 相册
-				const { data: res3 } = await my.getPictureAlbumList({
-					start: 1,
-					limit: 6
-				})
 				this.setAlbumInfo(res3.data)
-				
 			},
 
 			// 复制id
-			copyText() {
-				uni.$showMsg("复制失败")
+			copyText(value) {
+				uni.showModal({
+					content: value, //模板中提示的内容
+					confirmText: '复制内容',
+					success: () => { //点击复制内容的后调函数
+						//uni.setClipboardData方法就是讲内容复制到粘贴板
+						uni.setClipboardData({
+							data: value, //要被复制的内容
+							success: () => { //复制成功的回调函数
+								uni.showToast({ //提示
+									title: '复制成功'
+								})
+							}
+						});
+					}
+				});
 			},
 			// 打开简历
 			gotoResume() {
@@ -291,8 +313,8 @@
 		padding: 0 20rpx;
 		background-color: #fcfcfc;
 	}
-	
-	.head{
+
+	.head {
 		border-bottom: 2rpx solid #eee;
 	}
 

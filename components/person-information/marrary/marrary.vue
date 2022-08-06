@@ -68,7 +68,7 @@
 		<view class="diliver"></view>
 
 		<view class="btn-next">
-			<button @click="changeType">保存资料</button>
+			<button @click="changeData">保存资料</button>
 		</view>
 	</view>
 </template>
@@ -76,6 +76,7 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
+	import my from "@/apis/my"
 	export default {
 		data() {
 			const marryStatus = ['请选择', '未婚', '二婚', '已婚']
