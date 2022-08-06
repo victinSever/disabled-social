@@ -30,17 +30,17 @@
 		data() {
 			return {
 				groupItem: [{
-						imagPath: 'static/images/user.jpg',
+						imagPath: '../../static/images/user.jpg',
 						title: '全国聋人单身群',
 						content: '专注于.....'
 					},
 					{
-						imagPath: 'static/images/user.jpg',
+						imagPath: '../../static/images/user.jpg',
 						title: '全国聋人单身群',
 						content: '专注于.....'
 					},
 					{
-						imagPath: 'static/images/user.jpg',
+						imagPath: '../../static/images/user.jpg',
 						title: '全国聋人单身群',
 						content: '专注于.....'
 					},
