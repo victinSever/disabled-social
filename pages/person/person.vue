@@ -2,7 +2,7 @@
 	<view class="root">
 		<mover></mover>
 		<!-- 顶部设置 -->
-<!-- 		<view class="header">
+		<!-- 		<view class="header">
 			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
 				<view class="header-prove" @click="gotoConnern">
 					<uni-icons type="checkbox-filled" size="25"></uni-icons>
@@ -23,17 +23,17 @@
 
 				<div class="top-left">
 					<view class="top-logo">
-						<image v-if="personData.headPicPath" :src="personData.headPicPath" alt="" />					
+						<image v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" />
 						<view class="empty-image" v-else>
 							<uni-icons type="person-filled" size="80" color="#eee"></uni-icons>
 						</view>
 					</view>
 					<view class="top-left-right">
 						<h1>
-							<text>{{personData.username}}</text>
+							<text>{{baseData.username}}</text>
 						</h1>
 						<p>
-							<text>用户ID：{{personData.personId}}</text>
+							<text>用户ID：{{baseData.personId}}</text>
 							<uni-icons type="compose" size="16" @click="copyText"></uni-icons>
 						</p>
 
@@ -50,19 +50,19 @@
 			</view>
 			<view class="main-bottom">
 				<view class="bottom-item" @click="gotoBillBoard(1)">
-					<text class="item-num">{{personData.attentionCount}}</text>
+					<text class="item-num">{{baseData.attentionCount}}</text>
 					<text class="item-title">关注</text>
 				</view>
 				<view class="bottom-item" @click="gotoBillBoard(2)">
-					<text class="item-num">{{personData.fanCount}}</text>
+					<text class="item-num">{{baseData.fanCount}}</text>
 					<text class="item-title">粉丝</text>
 				</view>
 				<view class="bottom-item">
-					<text class="item-num">{{personData.like}}</text>
+					<text class="item-num">{{baseData.like}}</text>
 					<text class="item-title">点赞</text>
 				</view>
 				<view class="bottom-item">
-					<text class="item-num">{{personData.sorts}}</text>
+					<text class="item-num">{{baseData.sorts}}</text>
 					<text class="item-title">积分</text>
 				</view>
 			</view>
@@ -91,7 +91,7 @@
 					<text>完成度越高越容易推荐</text>
 				</view>
 				<view class="section-three">
-					<text>20%</text>
+					<text>{{InfoRate}}</text>
 				</view>
 			</view>
 		</view>
@@ -119,12 +119,12 @@
 							<view class="btn-info-right">
 								<view class="like">
 									<image class="icon" src="../../static/icon/active/like.png" alt="">
-									<text class="num">{{item.likes}}</text>
+										<text class="num">{{item.likes}}</text>
 								</view>
-								<view class="comment">									
+								<view class="comment">
 									<image class="icon" src="../../static/icon/active/comment.png" alt="">
-									<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
-									<text class="num" v-else>去评论</text>
+										<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
+										<text class="num" v-else>去评论</text>
 								</view>
 							</view>
 						</view>
@@ -154,6 +154,9 @@
 
 <script>
 	import apiService from '@/apis/my.js'
+	import {
+		returnRate
+	} from '@/apis/tools.js'
 	export default {
 		data() {
 			return {
@@ -162,7 +165,7 @@
 				// 是否签到
 				isSignUp: false,
 				// 个人信息
-				personData: {
+				baseData: {
 					username: 'xxx',
 					personId: '',
 					headPicPath: '',
@@ -171,6 +174,7 @@
 					like: 0, //点赞
 					sorts: 0, //积分
 				},
+				moreData: {},
 				personActiveData: [{
 					publishDate: '2022-8-2 1:59:01',
 					text: '今天的天空格外好看！',
@@ -178,34 +182,47 @@
 					views: 231,
 					likes: 1023,
 					contents: 52,
-					isAudit: false,//被举报
+					isAudit: false, //被举报
 				}]
 			}
 		},
-		mounted(){
+		mounted() {
 			this.getData()
 		},
+		computed: {
+			// 资料完善比率
+			InfoRate() {
+				const obj = {
+					...this.moreData.personBasicInfo,
+					...this.moreData.personDetailInfo,
+					...this.moreData.requirement
+				}
+				return (returnRate(obj) * 100) + '%'
+			}
+		},
 		methods: {
-	
 			// 获取信息
-			async getData(){
-				const { data: res} = await apiService.getBaseData({
+			async getData() {
+				const { data: res1 } = await apiService.getBaseData({
 					personId: 1
 				})
-				if(res.resultCode === 200){
-					this.personData = res.data
-					console.log(res);
-				}else{
-					uni.$showMsg('获取信息失败！')
+				const { data: res2 } = await apiService.getAllData({
+					personId: 1
+				})
+				if (res1.resultCode !== 200 || res2.resultCode !== 200) {
+					return uni.$showMsg('服务器出错了！')				
+				} else {
+					this.baseData = res1.data
+					this.moreData = res2.data
 				}
 			},
-			
+
 			// 复制id
 			copyText() {
 				uni.$showMsg("复制失败")
 			},
 			// 打开简历
-			gotoResume(){
+			gotoResume() {
 				uni.$showMsg("该功能未开放！")
 			},
 			// 查看关注页面
@@ -216,17 +233,18 @@
 			},
 			// 签到
 			async makeSignUp() {
-				const { data: res } = await apiService.signIn({
+				const {
+					data: res
+				} = await apiService.signIn({
 					reward: 5,
 					loginName: '123456'
 				})
-				console.log(response);
-				uni.$showMsg('签到成功')
+				uni.$showMsg(res.message)
 				this.isFlag = true
 				setTimeout(function() {
 					uni.$showMsg('积分 + 5')
 				}, 1000)
-				
+
 			},
 			// 跳转到vip充值页
 			gotoPrivilege() {
@@ -247,7 +265,7 @@
 				})
 			},
 			// 去网评论页面
-			gotoComment(){
+			gotoComment() {
 				uni.navigateTo({
 					url: '/subpkg/comment/comment'
 				})
@@ -293,7 +311,7 @@
 
 			.top-left {
 				display: flex;
-				
+
 				.top-logo {
 					width: 150rpx;
 					height: 200rpx;
@@ -305,8 +323,8 @@
 						border-radius: 30rpx;
 						border: 4rpx solid #fff;
 					}
-					
-					.empty-image{
+
+					.empty-image {
 						height: 200rpx;
 						width: 100%;
 						display: flex;
@@ -320,7 +338,8 @@
 				}
 
 				.top-left-right {
-					margin-left: 30rpx;;
+					margin-left: 30rpx;
+					;
 
 					h1 {
 						height: 100rpx;
@@ -332,6 +351,7 @@
 						height: 50rpx;
 						line-height: 50rpx;
 						display: flex;
+
 						text {
 							margin-right: 10rpx;
 						}
@@ -343,7 +363,7 @@
 				display: flex;
 				align-items: flex-end;
 
-				text {	
+				text {
 					padding: 0 30rpx;
 					height: 60rpx;
 					line-height: 60rpx;
@@ -371,7 +391,7 @@
 				flex-direction: column;
 				background-color: #fff;
 				padding: 10rpx 20rpx;
-				border-radius: 20rpx;			
+				border-radius: 20rpx;
 
 				.item-num {
 					font-weight: bold;
@@ -382,8 +402,8 @@
 					color: #777;
 				}
 			}
-			
-			.bottom-item:not(:last-child):before{
+
+			.bottom-item:not(:last-child):before {
 				content: "";
 				height: 30rpx;
 				width: 2rpx;
@@ -451,14 +471,14 @@
 			font-weight: bold;
 			margin-bottom: 10rpx;
 		}
-		
-		.active-list{
-			.active-item{
+
+		.active-list {
+			.active-item {
 				display: flex;
 				justify-content: space-between;
 				margin-bottom: 20px;
-				
-				.item-left{
+
+				.item-left {
 					padding-top: 30rpx;
 					width: 100rpx;
 					display: flex;
@@ -467,51 +487,52 @@
 					font-weight: bold;
 					color: #ddd;
 					margin-right: 20rpx;
-					
-					
-					.day{
+
+
+					.day {
 						font-size: 22px;
 					}
-					
-					.mouth{
+
+					.mouth {
 						font-size: 16px;
 					}
 				}
-				
-				.item-right{
+
+				.item-right {
 					width: calc(100% - 100rpx);
-					
-					.text{
+
+					.text {
 						line-height: 80rpx;
 						font-weight: bold;
 					}
-					.image{
-						
-						image{
+
+					.image {
+
+						image {
 							width: calc(100% - 50rpx);
 							border-radius: 30rpx;
 						}
 					}
-					
-					.btns{
+
+					.btns {
 						margin-top: 10px;
 						display: flex;
 						justify-content: space-between;
 						width: calc(100% - 50rpx);
-						
+
 						.btn-info-right {
 							display: flex;
-						
+
 							&>view {
 								display: flex;
 								align-items: center;
 								margin-left: 40rpx;
-								
-								.icon{
+
+								.icon {
 									width: 40rpx;
 									height: 40rpx;
 								}
-						
+
 								.num {
 									font-size: 12px;
 									margin-left: 10rpx;
@@ -522,8 +543,8 @@
 					}
 				}
 			}
-		
-			.active-list-empty{
+
+			.active-list-empty {
 				width: 100%;
 				text-align: center;
 				margin-bottom: 50rpx;
@@ -531,7 +552,7 @@
 			}
 		}
 
-		
+
 		.active-empty {
 			height: 400rpx;
 			display: flex;

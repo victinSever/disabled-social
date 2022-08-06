@@ -60,9 +60,9 @@
 			<view class="main">
 				<personage v-if="isPre" :backShow="false" :personageData="data"></personage>
 				<view v-else>
-					<baseCom v-if="type === 1" @changeProgress="data" @changeType="changeType"></baseCom>
-					<detail v-else-if="type === 2" @changeProgress="changeProgress" @changeType="changeType"></detail>
-					<marrary v-else @changeProgress="changeProgress" @saveData="saveData"></marrary>
+					<baseCom v-if="type === 1" :data="personData.basicInfo" @changeProgress="data" @changeType="changeType"></baseCom>
+					<detail v-else-if="type === 2" :data="personData.detailInfo" @changeProgress="changeProgress" @changeType="changeType"></detail>
+					<marrary v-else :data="personData.marraryInfo" @changeProgress="changeProgress" @saveData="saveData"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -74,6 +74,7 @@
 	import detail from "@/components/person-information/detail/detail.vue"
 	import marrary from "@/components/person-information/marrary/marrary.vue"
 	import personage from '@/components/personage/index.vue'
+	import apiService from '@/apis/my.js'
 	export default {
 		name: "checkinformation",
 		data() {
@@ -90,7 +91,8 @@
 						"../../static/images/admin/admin3.jpg",
 						"../../static/images/admin/admin4.jpg",
 					],
-				}
+				},
+				personData: {}
 			};
 		},
 		components: {
@@ -102,6 +104,27 @@
 			}
 		},
 		methods: {
+			// 获取信息
+			async getAllData(){
+				const { data: res1} = await apiService.getPersonBasicInfo({
+					personId: 750576
+				})
+				const { data: res2} = await apiService.getPersonDetailInfo({
+					personId: 14205
+				})
+				const { data: res3} = await apiService.getRequirements({
+					personId: 12718
+				})
+				if(res1.resultCode !== 200 || res2.resultCode !== 200 || res3.resultCode !== 200){
+					return uni.$showMsg('服务器出错了！')				
+				}
+				this.personData = {
+					basicInfo: res1.data,
+					detailInfo: res2.data,
+					marraryInfo: res3.data
+				}
+			},
+			
 			saveData(data){
 				this.data = {...data}
 				console.log(this.data);
