@@ -86,11 +86,18 @@
 		mounted() {
 			this.getrecommendList();
 			this.getMessageList();
+            
+            //接受消息数据
+            uni.$on("messageData",(data)=>{
+                if(data.type==1){
+                }
+            })
 		},
 		
 		methods: {
-			//获取推荐ren
-			
+            
+            
+			//获取推荐人
 			getrecommendList(){
 				message.recommendList().then(response => {
                  
@@ -107,7 +114,15 @@
 			        
 			    }) 
 			},
-			
+            
+            //创建聊天用户
+			addUserMessage(){
+				message.addMessageUser().then(response => {
+			     
+			    }).catch(error => {
+			        
+			    }) 
+			},
 			
 			
 			gotoMessageDetail(item) {
