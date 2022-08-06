@@ -65,7 +65,7 @@ http.interceptor.response(async (response) => {
 	// 	tip.error(data.message);
 	// 	return Promise.reject(response);
 	// }
-	// return response
+	return response
 }, (response) => {
 	// 请求错误做点什么
 	// if (response) {
