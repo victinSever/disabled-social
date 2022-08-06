@@ -55,10 +55,16 @@ http.interceptor.request((config, cancel) => {
 // 必须使用异步函数，注意
 http.interceptor.response(async (response) => {
 	/* 请求之后拦截器 */
-	// if (response.data.code !== 0) { // 服务端返回的状态码不等于0，则reject()
-	//     let data = response.data;
-	//     tip.error(data.message);
-	// }
+	if (response.statusCode !== 200) { // 服务端返回的状态码不等于0，则reject()
+
+	    tip.error("服务器错误");
+		return Promise.reject(response);
+	}
+	let data = response.data;
+	if(data.code!=200){
+		tip.error(data.message);
+		return Promise.reject(response);
+	}
 	return response
 }, (response) => {
 	// 请求错误做点什么

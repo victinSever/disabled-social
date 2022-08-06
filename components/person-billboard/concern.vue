@@ -25,7 +25,7 @@
 </template>
 
 <script>
-	import apiService from '@/apis/message.js'
+	import apiService from '@/apis/my.js'
 	export default {
 		name:"cencern",
 		data() {

@@ -65,71 +65,27 @@
                  CustomBar: this.CustomBar,
 				// 对方的信息
 				userInfo: {
-					userImage: '/static/images/home/img1.png',
+					userImage: '../../static/images/home/img1.png',
 					userName: '小懒猫',
 					lastTime: '11小时前'
 				},
 				// 我的信息
 				myInfo: {
-					userImage: '/static/images/user.jpg',
+					userImage: '../../static/images/user.jpg',
 					userName: '微凉',
 				},
 				// 聊天内容
-				chattingList: [{
-					isMy: false,
-					content: {
-						text: '吃饭了吗',
-					},
-
-				}, {
-					isMy: true,
-					content: {
-						text: '没呢',
-					},
-				}, {
-					isMy: true,
-					content: {
-						text: '你呢',
-					},
-				}, {
-					isMy: false,
-					content: {
-						text: '要不我们去新开的那家店？',
-					},
-				}, {
-					isMy: true,
-					content: {
-						text: '好的',
-					},
-				}, {
-					isMy: true,
-					content: {
-						text: '另外，你喜欢什么',
-					},
-				}, {
-					isMy: true,
-					content: {
-						text: '你结过婚嘛？',
-					},
-				}, {
-					isMy: false,
-					content: {
-						text: '没呢',
-					},
-				}, {
-					isMy: true,
-					content: {
-						text: '你怎么残疾了，发生了什么，我想先了解你的过去',
-					},
-				}, {
-					isMy: false,
-					content: {
-						text: '这...',
-					},
-				}]
+				chattingList: []
 			};
 		},
+		onLoad(option) {
+			//获取对方用户信息
+			getUserInfo(option.userId)
+		},
 		methods: {
+			
+			
+			
 			// 选择图片
 			sendPic(){
 				uni.chooseImage({
@@ -141,7 +97,8 @@
 					}
 				});
 			},
-            
+			
+
             //照相机
             sendPhotograph(){
                 uni.chooseImage({
@@ -153,6 +110,7 @@
                 	}
                 });
             },
+			
 			// 打电话
 			call() {
 				uni.$showMsg()
@@ -296,7 +254,7 @@
 			input::placeholder {
 				font-size: 16px;
 			}
-			
+
 
 			span {
 				margin-right: 30rpx;
@@ -309,7 +267,7 @@
 			height: 100rpx;
 			display: flex;
 			align-items: center;
-            
+
             .icons{
                 margin-right: 40rpx;
             }

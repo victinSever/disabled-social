@@ -23,11 +23,11 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- 列表 -->
 			<view class="table-list">
 				<view class="table-item">
-					
+
 				</view>
 			</view>
 			<!-- 推荐区 -->
@@ -59,7 +59,7 @@
 					</view>
 				</view>
 			</view>
-			
+
 		</view>
 	</view>
 </template>
@@ -93,7 +93,7 @@
 				],
 				// 推荐嘉宾
 				recommentList: [{
-					imagePath: '/static/images/user.jpg',
+					imagePath: '/../../static/images/user.jpg',
 					age: '18岁',
 					high: '178cm',
 					rank: '大专',
@@ -102,7 +102,7 @@
 					position: '南岸区',
 					operation: '自由职业者'
 				},{
-					imagePath: '/static/images/user2.jpg',
+					imagePath: '/../../static/images/user2.jpg',
 					age: '18岁',
 					high: '178cm',
 					rank: '大专',
@@ -111,7 +111,7 @@
 					position: '南岸区',
 					operation: '自由职业者'
 				},{
-					imagePath: '/static/images/home/img1.png',
+					imagePath: '/../../static/images/home/img1.png',
 					age: '18岁',
 					high: '178cm',
 					rank: '大专',
@@ -120,7 +120,7 @@
 					position: '南岸区',
 					operation: '自由职业者'
 				},{
-					imagePath: '/static/images/content2.jpg',
+					imagePath: '/../../static/images/content2.jpg',
 					age: '18岁',
 					high: '178cm',
 					rank: '大专',
@@ -134,7 +134,7 @@
 		methods: {
 			search(e) {
 				console.log(2);
-			}, 
+			},
 			bindPickerChange(e,i) {
 				this.tags[i].index = e.detail.value
 			},
@@ -151,61 +151,61 @@
 
 		.search-choose {
 			width: 100%;
-			
-			
+
+
 			.choose-title{
 				height: 60rpx;
 				line-height: 60rpx;
 			}
-			
+
 			.choose-list{
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: space-between;
-				
+
 				.choose-item {
 					width: 40%;
 					height: 80rpx;
 					line-height: 80rpx;
 					// display: flex;
 					// align-items: center;
-					
+
 					.item-title{
 						color: #777;
 					}
-					
+
 				}
 			}
 
-			
+
 		}
 	}
 
-	.body-recomment{	
+	.body-recomment{
 		margin-top: 40rpx;
-		
+
 		.recomment-list{
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-around;
-			
+
 			.recomment-item{
 				width: calc((100% - 40rpx - 20rpx)/2);
 				margin-bottom: 40rpx;
 				border-radius: 10rpx;
-				box-shadow: 1px 1px 1px rgba(0,0,0,0.1), 
+				box-shadow: 1px 1px 1px rgba(0,0,0,0.1),
 				1px -1px 1px rgba(0,0,0,0.1),
 				-1px -1px 1px rgba(0,0,0,0.1);
-				
+
 				.item-img{
 					position: relative;
-					
+
 					img{
 						border-radius: 10rpx 10rpx 0 0;
 						width: 100%;
 						height: 60%;
 					}
-					
+
 					.img-prove{
 						position: absolute;
 						top: 0;
@@ -220,24 +220,24 @@
 						letter-spacing: 2rpx;
 					}
 				}
-				
+
 				.item-info{
 					p{
 						text-align: center;
 						line-height: 50rpx;
 						font-size: 12px;
 						color: #777;
-						
+
 						span{
 							margin: 0 6rpx;
 						}
 					}
-					
+
 					.info-imp{
 						color: red;
 						font-size: 10px;
 						margin-bottom: 20rpx;
-						
+
 						&>span{
 							border-radius: 20rpx;
 							height: 50rpx;
@@ -247,8 +247,8 @@
 					}
 				}
 			}
-			
+
 		}
-	
+
 	}
 </style>

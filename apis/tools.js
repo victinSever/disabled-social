@@ -16,7 +16,6 @@ export const returnRate = function(obj){
 	for (let key in obj) {
 		sum++
 		if (obj[key] != '' && obj[key] != 0) finish++
-		console.log(obj[key]);
 	}
 	return (finish / sum).toFixed(2)
 }
