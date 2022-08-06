@@ -5,13 +5,29 @@ import {
 
 const apiService = {
 
-	//获取
+	//获取附近列表
 	getCommentList(params) {
 		return http.get('/social/active/getCommentList', params)
 	},
+
+	// 获取评论
+	getComments(params) {
+		return http.get('/social/active/getReplyList', params)
+	},
+
+	// 点赞
+	addLike(params) {
+		return http.post('/recomment/likeComment', null, params)
+	},
+
+	// 回复点赞
+	addLikeComment(params) {
+		return http.post('/recomment/likeReply', null, params)
+	},
 	
-	getComments(params){
-		return http.get('/social/active/getReplyList',params)
+	// 获取一条动态信息
+	getOneInfo(params){
+		return http.get('/social/active/getOneDiary',params)
 	}
 
 }

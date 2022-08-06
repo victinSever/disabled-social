@@ -35,12 +35,14 @@
 						<uni-icons type="more-filled" color="#d0d2d4" size="20" @click="openPopu"></uni-icons>
 					</view>
 					<view class="btn-info-right">
+						<!-- 点赞 -->
 						<view class="like">
 							<uni-icons type="heart" size="25" @click="addLike"
 								:style="data.alreadyLike == 1 ? 'color:red' : (code == 1 ? 'color:red' : '')">
 							</uni-icons>
 							<text>{{data.diary.diaryLove < 100 ? data.diary.diaryLove : '99+' }}</text>
 						</view>
+						<!-- 跳转评论页面 -->
 						<view class="comment" @click="gotoComment">
 							<uni-icons type="chatbubble" size="25"></uni-icons>
 							<text>{{data.diary.diaryComment < 100 ? data.diary.diaryComment : '99+' }}</text>
@@ -68,7 +70,7 @@
 		props: ['data'],
 		data() {
 			return {
-				code: false
+				code: 0
 			};
 		},
 		methods: {
@@ -77,26 +79,28 @@
 			},
 			gotoComment() {
 				uni.navigateTo({
-					url: '/subpkg/comment/comment?diaryId=' + this.data.diary.diaryId
+					url: `/subpkg/comment/comment?diaryId=${this.data.diary.diaryId}`  
 				})
 			},
 			// 添加喜欢
 			addLike() {
 				let _this = this
-				this.data.alreadyLike = false
+				this.data.alreadyLike = 0
 
 				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
 				around.addLike({
 					userId: 1,
 					diaryId: this.data.diary.diaryId
 				}).then(res => {
-					// console.log(res);
 					_this.data.diary.diaryLove = res.data.map.total
 					_this.code = res.data.code
 				})
 			}
 		},
-		mounted() {}
+		mounted() {
+			this.code = this.data.alreadyLike
+			// console.log(this.data);
+		}
 	}
 </script>
 

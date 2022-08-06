@@ -19,7 +19,10 @@ Vue.prototype.vuex_uploadAction = "http://222.177.66.230:9898/upload"
 App.mpType = 'app'
 
 const app = new Vue({
-    ...App
+    ...App,
+	beforeCreate() {
+		Vue.prototype.$bus = this
+	}
 })
 app.$mount()
 // #endif

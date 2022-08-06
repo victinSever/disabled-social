@@ -1,34 +1,44 @@
 <template>
 	<view class="comment-container">
 		<view class="comment-title">评论</view>
-		<view class="comment-content" v-for="(item,index) in data" :key="index">
-			<view class="content-left">
-				<img :src="item.headPicture" alt="" />
-			</view>
 
-			<view class="content-right">
-				<content-item :user="item.comment"></content-item>
-
-				<uni-transition mode-class="slide-bottom" :show="item.flag">
-					<view v-if="item.flag" v-for="(item2,indexs) in commentList" :key="indexs">
-						<content-item :user="item2.comment" :replyPic="item2.headPicture"></content-item>
-					</view>
-				</uni-transition>
-
-				<view class="btn-content" v-if="item.comment.replyAmount > 0">
-					<view class="btn-moreInfo" @click="showDown(item)">
-						<text>—— 展开{{item.comment.replyAmount}}回复</text>
-						<uni-icons type="bottom" size="20"></uni-icons>
-					</view>
-					<view class="btn-shouqi" v-if="item.flag" @click="showUp(item)">
-						<text>收起</text>
-						<uni-icons :type="item.flag == false ? 'bottom' : 'top'" size="16"></uni-icons>
-					</view>
-
+		<template v-if="data.length > 0">
+			<view class="comment-content" v-for="(item,index) in data" :key="index">
+				<view class="content-left">
+					<img :src="item.headPicture" alt="" />
 				</view>
-			</view>
+				<view class="content-right">
+					<content-item :user="item.comment" :alreadyItem="item"></content-item>
 
-		</view>
+					<uni-transition mode-class="slide-bottom" :show="item.flag">
+						<view v-if="item.flag" v-for="(item2,indexs) in commentList" :key="indexs">
+							<content-item :user="item2.comment" :alreadyItem="item2" :replyPic="item2.headPicture">
+							</content-item>
+						</view>
+					</uni-transition>
+
+					<view class="btn-content">
+						<view class="btn-moreInfo" v-if="item.replyAmountTemp > 0" @click="showDown(item)">
+							<text>—— 展开{{item.flag == false ? item.comment.replyAmount : item.replyAmountTemp}}回复</text>
+							<uni-icons type="bottom" size="20"></uni-icons>
+						</view>
+						<view class="btn-shouqi" v-if="item.flag" @click="showUp(item)">
+							<text>收起</text>
+							<uni-icons :type="item.flag == false ? 'bottom' : 'top'" size="16"></uni-icons>
+						</view>
+
+					</view>
+				</view>
+
+			</view>
+		</template>
+
+		<template v-else>
+			<view class="no-comment">
+				<text>~暂无评论~</text>
+			</view>
+		</template>
+
 	</view>
 </template>
 
@@ -40,72 +50,37 @@
 		data() {
 			return {
 				commentList: [],
-				userList: [{
-						user: {
-							imgPath: '../../static/images/user.jpg',
-							userName: ['柚子'],
-							commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-							time: '7月12日',
-							flag: false
-						},
-						comment: [{
-								userName: ['柚子', '刘哥'],
-								commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-								time: '7月12日',
-								imgPath: 'static/images/user.jpg',
-							},
-							{
-								userName: ['陈小弟', '刘哥'],
-								commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-								time: '7月12日',
-								imgPath: 'static/images/user.jpg',
-							},
-						]
-					},
-					{
-						user: {
-							imgPath: 'static/images/user.jpg',
-							userName: ['柚子'],
-							commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-							time: '7月12日',
-							flag: false
-						},
-						comment: [{
-								userName: ['柚子', '刘哥'],
-								commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-								time: '7月12日',
-								imgPath: 'static/images/user.jpg',
-							},
-							{
-								userName: ['陈小弟', '刘哥'],
-								commentContnet: '加油！相信你一定会找到属于你自己的幸福加油！相信你一定会找到属于你自己的幸福。',
-								time: '7月12日',
-								imgPath: 'static/images/user.jpg',
-							},
-						]
-					},
-				]
 			};
 		},
 		methods: {
 			showDown(item) {
 				let _this = this;
 				item.flag = true;
-				comment.getComments({
-					commentId: item.comment.commentId,
-					page: 1,
-					size: 10
-				}).then(res => {
-					_this.commentList = res.data
-					console.log(res.data);
-				})
+				if (item.Flag == false) {
+					uni.$showMsg("获取中...");
+					comment.getComments({
+						commentId: item.comment.commentId,
+						page: item.page,
+						size: 10
+					}).then(res => {
+						_this.commentList = _this.commentList.concat(res.data)
+						item.replyAmountTemp -= 10
+						item.page++
+						uni.hideToast()
+					})
+				} else {
+					item.Flag = false
+					item.replyAmountTemp -= (item.page - 1) * 10
+				}
+
 			},
 			showUp(item) {
 				item.flag = false
+				item.Flag = true
+				item.replyAmountTemp = item.comment.replyAmount
 			}
 		},
 		mounted() {
-			console.log(this.data);
 		}
 	}
 </script>
@@ -115,7 +90,7 @@
 		border-top: 1px solid #f5f5f5;
 		padding-top: 15px;
 		height: 200px;
-
+		
 		.comment-title {
 			font-weight: bold;
 			margin-bottom: 10px;
@@ -163,6 +138,18 @@
 				}
 
 			}
+		}
+
+
+		.no-comment {
+			width: 100%;
+			height: 150px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 18px;
+			text-align: center;
+			color: #a5a395;
 		}
 	}
 </style>
