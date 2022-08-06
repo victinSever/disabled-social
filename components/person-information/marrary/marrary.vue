@@ -68,7 +68,7 @@
 		<view class="diliver"></view>
 
 		<view class="btn-next">
-			<button @click="changeData">保存资料</button>
+			<button @click="changeType">保存资料</button>
 		</view>
 	</view>
 </template>
@@ -76,7 +76,6 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
-	import my from "@/apis/my"
 	export default {
 		data() {
 			const marryStatus = ['请选择', '未婚', '二婚', '已婚']
@@ -104,13 +103,6 @@
 			this.data = this.moreInfo.requirement
 		},
 		methods: {
-			async changeData(){
-				const {data: res} = await my.changeRequirements(this.data)
-				if(res.resultCode === 200){
-					uni.$showMsg("保存成功！")
-					this.changeType()//下一页
-				}
-			},
 			changeType() {
 				this.$emit('gotoPre', this.data)
 			},

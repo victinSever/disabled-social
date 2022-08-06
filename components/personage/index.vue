@@ -26,8 +26,10 @@
 					<text class="look">查看全部</text>
 				</view>
 				<view class="">
-					<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-						<view id="demo1" class="scroll-view-item_H uni-bg-red"></view>
+					<scroll-view class="scroll-view" scroll-x="true" scroll-left="120">
+						<view class="scroll-view-item" v-for="(item, i) in imageList" :key="i">
+							<image :src="item.picPath" mode="aspectFill"></image>
+						</view>
 					</scroll-view>
 				</view>
 			</view>
@@ -163,20 +165,24 @@
 				}
 			}
 
-			.scroll-view_H {
+			.scroll-view {
 				white-space: nowrap;
 				width: 100%;
 			}
 
-			.scroll-view-item_H {
-
+			.scroll-view-item {
 				display: inline-block;
 				margin-right: 20rpx;
-				width: 164rpx;
-				height: 164rpx;
+				width: 160rpx;
+				height: 160rpx;
 				border-radius: 14rpx;
 				text-align: center;
 				font-size: 36rpx;
+				
+				image{
+					height: 100%;
+					width: 100%;
+				}
 			}
 		}
 

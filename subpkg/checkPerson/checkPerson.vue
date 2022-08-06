@@ -49,7 +49,7 @@
 			<view class="main">
 				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
 				<view v-else>								
-					<baseCom v-if="type === 1" @changeType="changeType"></baseCom>
+					<baseCom v-if="type === 1" @sendBase="getBase"></baseCom>
 					<detail v-else-if="type === 2" @changeType="changeType"></detail>
 					<marrary v-else  @gotoPre="gotoPre"></marrary>
 				</view>
@@ -72,16 +72,12 @@
 				// 是否为预览状态
 				isPre: true,
 				isFinish: false,
-				type: 1,//三类资料组件切换
-				
-				data: {
-					imageList: [
-						
-					],
-				},
+				type: 1,//三类资料组件切换			
 				baseData: {},
 				personData: {},
 				albumData: [],
+				
+				cacheData: {},//缓存的更改数据
 			};
 		},
 		components: {
@@ -89,31 +85,46 @@
 		},
 		computed: {
 			// 引入个人数据
-			...mapState('common',['albumInfo']),
+			...mapState('common',['baseInfo','moreInfo','albumInfo']),
 		},
-		mounted(){
+		mounted(){			
 			this.getData()
 		},
 		methods: {
 			// 获取信息
-			async getData() {
-				const { data: res1 } = await my.getBaseData({
-					personId: 1
-				})
-				const { data: res2 } = await my.getAllData({
-					personId: 1
-				})
-				const { data: res3 } = await my.getPictureAlbumList({
-					start: 1,
-					limit: 6
-				})
-				this.baseData = res1.data
-				this.moreData = res2.data	
-				this.albumData = res3.data
+			getData() {
+				this.baseData = this.baseInfo
+				this.personData = this.moreInfo
+				this.albumData = this.albumInfo
+				this.cacheData = this.moreInfo
+				console.log(this.cacheData);
 			},
-			
+			// 获取基础信息缓存
+			getBase(data){
+				this.cacheData.personBasicInfo = data
+				this.type = 2
+			},
+			// 获取详细信息缓存
+			getDetail(data){
+				this.cacheData.personDetailInfo = data
+				this.type = 3
+			},
+			// 获取择偶信息缓存并更新数据调往预览页
 			gotoPre(data){
+				this.cacheData.requirement = data
+				this.saveUpdate()
 				this.isPre = true
+			},
+			// 更新数据
+			async saveUpdate(){
+				uni.showLoading({title: '加载中',mask:true});
+				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
+				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
+				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
+				uni.hideLoading();
+				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
+					uni.$showMsg("保存成功！")
+				}				
 			},
 			// 进入下一页
 			changeType(data){
@@ -129,12 +140,8 @@
 			},
 			// 保存修改
 			finish() {
-				let $this = this
-				setTimeout(function() {
-					this.isFinish = true
-					console.log(this.data);
-					uni.$showMsg("修改成功！")
-				}, 1000)
+				this.saveUpdate()
+				this.gotoBack()
 			},
 		}
 	}

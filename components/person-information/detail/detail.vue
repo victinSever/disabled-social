@@ -230,7 +230,7 @@
 		</view>
 		
 		<view class="btn-next">
-			<button @click="changeData">保存并下一步</button>
+			<button @click="changeType">下一步</button>
 		</view>
 	</view>
 </template>
@@ -238,7 +238,6 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
-	import my from "@/apis/my"
 	export default {
 		data() {
 			const isDisable = ['请选择', '正常人', '残疾人']
@@ -303,14 +302,6 @@
 			this.data = this.moreInfo.personDetailInfo
 		},
 		methods: {
-			// 保存并下一步
-			async changeData(){
-				const {data: res} = await my.changePersonDetailInfo(this.data)
-				if(res.resultCode === 200){
-					uni.$showMsg("保存成功！")
-					this.changeType()//下一页
-				}
-			},
 			changeType(){
 				this.$emit('changeType', this.data)
 			},

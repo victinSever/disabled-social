@@ -241,7 +241,7 @@
 		</view>
 
 		<view class="btn-next">
-			<button @click="changeData">保存并下一步</button>
+			<button @click="changeType">下一步</button>
 		</view>
 	</view>
 </template>
@@ -249,7 +249,6 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
-	import my from "@/apis/my"
 	import areaInfo from "./area-data-min.js"
 	export default {		
 		data() {
@@ -289,14 +288,6 @@
 			this.householdAddr = this.workAddr
 		},
 		methods: {
-			// 保存并下一步
-			async changeData(){
-				const {data: res} = await my.changePersonBasicInfo(this.data)
-				if(res.resultCode === 200){
-					uni.$showMsg("保存成功！")
-					this.changeType()//下一页
-				}
-			},
 			// 上传动态图片
 			uploadActiveImage(item, i){
 				var that = this;
@@ -317,7 +308,7 @@
 				})
 			},
 			changeType(){
-				this.$emit('changeType', this.data)
+				this.$emit('sendBase', this.data)
 			},
 			//学历
 			binddegreeChange(e) {

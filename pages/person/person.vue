@@ -232,8 +232,8 @@
 				})
 				this.baseData = res1.data
 				this.moreData = res2.data
-				this.setBaseInfo(this.baseData)
-				this.setMoreInfo(this.moreData)
+				this.setBaseInfo(res1.data)
+				this.setMoreInfo(res2.data)
 				this.setAlbumInfo(res3.data)
 			},
 
