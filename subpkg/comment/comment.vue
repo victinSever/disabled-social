@@ -111,9 +111,10 @@
 	}
 
 	.comment-header {
-		position: sticky;
-		top: 70rpx;
+		position: relative;
+		// top: 70rpx;
 		height: 100rpx;
+		z-index: 10;
 		background-color: #fff;
 		display: flex;
 		justify-content: space-between;
