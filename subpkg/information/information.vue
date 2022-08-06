@@ -47,8 +47,8 @@
 				<span @click="sendMessage">发送</span>
 			</view>
 			<view class="edit-btns">
-				<uni-icons class="icons" type="image-filled" size="30" color="#777" @click="sendPic"></uni-icons>
-				<uni-icons class="icons" type="camera-filled" size="30" color="#777" @click="sendPhotograph"></uni-icons>
+				<uni-icons class="icons" type="image-filled" size="30" color="#777" @click="chooseImg"></uni-icons>
+				<uni-icons class="icons" type="camera-filled" size="30" color="#777" @click="chooseVideo"></uni-icons>
 				<!-- <uni-icons type="mic-filled" size="30" color="#777" @click="sendMessage"></uni-icons> -->
 <!-- 				<uni-icons type="gift-filled" size="30" color="#777" @click="sendMessage"></uni-icons>
 				<uni-icons type="folder-add-filled" size="30" color="#777" @click="sendMessage"></uni-icons> -->
@@ -59,23 +59,22 @@
 </template>
 
 <script>
+	import webSocket from "@/common/util/webSocket.js"
 	export default {
 		data() {
 			return {
                  CustomBar: this.CustomBar,
 				// 对方的信息
-				userInfo: {
-					userImage: '../../static/images/home/img1.png',
-					userName: '小懒猫',
-					lastTime: '11小时前'
-				},
+				userInfo: {},
 				// 我的信息
-				myInfo: {
-					userImage: '../../static/images/user.jpg',
-					userName: '微凉',
-				},
+				myInfo: {},
 				// 聊天内容
-				chattingList: []
+				chattingList: [],
+				messageObj:{
+					senduserid:"",
+					reciveuserid:"",
+					sendtext:"",
+				}
 			};
 		},
 		onLoad(option) {
@@ -83,33 +82,81 @@
 			getUserInfo(option.userId)
 		},
 		methods: {
+			getUserInfo(id){
+				
+			},
 			
-			
-			
-			// 选择图片
-			sendPic(){
+			chooseImg() {
+                let _that=this;
 				uni.chooseImage({
 					count: 6, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album'], //从相册选择
-					success: function (res) {
-						console.log(JSON.stringify(res.tempFilePaths));
+					sourceType: ['album','camera'], //从相册选择
+					success: function(res) {
+                        
+                        res.tempFilePaths.forEach((item)=>{
+                            uni.uploadFile({
+                            	// 需要上传的地址
+                            	url: _that.vuex_uploadAction,
+                            	// filePath  需要上传的文件
+                            	filePath: item,
+                            	name: 'file',
+                            	header: {
+                            		token: ""		// 挂载请求头为用户的 token
+                            	},
+                            	success:function (arr) {
+                            		let data = JSON.parse(arr.data);
+									let str=`<image src="${data}" style="width:200rpx;height:300rpx"  mode="widthFix" />`
+                            	    webSocket.sendData({
+										
+									})
+								}
+                            });
+                        })
+
+                        
 					}
 				});
 			},
-			
+			chooseVideo(){
+				uni.showLoading({
+					mask: true,
+					title: '上传中...'
+				})
+				// uploadFile 存储需要上传的文件
+				let uploadFile = '';
+				let _that = this;
+				// 1.选择要上传的视频
+	           uni.chooseVideo({
+					maxDuration: 10,		// 拍摄视频最长拍摄时间，单位秒。最长支持 60 秒。
+					sourceType: ['album','camera'],		// album 从相册选视频，camera 使用相机拍摄，默认为：['album', 'camera']
+					success:function (res) {
+						uploadFile = res.tempFilePath;
+						// console.log(uploadFile);
+						// 2.上传所选视频到服务器
+						uni.uploadFile({
+							// 需要上传的地址
+							url: _that.vuex_uploadAction,
+							// filePath  需要上传的文件
+							filePath: uploadFile,
+							name: 'file',
+							header: {
+								token: ""		// 挂载请求头为用户的 token
+							},
+							success:function (arr) {
+								let data = JSON.parse(arr.data);
+                                let str=`<video object-fit='fill' src="${data}" style="width:200rpx;height:300rpx" />`
+                                webSocket.sendData({
+                                	
+                                })
+                                // data就是上传的成功的路径
+							}
+						});
 
-            //照相机
-            sendPhotograph(){
-                uni.chooseImage({
-                	count: 6, //默认9
-                	sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-                	sourceType: ['camera'], //照相机
-                	success: function (res) {
-                		console.log(JSON.stringify(res.tempFilePaths));
-                	}
-                });
-            },
+					}
+				});
+
+			},
 			
 			// 打电话
 			call() {
