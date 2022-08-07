@@ -210,7 +210,6 @@
 				})
 			},
 			comm() {
-				
 				//跳转动态详情评论
 				uni.navigateTo({
 					url: `/subpkg/comment/comment?diaryId=${this.videoList[this._videoIndex].diary.id}`

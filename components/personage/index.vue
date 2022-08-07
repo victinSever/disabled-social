@@ -28,7 +28,7 @@
 				<view class="">
 					<scroll-view class="scroll-view" scroll-x="true" scroll-left="120">
 						<view class="scroll-view-item" v-for="(item, i) in imageList" :key="i">
-							<image :src="item.picPath" mode="aspectFill"></image>
+							<image :src="item" mode="aspectFill"></image>
 						</view>
 					</scroll-view>
 				</view>

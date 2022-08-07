@@ -5,7 +5,7 @@ const apiService = {
     
     //获取图片秀推荐列表
     getRecomment(params) {
-    	return http.get('/recomment/getUser',params)
+    	return http.get('/recomment/SearchPictureShowByAdvise',params)
     },
     
     //获取推荐的视频秀
@@ -30,6 +30,11 @@ const apiService = {
     	return http.post('/recomment/dislikeUser',params)
     },
        
+	//取消不喜欢用户
+	cancelDislikeUser(params) {
+		return http.delete('/recomment/cancel-dislikeUser',params)
+	},
+	   
     //关注用户
     concernUser(params) {
     	return http.post('/mine/concernUser',null,params)

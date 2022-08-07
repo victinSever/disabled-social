@@ -15,11 +15,12 @@
 					</text>
 				</view>
 				<view class="header-right">
-					<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;"></image>
+					<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;">
+					</image>
 					<image @click="openPopup" src="@/static/images/home/screen.png"></image>
 				</view>
 			</view>
-		</uni-transition>	
+		</uni-transition>
 
 		<template v-if="isImages">
 			<view class="home-body">
@@ -30,16 +31,16 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<recomment-swiper :swiperList="obj.imageList"></recomment-swiper>
+							<image :src="obj.headPath" style="width: 100%;height: 80%;" mode="widthFix"></image>
 							<view class="swiper_detail">
 								<view class="mask">
 								</view>
-								
+
 								<view class="userName">
-									小懒猫
+									<!-- {{obj.}} -->
 								</view>
 								<view class="userDetail">
-									<text>重庆九龙坡(10km)</text>
+									<text>{{obj.houseAddress}}</text>
 									<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
 								</view>
 								<view class="userConstellation">
@@ -47,11 +48,11 @@
 									<text>26岁</text>
 								</view>
 								<view class="control">
-									<view class="back">
+									<view class="back" @click="NoDislikeUser">
 										<image src="@/static/images/home/5.png"></image>
 									</view>
 
-									<view class="cancel"  @click="disLike">
+									<view class="cancel" @click="disLike">
 										<image src="@/static/images/home/3.png"></image>
 									</view>
 
@@ -119,10 +120,15 @@
 				animationData: {},
 				// 用户信息
 				personageData: {},
-				obj:{
-					imageList: [],
+				selectIndex: 0,
+				obj: {
+					headPath: "",
+					houseAddress: "",
+					hobbies: [],
+					picShow: [],
+					tags: []
 				},
-			
+
 				nowid: 3,
 				x: 0,
 				y: 0,
@@ -131,10 +137,12 @@
 					y: 0
 				},
 				page: {
-					userId: "",
+					userId: "1",
 					page: 1,
 					size: 10
-				}
+				},
+				imgList: [],
+				showMove:false
 			}
 		},
 		onLoad() {
@@ -142,49 +150,76 @@
 			this.getRecommentList();
 		},
 		methods: {
+			
+			//撤回不喜欢
+			NoDislikeUser(){
+				recomment.cancelDislikeUser({
+					user_id:"",
+					dislike_user_id:""
+				}).then((res) => {
+					
+				}).catch(() => {
+
+				})
+			},
+			
 			//不喜欢用户
-			disLike(){
+			disLike() {
 				recomment.dislikeUser().then((res) => {
+					if ((this.imgList.length - 2) == this.selectIndex) {
+						this.page.page++;
+						this.getRecommentList()
+					}
+					this.selectIndex++;
+					this.obj = this.imgList[this.selectIndex];
 					this.moveOutrb();
 				}).catch(() => {
-								
+
 				})
 			},
 			//喜欢用户
-			like(){
+			like() {
 				recomment.loveUser().then((res) => {
-				  this.moveOutrb();
+					if ((this.imgList.length - 2) == this.selectIndex) {
+						this.page.page++;
+						this.getRecommentList()
+					}
+					this.selectIndex++;
+					this.obj = this.imgList[this.selectIndex];
+					this.moveOutrb();
 				}).catch(() => {
-								
+
 				})
 			},
-			
+
 			//收藏
-			collect(){
-					recomment.collect({
-						userId: "1",
-						type: "2",
-						likedId: this.obj.id
-					}).then((res) => {
-						uni.showToast({
-							icon: "none",
-							title: "收藏成功"
-						})
-					}).catch(() => {
-				
+			collect() {
+				recomment.collect({
+					userId: "1",
+					type: "2",
+					likedId: this.obj.id
+				}).then((res) => {
+					uni.showToast({
+						icon: "none",
+						title: "收藏成功"
 					})
+				}).catch(() => {
+
+				})
 			},
-			
+
 
 			//获取图片秀list
 			getRecommentList() {
 				recomment.getRecomment(this.page).then(response => {
-					if(this.page.page==1){
-						this.obj = response.data[0]
-					}else{
-						
+					if (this.page.page == 1) {
+						this.obj = response.data[0];
+						this.imgList = response.data;
+						this.selectIndex = 0
+					} else {
+						this.imgList = this.imgList.concat(response.data);
 					}
-					
+
 				}).catch(error => {
 
 				})
@@ -268,7 +303,7 @@
 
 			// 四种动画方式
 			moveOutlb() {
-				this.animation.translateY(230).rotate(-10).translateX(-500).step()
+				this.animation.translateY(230).rotate(-10).translateX(-500).step();
 				this.clear()
 				this.animationData = this.animation.export()
 			},
@@ -305,15 +340,30 @@
 						timingFunction: 'ease-in-out',
 					})
 					this.animation = animation;
-					debugger
-					if (x < 0 && y > 0)
-						this.moveOutlb()
-					else if (x < 0 && y < 0)
-						this.moveOutlt()
-					else if (x > 0 && y < 0)
-						this.moveOutrt()
-					else
-						this.moveOutrb()
+					if (x < 0 && y > 0){
+						this.moveOutlb();
+						if(!this.showMove){
+							setTimeout(()=>{
+								this.disLike();
+								this.showMove=false;
+							},2000)
+						}
+						this.showMove=true;
+					}else if (x < 0 && y < 0){
+							this.moveOutlt()
+					}else if (x > 0 && y < 0){
+							this.moveOutrt()
+					}else{
+						this.moveOutrb();
+						if(!this.showMove){
+							setTimeout(()=>{
+								this.like();
+								this.showMove=false;
+							},2000)
+						}
+						this.showMove=true;
+					}
+		
 				}
 
 				this.nowid = e.target.id
@@ -323,7 +373,6 @@
 </script>
 
 <style lang="scss" scoped>
-	
 	.back-detail {
 		position: absolute;
 		top: 50rpx;
