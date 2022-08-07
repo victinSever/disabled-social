@@ -23,23 +23,23 @@
 				total: 0,
 				page: 2,
 				downOption: {
-					use: true, // 是否启用下拉刷新; 默认true
-					auto: false, // 是否在初始化完毕之后自动执行下拉刷新的回调; 默认true
+					use: true,
+					auto: false,
 					page: {
-						num: 1, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
-						size: 10 // 每页数据的数量,默认10
+						num: 1,
+						size: 10
 					},
 					textLoading: '加载中....',
 				},
 				// 上拉加载的常用配置
 				upOption: {
-					use: true, // 是否启用上拉加载; 默认true
-					auto: false, // 是否在初始化完毕之后自动执行上拉加载的回调; 默认true
+					use: true,
+					auto: false,
 					page: {
-						num: 2, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
-						size: 10 // 每页数据的数量,默认10
+						num: 2,
+						size: 10
 					},
-					noMoreSize: 100, // 配置列表的总数量要大于等于5条才显示'-- END --'的提示
+					noMoreSize: 10,
 					// empty: {
 					// 	tip: '暂无相关数据'
 					// }
@@ -88,7 +88,6 @@
 					_that.page++
 					console.log(res.data);
 					_that.acitveData.push(...res.data)
-					_that.mescroll.optUp.hasNext = true
 					if (res.data.length < 10)
 						_that.flag = false
 					_that.mescroll.endByPage(3, 10);
