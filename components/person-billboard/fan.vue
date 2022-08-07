@@ -34,7 +34,7 @@
 				list: [],
 				page: {
 					userId: 5,
-					start: 1,
+					start: 0,
 					limit: 5,
 				}
 			};
@@ -53,7 +53,7 @@
 			async cancelAttention(item, i){
 				const { data: res} = await my.cancelAttention({
 					userId: item.userId,
-					follower: 5
+					follower: page.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('取消成功！')
@@ -63,7 +63,7 @@
 			async addAttention(item, i){
 				const { data: res} = await my.addAttention({
 					userId: item.userId,
-					follower: 5
+					follower: page.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('回关成功！')

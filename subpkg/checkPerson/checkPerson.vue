@@ -119,7 +119,6 @@
 			},
 			// 改变基础信息
 			changeBase(val){
-				console.log(this.cacheData.personBasicInfo);
 				this.cacheData.personBasicInfo = val
 				console.log(this.cacheData.personBasicInfo);
 			},
@@ -139,11 +138,12 @@
 			
 			// 更新数据调往预览页
 			gotoPre(data){
-				this.saveUpdate()
-				this.isPre = true
+				if(this.saveUpdate())
+					this.isPre = true
 			},
 			// 更新数据
 			async saveUpdate(){
+				let success = false
 				uni.showLoading({title: '加载中',mask:true});
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
@@ -152,7 +152,9 @@
 				console.log(res1,res2,res3);
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
-				}				
+					success = true
+				}	
+				return success			
 			},
 			// 返回
 			gotoBack() {
@@ -162,8 +164,8 @@
 			},
 			// 保存修改
 			finish() {
-				this.saveUpdate()
-				this.gotoBack()
+				if(this.saveUpdate())
+					this.gotoBack()
 			},
 		}
 	}

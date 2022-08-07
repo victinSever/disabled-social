@@ -78,17 +78,17 @@ const apiService = {
 	
 	// 修改基本信息
 	changePersonBasicInfo(params) {
-		return http.put('/personBasicInfo/update', null, params)
+		return http.put('/personBasicInfo/update', params)
 	},
 	
 	// 修改详细信息
 	changePersonDetailInfo(params) {
-		return http.put('/personDetailInfo/update', null, params)
+		return http.put('/personDetailInfo/update', params)
 	},
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update', null, params)
+		return http.put('/requirements/update', params)
 	},
 	
 	/**************************************
@@ -112,7 +112,12 @@ const apiService = {
 	
 	// 更新图片
 	changePicture(params) {
-		return http.get('/pictureAlbum/update', null, params)
+		return http.put('/pictureAlbum/update', params)
+	},
+	
+	// 获取我的动态列表
+	getMyDiary(params) {
+		return http.get('/mine/getMyDiary', params)
 	},
 }
 
