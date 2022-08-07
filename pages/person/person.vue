@@ -100,7 +100,7 @@
 		</view>
 
 		<!-- 动态 -->
-		<person-active></person-active>
+		<person-active :personActiveData="personActiveData"></person-active>
 
 		<!-- 发表动态按钮 -->
 		<view class="active-btn" @click="gotoShare">
@@ -113,12 +113,14 @@
 
 <script>
 	import my from '@/apis/my.js'
+	import { getDay, getMonth } from "@/apis/tools"
 	import {
-		returnRate
+		returnRate, formdataify
 	} from '@/apis/tools.js'
 	import {
 		mapMutations
 	} from 'vuex'
+	
 	export default {
 		data() {
 			return {
@@ -135,11 +137,20 @@
 					sorts: 0, //积分
 				},
 				moreData: {},
+				// 动态的数据
+				personActiveData: [],
+				isLoading: false,//节流器
+				paramsData: {
+					userId: "1",
+					page: 1,
+					size: 5
+				}
 				
 			}
 		},
 		mounted() {
 			this.getData()
+			// this.getActiveData()
 		},
 		computed: {
 			// 资料完善比率
@@ -152,30 +163,62 @@
 				return (returnRate(obj) * 100) + '%'
 			}
 		},
+		// 下拉触底
+		onReachBottom(){
+			// 节流器
+			if(!this.isLoading){
+				this.paramsData.page++
+				this.getActiveData()
+			}					
+		},
 		methods: {
 			...mapMutations('common', ['setBaseInfo', 'setMoreInfo', 'setAlbumInfo']),
+			
+			// 获取动态信息
+			async getActiveData(){
+				uni.showLoading({title: '动态加载中',mask:true});
+				this.isLoading = true
+				const {data: res} = await my.getMyDiary(this.paramsData)
+				this.isLoading = false
+				setTimeout(function () {uni.hideLoading();}, 100);
+				// 根据动态发布时间获取日月
+				let arr = res.map(item => {
+					item.day = getDay(item.diary.createTime)
+					item.month = getMonth(item.diary.createTime)
+					return item
+				})
+				// 合并动态数组
+				this.personActiveData = [
+					...this.personActiveData,
+					...arr
+				]			
+			},
 
 			// 获取信息
 			async getData() {
-				// 系统信息
-				const {
-					data: res1
-				} = await my.getBaseData({
+				uni.showLoading({title: '信息加载中',mask:true});
+				// // 系统信息
+				const {data: res1 } = await my.getBaseData({
 					personId: 1
 				})
 				// 用户信息
-				const {
-					data: res2
-				} = await my.getAllData({
+				const {data: res2} = await my.getAllData({
 					personId: 1
 				})
+				console.log(res2.data.requirement);
+				const formdata = formdataify(res2.data.requirement)
+				console.log(formdata);
+				const {data: res4} = await my.changeRequirements({
+					formdata
+				})
+				console.log(res4);
 				// 相册
-				const {
-					data: res3
-				} = await my.searchAlbumListByUserId({
+				const {data: res3} = await my.searchAlbumListByUserId({
 					userId: 1
-				})				
+				})	
+				setTimeout(function () {uni.hideLoading();}, 100);
 				this.baseData = res1.data
+				
 				this.moreData = res2.data
 				this.setBaseInfo(res1.data)
 				this.setMoreInfo(res2.data)

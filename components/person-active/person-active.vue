@@ -7,13 +7,13 @@
 			<view class="active-list" v-if="personActiveData.length !== 0">
 				<view class="active-item" v-for="(item, i) in personActiveData" :key="i">
 					<view class="item-left">
-						<text class="day">11</text>
-						<text class="mouth">07月</text>
+						<text class="day">{{item.month}}</text>
+						<text class="mouth">{{item.day}}月</text>
 					</view>
-					<view class="item-right" @click="gotoComment(item.diaryId)">
-						<p class="text">{{item.text}}</p>
-						<view class="image" v-if="item.image">
-							<image :src="item.image" alt="">
+					<view class="item-right" @click="gotoComment(item.diary.diaryId)">
+						<p class="text">{{item.diary.diaryContent}}</p>
+						<view class="image" v-if="item.headPicture">
+							<image :src="item.headPicture" alt="" mode="aspectFill">
 						</view>
 						<view class="btns">
 							<view class="btn-info-left">
@@ -22,11 +22,11 @@
 							<view class="btn-info-right">
 								<view class="like">
 									<image class="icon" src="../../static/icon/active/like.png" alt="">
-										<text class="num">{{item.likes}}</text>
+										<text class="num">{{item.diary.diaryLove}}</text>
 								</view>
 								<view class="comment">
 									<image class="icon" src="../../static/icon/active/comment.png" alt="">
-										<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
+										<text class="num" v-if="item.diary.diaryComment !== 0">{{item.diary.diaryComment}}</text>
 										<text class="num" v-else>去评论</text>
 								</view>
 							</view>
@@ -49,41 +49,15 @@
 </template>
 
 <script>
-	import my from "@/apis/my"
 	export default {
 		name:"person-active",
-		data() {
-			return {
-				personActiveData: [{
-					diaryId: "1",
-					publishDate: '2022-8-2 1:59:01',
-					text: '今天的天空格外好看！',
-					image: '../../static/images/sky.jpg',
-					views: 231,
-					likes: 1023,
-					contents: 52,
-					isAudit: false, //被举报
-				}],
-				paramsData: {
-					userId: "1",
-					page: 1,
-					size: 5
-				}
-			};
+		props: {
+			personActiveData: {
+				type: Array,
+				default: []
+			}
 		},
-		mounted(){
-			this.getData()
-		},
-		methods: {
-			async getData(){
-				// 相册
-				try{
-					const {data: res} = await my.getMyDiary(this.paramsData)
-					console.log(res);
-				}catch(err){
-					console.log(err);
-				}
-			},
+		methods: {			
 			// 去网评论页面
 			gotoComment(diaryId) {
 				uni.navigateTo({
@@ -134,7 +108,7 @@
 					width: calc(100% - 100rpx);
 
 					.text {
-						line-height: 80rpx;
+						margin: 20rpx 0;
 						font-weight: bold;
 					}
 

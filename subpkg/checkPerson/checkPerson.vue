@@ -105,11 +105,11 @@
 		},
 		methods: {
 			// 获取信息
-			getData() {
+			async getData() {
 				this.baseData = this.baseInfo
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
-				this.cacheData = this.moreInfo
+				this.cacheData = this.moreInfo			
 			},
 			
 			// 监视缓存数据
@@ -144,11 +144,12 @@
 			// 更新数据
 			async saveUpdate(){
 				let success = false
-				uni.showLoading({title: '加载中',mask:true});
+				uni.showLoading({title: '数据更新中',mask:true});
+				console.log(this.cacheData);this.cacheData
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-				uni.hideLoading();
+				setTimeout(function () {uni.hideLoading();}, 100);
 				console.log(res1,res2,res3);
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
