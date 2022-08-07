@@ -88,7 +88,11 @@ const apiService = {
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update', params)
+		return http.put('/requirements/update',params,null,{
+			header:{
+				 'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		})
 	},
 	
 	/**************************************

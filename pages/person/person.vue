@@ -205,12 +205,7 @@
 				const {data: res2} = await my.getAllData({
 					personId: 1
 				})
-				console.log(res2.data.requirement);
-				const formdata = formdataify(res2.data.requirement)
-				console.log(formdata);
-				const {data: res4} = await my.changeRequirements({
-					formdata
-				})
+				const {data: res4} = await my.changeRequirements(res2.data.requirement)
 				console.log(res4);
 				// 相册
 				const {data: res3} = await my.searchAlbumListByUserId({

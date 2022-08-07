@@ -10,7 +10,7 @@
 			<view class="footer-header">
 				<view class="userName">
 					<text>小懒猫</text>
-					<text class="focus" v-if="isTemplate">关注</text>
+					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
 				</view>
 				<view class="address">
 					<text>重庆巴南(3km)</text>
