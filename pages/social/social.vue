@@ -21,12 +21,12 @@
 		</view>
 		
 		<!-- 附近 -->
-		<uni-transition mode-class="slide-right" :show="isClose">
+		<uni-transition mode-class="slide-right" :show="!isClose">
 			<social-close @openPopu="openPopu"></social-close>
 		</uni-transition>
 		
 		<!-- 关注 -->
-		<uni-transition mode-class="slide-left" :show="!isClose">
+		<uni-transition mode-class="slide-left" :show="isClose">
 			<social-concern @openPopu="openPopu"></social-concern>
 		</uni-transition>
 		
@@ -99,15 +99,15 @@
 	// 头部
 	.social-header {
 		height: 100rpx;
+		box-sizing: border-box;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		position: sticky;
-		top: 70rpx;
-		z-index: 5;
+		// position: sticky;
+		// top: 70rpx;
 		background-color: #fff;
 		padding: 0 20rpx;
-		
+		background-color: yellow;
 		.social-header-left {
 			display: flex;
 			width: 50%;

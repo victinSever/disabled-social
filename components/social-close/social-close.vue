@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 附近的社交盒子滑动 -->
-		<scroll-view scroll-y="true" class="social-close" v-if="getInfo">
+		<scroll-view scroll-y="true" class="social-close" @refresherrefresh="getFresh" :style="{height:wh+'px'}" v-if="getInfo">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu">
 			</message-box>
 		</scroll-view>
@@ -14,11 +14,15 @@
 		name: "social-close",
 		data() {
 			return {
+				wh: 0,
 				getInfo: false,
 				acitveData: []
 			};
 		},
 		methods: {
+			getFresh(){
+				console.log(1);
+			},
 			openPopu() {
 				this.$emit('openPopu', true)
 			},
@@ -38,7 +42,9 @@
 					page: 1,
 					size: 10
 				}).then(res => {
+					_this.acitveData = []
 					_this.acitveData = res.data
+					console.log(res.data);
 					_this.getInfo = true;
 					uni.hideLoading()
 				})
@@ -50,6 +56,7 @@
 		mounted() {
 			this.getAroundInfo()
 			this.$bus.$on('backUpdate', this.backUpdate)
+			this.wh = uni.getSystemInfoSync().windowHeight - 103
 		},
 
 	}
