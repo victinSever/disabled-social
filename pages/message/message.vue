@@ -123,19 +123,39 @@
 			//获取用户列表
 			getMessageList() {
 				message.messageList("1").then(response => {
-					response.data.forEach(item=>{
+					  this.messageData = response.data ? response.data : [];
+					this.messageData.forEach((item,index)=>{
+						this.$set(item,'num',0)
 						item.num=0
 						this.$store.state.webSocket.messageList.forEach((items)=>{
 							if(item.userid==items.userid){
 							   item.num=items.num
 							}
-						})
-					
+						});
+						this.getMessageDetail(item.userid,index)
 					})
-			       this.messageData = response.data ? response.data : [];
-				   console.log(this.messageData)
+			     
 				}).catch(error => {
 
+				})
+			},
+			
+			//获取消息列表
+			getMessageDetail(id,index){
+				message.lkuschatmsg({
+					reviceuserid: id,
+					userid: "1"
+				}).then(response => {
+					response.data = response.data ? response.data : [];
+					let indexs=0;
+					response.data.forEach((item)=>{
+						if(item.msgstatus==0){
+						  indexs++
+						}
+					})
+					this.messageData[index].num=indexs;
+				}).catch(error => {
+				
 				})
 			},
 
