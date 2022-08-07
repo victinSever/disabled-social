@@ -83,6 +83,7 @@
 			};
 		},
 		methods: {
+			// 返回上一页
 			gotoBack() {
 				let _this = this
 				uni.navigateBack({
@@ -91,6 +92,7 @@
 					}
 				})
 			},
+			// 获取新的列表数据
 			getComments(diaryId) {
 				let _this = this;
 				comment.getCommentList({
@@ -116,6 +118,7 @@
 					_this.code = res.data.code
 				})
 			},
+			// 获取一条展示数据
 			OneInfo(diaryId) {
 				let _this = this;
 				comment.getOneInfo({
