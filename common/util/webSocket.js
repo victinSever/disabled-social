@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '@/store'
 
 const webSocket = {
 
@@ -26,7 +27,9 @@ const webSocket = {
 		})
 		// 监听服务器推送的消息
 		uni.onSocketMessage((message) => {
-			uni.$emit("websocketData",JSON.parse(message.data))
+	       store.dispatch("webSocket/NewMessageNum",JSON.parse(message.data))
+			uni.$emit("websocketData",JSON.parse(message.data));
+			
 		})
 		// 打开信道
 		uni.connectSocket({

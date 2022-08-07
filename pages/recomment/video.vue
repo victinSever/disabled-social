@@ -1,30 +1,42 @@
 <template>
 	<view class="page">
 		<swiper class="swiper" :circular="circular" :vertical="true" @change="onSwiperChange">
-			<swiper-item v-for="(item,index) in videoList" :key="item.id">
-				<video @click="videoplay(index)" class="video" :id="item.id" :ref="item.id" :src="item.video_src"
-					:controls="false" :loop="true" :show-center-play-btn="false" preload="auto"
+			<swiper-item v-for="(item,index) in videoList" :key="item.diary.id">
+				<video @click="videoplay(index)" class="video" :id="item.diary.id" :ref="item.diary.id"
+					:src="item.video" :controls="false" :loop="true" :show-center-play-btn="false" preload="auto"
 					x5-playsinline="" playsinline="true" webkit-playsinline="true" x-webkit-airplay="allow"
 					x5-video-player-type="h5" x5-video-player-fullscreen="" x5-video-orientation="portraint">
 				</video>
 				<view class="detail-box">
-					<view class="name">222</view>
-					<view class="detail">21343</view>
+					<view class="name">{{item.diary.diaryUserName}}</view>
+					<view class="detail">{{item.diary.diaryTitle}}</view>
 				</view>
 			</swiper-item>
 		</swiper>
 		<cover-view>
 			<cover-image :src="avatar_img" class="video-image"></cover-image>
 			<cover-view class="video-love" @click="love()">
-				<image src="../../static/images/home/6.png" class="img2"></image>
+				<template v-if="alreadyLike==1">
+					<image src="../../static/images/home/1-1.png" class="img2"></image>
+				</template>
+				<template v-else>
+					<image src="../../static/images/home/6.png" class="img2"></image>
+				</template>
+
 				<view class="video-num">{{love_num}}</view>
 			</cover-view>
 			<cover-view class="video-comm" @click="comm()">
-					<image src="../../static/images/home/7.png"  class="img2"></image>
+				<image src="../../static/images/home/7.png" class="img2"></image>
 				<view class="video-num">{{comm_num}}</view>
 			</cover-view>
 			<cover-view class="video-redo" @click="collect()">
-				<image src="../../static/images/home/8.png"  class="img2"></image>
+				<template v-if="isactive">
+					<image src="../../static/images/home/2-1.png" class="img2"></image>
+				</template>
+				<template v-else>
+					<image src="../../static/images/home/8.png" class="img2"></image>
+
+				</template>
 				<view class="video-num">{{redo_num}}</view>
 			</cover-view>
 		</cover-view>
@@ -32,6 +44,7 @@
 </template>
 <script>
 	import recomment from "@/apis/recomment.js"
+	import around from "@/apis/around.js"
 	export default {
 		data() {
 			return {
@@ -42,21 +55,14 @@
 				current_nav: 1,
 				isactive: false,
 				circular: true,
-				videoList: [{
-					video_src: "https://vd2.bdstatic.com/mda-nh4dtsitw2ykrs3m/sc/cae_h264/1659694517752184784/mda-nh4dtsitw2ykrs3m.mp4?v_from_s=hkapp-haokan-nanjing&auth_key=1659756981-0-0-6a6d7c11a8c80e0f13b756cc5e94729d&bcevod_channel=searchbox_feed&pd=1&cd=0&pt=3&logid=0381154670&vid=5182127965963672136&abtest=103525_1-103579_2-103742_2-103890_2&klogid=0381154670",
-					id: "video0",
-					play:false
-				},{
-					video_src: "https://vd2.bdstatic.com/mda-nh4dtsitw2ykrs3m/sc/cae_h264/1659694517752184784/mda-nh4dtsitw2ykrs3m.mp4?v_from_s=hkapp-haokan-nanjing&auth_key=1659756981-0-0-6a6d7c11a8c80e0f13b756cc5e94729d&bcevod_channel=searchbox_feed&pd=1&cd=0&pt=3&logid=0381154670&vid=5182127965963672136&abtest=103525_1-103579_2-103742_2-103890_2&klogid=0381154670",
-					id: "video1",
-					play:false
-				}],
+				videoList: [],
+				_videoIndex: 0,
 				videoDataList: [],
 				_videoContextList: [],
-				
-				videoPage:{
-					index:1,
-					size:10
+				alreadyLike: 0,
+				videoPage: {
+					index: 1,
+					size: 10
 				}
 			}
 		},
@@ -64,43 +70,23 @@
 			this.getVideoList();
 		},
 		methods: {
-			
 			//获取视频秀
-			getVideoList(page){
+			getVideoList(page) {
 				let _that = this;
-				recomment.getUserVedio(
-				{
-					page:this.videoPage.index,
-					size:this.videoPage.size,
-					userId:"1"
-				}).then((res)=>{
-					console.log(res)
-					_that.init()
-				}).catch(()=>{
-					
+				recomment.getUserVedio({
+					page: this.videoPage.index,
+					size: this.videoPage.size,
+					userId: "1"
+				}).then((res) => {
+					if (this.videoPage.index == 1) {
+						_that.videoList = res.data ? res.data : [];
+						_that.init()
+					} else {
+						_that.videoList = _that.videoList.concat(res.data ? res.data : [])
+					}
+				}).catch(() => {
+
 				})
-			},
-			
-			
-			navCurrent(index) {
-				this.current_nav = index
-				index === 1 ? uni.showToast({
-					title: '点击首页'
-				}) : '';
-				index === 2 ? uni.showToast({
-					title: '点击朋友'
-				}) : '';
-				index === 3 ? uni.showToast({
-					title: '点击消息'
-				}) : '';
-				index === 4 ? uni.showToast({
-					title: '点击我的'
-				}) : '';
-			},
-			navAdd() {
-				uni.showToast({
-					title: '点击+'
-				});
 			},
 			init() {
 				this._videoIndex = 0;
@@ -109,9 +95,14 @@
 					this._videoContextList.push(uni.createVideoContext('video' + i, this));
 				}
 				this._videoDataIndex = 0;
-				if(this._videoContextList.length>0){
+				if (this._videoContextList.length > 0) {
 					setTimeout(() => {
 						this._videoContextList[this._videoIndex].play();
+						this.alreadyLike = this.videoList[this._videoIndex].alreadyLike;
+						this.avatar_img = this.videoList[this._videoIndex].headPicture;
+						this.love_num = this.videoList[this._videoIndex].diary.diaryLove;
+						this.comm_num = this.videoList[this._videoIndex].diary.diaryComment;
+						this.redo_num = this.videoList[this._videoIndex].diary.diaryCollect;
 					}, 200);
 				}
 
@@ -126,8 +117,6 @@
 					this._videoContextList[index].play();
 					this.videoList[index].play = true
 				}
-
-
 			},
 			onSwiperChange(e) {
 				this.isactive = false
@@ -165,11 +154,18 @@
 				}
 
 				this._videoIndex = currentIndex;
-				var id = this._videoContextList[this._videoIndex].id;
-
+				this.alreadyLike = this.videoList[this._videoIndex].alreadyLike;
+				this.avatar_img = this.videoList[this._videoIndex].headPicture;
+				this.love_num = this.videoList[this._videoIndex].diary.diaryLove;
+				this.comm_num = this.videoList[this._videoIndex].diary.diaryComment;
+				this.redo_num = this.videoList[this._videoIndex].diary.diaryCollect;
 				setTimeout(() => {
 					this.updateVideo(isNext);
 				}, 200);
+				if (this._videoIndex == (this.videoList.length - 2)) {
+					this.videoPage.index++;
+					this.getVideoList();
+				}
 			},
 			getNextIndex(isNext) {
 				let index = this._videoIndex + (isNext ? 1 : -1);
@@ -195,31 +191,50 @@
 				}, 200);
 			},
 			love(item) {
-				item.love_num += 1
-				this.isactive = !this.isactive
-				uni.showToast({
-					title: '点击点赞'
-				});
+				around.addLike({
+					userId: "1",
+					diaryId: this.videoList[this._videoIndex].diary.id
+				}).then((res) => {
+					if (this.alreadyLike == 0) {
+						this.love_num += 1
+						this.alreadyLike = 1;
+						this.videoList[this._videoIndex].alreadyLike = 1;
+					} else {
+						this.alreadyLike = 0;
+						this.love_num -= 1
+						this.videoList[this._videoIndex].alreadyLike = 0;
+					}
+
+				}).catch(() => {
+
+				})
 			},
 			comm() {
-				uni.showToast({
-					title: '点击评论'
-				});
+				
+				//跳转动态详情评论
+				uni.navigateTo({
+					url: `/subpkg/comment/comment?diaryId=${this.videoList[this._videoIndex].diary.id}`
+				})
 			},
-			
+
 			//收藏
 			collect(item) {
-				recomment.collect(
-				{
-					userId:id,
-					type:"1",
-					likedId:item.id
-					
-				}).then((res)=>{
-					
-				}).catch(()=>{
-					
-				})
+				if (this.videoList[this._videoIndex].alreadyLike == 0) {
+					recomment.collect({
+						userId: "1",
+						type: "1",
+						likedId: this.videoList[this._videoIndex].diary.id
+					}).then((res) => {
+						uni.showToast({
+							icon: "none",
+							title: "收藏成功"
+						})
+
+					}).catch(() => {
+
+					})
+				}
+
 			}
 		}
 	}
@@ -302,7 +317,8 @@
 		border: 3px solid #fff;
 		z-index: 100;
 	}
-	.img2{
+
+	.img2 {
 		width: 90rpx;
 		height: 80rpx;
 		margin-bottom: 20rpx;

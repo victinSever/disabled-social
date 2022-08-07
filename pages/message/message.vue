@@ -41,7 +41,7 @@
 					<uni-swipe-action>
 						<block v-for="(item, index) in messageData" :key="index">
 							<!-- uni-swipe-action-item 可以为其子节点提供滑动操作的效果。需要通过 options 属性来指定操作按钮的配置信息 -->
-							<uni-swipe-action-item :right-options="options">
+							<uni-swipe-action-item :right-options="options" @click="bindClick">
 								<view class="item" @click="gotoMessageDetail(item)">
 									<view class="left-box">
 										<img :src="item.uimg" alt="">
@@ -52,7 +52,8 @@
 											<!-- <p>{{item.message}}</p> -->
 										</view>
 										<view class="right-box-right">
-											<!-- <text>{{item.lastTime}}{{item.lastUnit}}前</text> -->
+											<!-- v-if="item.num!=0" -->
+											<text class="item-num" v-if="item.num!=0">{{item.num}}</text>
 										</view>
 									</view>
 								</view>
@@ -68,6 +69,7 @@
 
 <script>
 	import message from "@/apis/message.js"
+	
 	export default {
 		data() {
 			return {
@@ -83,10 +85,9 @@
 
 			}
 		},
-		mounted() {
+		onShow() {
 			this.getrecommendList();
 			this.getMessageList();
-
 			//接受消息数据
 			uni.$on("messageData", (data) => {
 				if (data.type == 1) {}
@@ -94,7 +95,21 @@
 		},
 
 		methods: {
-
+			
+			//删除聊天人
+			bindClick(e){
+				if(e.content.text=="删除"){
+					this.$tip.confirm('确认删除？').then(()=>{
+						let obj =this.messageData[e.index];
+							message.deleteuser(obj.userid).then(response => {
+								this.getMessageList();
+						  	}).catch(error => {
+						
+						})
+					})
+	
+				}
+			},
 
 			//获取推荐人
 			getrecommendList() {
@@ -108,7 +123,17 @@
 			//获取用户列表
 			getMessageList() {
 				message.messageList("1").then(response => {
-			       this.messageData = response.data ? response.data : []
+					response.data.forEach(item=>{
+						item.num=0
+						this.$store.state.webSocket.messageList.forEach((items)=>{
+							if(item.userid==items.userid){
+							   item.num=items.num
+							}
+						})
+					
+					})
+			       this.messageData = response.data ? response.data : [];
+				   console.log(this.messageData)
 				}).catch(error => {
 
 				})
@@ -230,7 +255,7 @@
 				width: 100%;
 
 				.item {
-					height: 100rpx;
+					height: 120rpx;
 					width: calc(100vw - 40rpx);
 					display: flex;
 					margin-bottom: 40rpx;
@@ -238,11 +263,11 @@
 					.left-box {
 						display: flex;
 						align-items: center;
-						width: 100rpx;
+						width: 160rpx;
 
 						img {
-							height: 80rpx;
-							width: 80rpx;
+							height: 104rpx;
+							width: 104rpx;
 							border-radius: 50%;
 						}
 					}
@@ -252,6 +277,17 @@
 						display: flex;
 						justify-content: space-between;
 						align-items: center;
+						
+						.item-num{
+							    position: absolute;
+							    left: 61rpx;
+							    font-size: 24rpx;
+							    background: red;
+							    color: #ffffff;
+							    padding: 10rpx 20rpx;
+							    top: 0;
+							    border-radius: 20rpx;
+						}
 
 						.right-box-left {
 							width: 80%;
@@ -264,15 +300,7 @@
 							}
 
 							text {
-								font-size: 14px;
-							}
-
-							p {
-								width: 100%;
-								font-size: 13px;
-								color: #777;
-								overflow: hidden;
-								text-overflow: ellipsis;
+								font-size: 40rpx;
 							}
 						}
 
@@ -282,10 +310,6 @@
 							justify-content: center;
 							align-items: center;
 
-							text {
-								color: #777;
-								font-size: 10px;
-							}
 						}
 
 					}

@@ -32,8 +32,13 @@ const apiService = {
        
     //关注用户
     concernUser(params) {
-    	return http.post('/recomment/concernUser',params)
+    	return http.post('/mine/concernUser',null,params)
     },
+	
+	//取消关注
+	cancelConcernUser(params) {
+		return http.delete('/mine/cancelConcernUser',params)
+	},
 }
 
 export default apiService;

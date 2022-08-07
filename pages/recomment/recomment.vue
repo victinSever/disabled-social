@@ -30,7 +30,7 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<recomment-swiper :swiperList="imageList"></recomment-swiper>
+							<recomment-swiper :swiperList="obj.imageList"></recomment-swiper>
 							<view class="swiper_detail">
 								<view class="mask">
 								</view>
@@ -51,15 +51,15 @@
 										<image src="@/static/images/home/5.png"></image>
 									</view>
 
-									<view class="cancel">
+									<view class="cancel"  @click="disLike">
 										<image src="@/static/images/home/3.png"></image>
 									</view>
 
-									<view class="like">
+									<view class="like" @click="like">
 										<image src="@/static/images/home/1.png"></image>
 									</view>
 
-									<view class="collection">
+									<view class="collection" @click="collect">
 										<image src="@/static/images/home/2.png"></image>
 									</view>
 
@@ -119,21 +119,10 @@
 				animationData: {},
 				// 用户信息
 				personageData: {},
-				// 图片信息
-				imageList: [
-					{
-						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
-					},
-					{
-						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
-					},
-					{
-						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
-					},
-					{
-						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.cm&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
-					},
-				],
+				obj:{
+					imageList: [],
+				},
+			
 				nowid: 3,
 				x: 0,
 				y: 0,
@@ -148,15 +137,54 @@
 				}
 			}
 		},
-		mounted() {
+		onLoad() {
 			this.loadAdver();
 			this.getRecommentList();
 		},
 		methods: {
+			//不喜欢用户
+			disLike(){
+				recomment.dislikeUser().then((res) => {
+					this.moveOutrb();
+				}).catch(() => {
+								
+				})
+			},
+			//喜欢用户
+			like(){
+				recomment.loveUser().then((res) => {
+				  this.moveOutrb();
+				}).catch(() => {
+								
+				})
+			},
+			
+			//收藏
+			collect(){
+					recomment.collect({
+						userId: "1",
+						type: "2",
+						likedId: this.obj.id
+					}).then((res) => {
+						uni.showToast({
+							icon: "none",
+							title: "收藏成功"
+						})
+					}).catch(() => {
+				
+					})
+			},
+			
 
 			//获取图片秀list
 			getRecommentList() {
 				recomment.getRecomment(this.page).then(response => {
+					if(this.page.page==1){
+						this.obj = response.data[0]
+					}else{
+						
+					}
+					
 				}).catch(error => {
 
 				})
@@ -169,11 +197,11 @@
 			},
 			// 弹出广告
 			loadAdver() {
-				if (localStorage.getItem('tipToFileData')) return;
-				let $this = this
-				setTimeout(function() {
-					$this.$refs.recommentAdver.open('center')
-				}, 1000)
+				// if (localStorage.getItem('tipToFileData')) return;
+				// let $this = this
+				// setTimeout(function() {
+				// 	$this.$refs.recommentAdver.open('center')
+				// }, 1000)
 			},
 			// 关闭筛选弹出层
 			closePopup() {
@@ -276,7 +304,8 @@
 						duration: 500,
 						timingFunction: 'ease-in-out',
 					})
-					this.animation = animation
+					this.animation = animation;
+					debugger
 					if (x < 0 && y > 0)
 						this.moveOutlb()
 					else if (x < 0 && y < 0)

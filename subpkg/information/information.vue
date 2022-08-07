@@ -5,10 +5,10 @@
 		<view class="header" :style="{top:CustomBar+'px'}">
 			<view class="header-left">
 				<uni-icons type="back" size="30" color="#000" @click="backTo"></uni-icons>
-				<image :src="userInfo.userImage" mode="widthFix"></image>
+				<image :src="userInfo.headPicPath" mode="widthFix"></image>
 				<view class="info">
-					<text>{{userInfo.userName}}</text>
-					<text>{{userInfo.lastTime}}</text>
+					<text>{{userInfo.username}}</text>
+					<!-- <text>{{userInfo.lastTime}}</text> -->
 				</view>
 			</view>
 			<view class="header-right">
@@ -20,12 +20,12 @@
 		<!-- 聊天区 -->
 		<view class="chatting" :style="{'padding-top':CustomBar+'px'}">
 			<view class="time">
-				<span>07/13 12:55</span>
+				<!-- <span>07/13 12:55</span> -->
 			</view>
 			<scroll-view scroll-y="true">
 				<view class="chatting-item" v-for="(item, i) in chattingList" :key="i">
 					<view class="left-content content" v-if="item.senduserid!=1">
-						<image :src="userInfo.userImage" class="imageLogo"></image>
+						<image :src="userInfo.headPicPath" class="imageLogo"></image>
 						<view class="main-content">
 							<template v-if="item.msgtype==1">
 								{{item.sendtext}}
@@ -50,7 +50,7 @@
 							<video :src="item.sendtext"></video>
 						</template>
 									</view>
-						<image class="imageLogo" :src="myInfo.userImage"></image>
+						<image class="imageLogo" :src="myInfo.headPicPath"></image>
 					</view>
 				</view>
 			</scroll-view>
@@ -108,17 +108,31 @@
 			this.getUserData()
 
 			uni.$on("websocketData", (data) => {
-				this.chattingList.push(data)
-			})
+				this.chattingList.push(data);
+				this.setAlreadyRead(data.id)
+			});
+			this.myInfo= this.$store.user.baseData?this.$store.user.baseData:{}
 		},
 		methods: {
+			
+			//已读消息
+			setAlreadyRead(id){
+				message.alreadyRead(
+				{
+					id:id
+				}).then((res)=>{
+					
+				}).catch(()=>{
+					
+				})
+			},
 			
 			//获取聊天用户信息
 			getUserData(){
 				my.getBaseData({
 					personId:this.reviceuserid
-				}).then(()=>{
-					
+				}).then((res)=>{
+					this.userInfo = res.data?res.data:[]
 				}).catch(()=>{
 					
 				})
@@ -130,7 +144,13 @@
 					userid: "1"
 				}).then(response => {
 					this.chattingList = response.data ? response.data : [];
-					console.log(this.chattingList)
+					
+					this.chattingList.forEach((item)=>{
+						debugger
+						if(item.msgstatus==0){
+						  this.setAlreadyRead(item.id)
+						}
+					})
 				}).catch(error => {
 
 				})

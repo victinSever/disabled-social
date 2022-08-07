@@ -27,6 +27,17 @@ const apiService = {
     	return http.get('/message/getGroup',params)
     },
 	
+	//消息未读
+	alreadyRead(params) {
+		return http.post('/chat/alreadyRead',params)
+	},
+	
+	
+	//删除聊天人
+	deleteuser(fuserid) {
+		return http.delete(`/chat/deleteuser/${fuserid}`)
+	},
+	
 	
 	//获取聊天列表
 	lkuschatmsg(params) {
