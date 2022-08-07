@@ -54,6 +54,7 @@
 
 <script>
 	export default {
+		name:'social',
 		data() {
 			return {
 				// 活动按钮定制
@@ -107,7 +108,7 @@
 		// top: 70rpx;
 		background-color: #fff;
 		padding: 0 20rpx;
-		background-color: yellow;
+		// background-color: yellow;
 		.social-header-left {
 			display: flex;
 			width: 50%;
