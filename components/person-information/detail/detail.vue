@@ -1,11 +1,13 @@
 <template>
 	<view>
+		<myProgress :data="data"></myProgress>
+		
 		<view class="section">
 			<text class="label">是否残疾</text>
 			<view class="content">
 				<picker @change="bindDisableChange" :range="isDisable" :value="data.isDisable">
 					<view v-if="data.isDisable" class="uni-input">
-						{{isDisable[data.isDisable]}}
+						{{isDisable[data.isDisable] || data.isDisable}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -17,7 +19,7 @@
 			<view class="content">
 				<picker @change="bindDisableTypeChange" :range="disableType" :value="data.disableType">
 					<view v-if="data.disableType" class="uni-input">
-						{{disableType[data.disableType]}}
+						{{disableType[data.disableType] || data.disableType}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -27,9 +29,9 @@
 		<view class="section">
 			<text class="label">残疾等级</text>
 			<view class="content">
-				<picker @change="bindDisbaleLevelChange" :range="disbaleLevel" :value="data.disbaleLevel">
-					<view v-if="data.disbaleLevel" class="uni-input">
-						{{disbaleLevel[data.disbaleLevel]}}
+				<picker @change="binddisableLevelChange" :range="disableLevel" :value="data.disableLevel">
+					<view v-if="data.disableLevel" class="uni-input">
+						{{disableLevel[data.disableLevel] || data.disableLevel}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -39,7 +41,12 @@
 		<view class="section">
 			<text class="label">是否自理</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.isProvide">
+				<picker @change="bindisProvideChange" :range="disableLevel" :value="data.isProvide">
+					<view v-if="data.isProvide" class="uni-input">
+						{{isProvide[data.isProvide] || data.isProvide}}
+					</view>
+					<view v-else>请选择</view>
+				</picker>
 			</view>
 		</view>
 		
@@ -69,7 +76,7 @@
 			<view class="content">
 				<picker @change="bindparentStatusChange" :range="parentStatus" :value="data.parentStatus">
 					<view v-if="data.parentStatus" class="uni-input">
-						{{parentStatus[data.parentStatus]}}
+						{{parentStatus[data.parentStatus] || data.parentStatus}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -81,7 +88,7 @@
 			<view class="content">
 				<picker @change="bindbrotherNumberChange" :range="brotherNumber" :value="data.brotherNumber">
 					<view v-if="data.brotherNumber" class="uni-input">
-						{{brotherNumber[data.brotherNumber]}}
+						{{brotherNumber[data.brotherNumber] || data.brotherNumber}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -107,7 +114,7 @@
 			<view class="content">
 				<picker @change="bindisSmokingChange" :range="isSmoking" :value="data.isSmoking">
 					<view v-if="data.isSmoking" class="uni-input">
-						{{isSmoking[data.isSmoking]}}
+						{{isSmoking[data.isSmoking] || data.isSmoking}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -119,7 +126,7 @@
 			<view class="content">
 				<picker @change="bindisDrinkingChange" :range="isDrinking" :value="data.isDrinking">
 					<view v-if="data.isDrinking" class="uni-input">
-						{{isDrinking[data.isDrinking]}}
+						{{isDrinking[data.isDrinking] || data.isDrinking}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -166,7 +173,7 @@
 			<view class="content">
 				<picker @change="bindbloodTypeChange" :range="bloodType" :value="data.bloodType">
 					<view v-if="data.bloodType" class="uni-input">
-						{{bloodType[data.bloodType]}}
+						{{bloodType[data.bloodType] || data.bloodType}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -229,14 +236,14 @@
 </template>
 
 <script>
-	import {
-		returnRate
-	} from '@/apis/tools.js'
+	import myProgress from "@/components/person-information/progress/progress.vue"
+	import { mapState } from 'vuex'
 	export default {
 		data() {
 			const isDisable = ['请选择', '正常人', '残疾人']
 			const disableType = ['请选择', '手臂', '腿部', '耳部', '眼睛', '脑瘫', '其他']
-			const disbaleLevel = ['请选择', '手臂', '腿部', '耳部', '眼睛', '脑瘫', '其他']
+			const disableLevel = ['请选择', '健康', '轻度残疾', '中度残疾', '重度残疾', '极重度残疾']
+			const isProvide = ['请选择', '完全自理，并能照顾对方', '不能自理']
 			const parentStatus = ['请选择', '父母健在', '单亲', '离异']
 			const isGenetic = ['请选择', '不遗传', '遗传', '不清楚']
 			const brotherNumber = ['请选择', '0', '1', '2','3','4','5','6','7','8','9','其他']
@@ -249,7 +256,8 @@
 			return {
 				isDisable,
 				disableType,
-				disbaleLevel,
+				disableLevel,
+				isProvide,
 				parentStatus,
 				isGenetic,
 				brotherNumber,
@@ -262,7 +270,8 @@
 				data: {
 					isDisable: '',
 					disableType: '',
-					disbaleLevel: '',
+					disableLevel: '',
+					isProvide: '',
 					parentStatus: '',
 					isGenetic: '',
 					brotherNumber:'',
@@ -283,14 +292,14 @@
 				}
 			};
 		},
-		watch: {
-			data: {
-				immediate: true,
-				deep: true,
-				handler(val) {
-					this.$emit('changeProgress', returnRate(val))
-				}
-			}
+		components: {
+			myProgress
+		},
+		computed: {
+			...mapState('common', ['moreInfo']),
+		},
+		created(){
+			this.data = this.moreInfo.personDetailInfo
 		},
 		methods: {
 			changeType(){
@@ -332,9 +341,13 @@
 			bindisGeneticlChange(e) {
 				this.data.isGenetic = e.detail.value
 			},
+			//是否自理
+			bindisProvideChange(e) {
+				this.data.isProvide = e.detail.value
+			},
 			//残疾等级
-			bindDisbaleLevelChange(e) {
-				this.data.disbaleLevel = e.detail.value
+			binddisableLevelChange(e) {
+				this.data.disableLevel = e.detail.value
 			},
 			//残疾类型
 			bindDisableTypeChange(e) {

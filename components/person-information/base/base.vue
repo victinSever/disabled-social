@@ -1,21 +1,24 @@
 <template>
 	<view>
+		<myProgress :data="data"></myProgress>
+		
 		<!-- tip -->
 		<view class="tip">
 			<p>各位用户，个人资料内容需要遵守相关法律法规和社区规定，需要审核后才能生效，请严格遵守规定填写资料</p>
 		</view>
+		
 		<!-- images -->
 		<view class="image-active">
 			<view class="image-list">
 				<view class="image-item" v-for="(item, i) in userImages" :key="i" @click="uploadActiveImage(item, i)">
-					<view class="box" v-if="item.show">
-						<image :src="item.imagePath" mode="aspectFill" alt=""></image>
-						<text class="close" @click="deleteActiveImage(item, i)">
+					<view class="box" v-if="item.picPath">
+						<image :src="item.picPath" mode="aspectFill" alt=""></image>
+						<view class="close" @click="deleteActiveImage(item, i)">
 							<uni-icons type="closeempty" size="16" color="darkorange"></uni-icons>
-						</text>
-						<text v-if="i === 0" class="host">
+						</view>
+						<view v-if="i === 0" class="host">
 							<text>主头像</text>
-						</text>
+						</view>
 					</view>
 					<view class="" v-else>
 						<uni-icons type="auth" size="50" color="#eee"></uni-icons>
@@ -37,16 +40,6 @@
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
 				</view>
 				<text v-else>已上传成功！</text>
-			</view>
-		</view>
-
-		<view class="section">
-			<text class="label">生日</text>
-			<view class="content">
-				<picker mode="date" :value="data.date" :start="startDate" @change="bindDateChange" :end="endDate">
-					<view v-if="data.date" class="uni-input">{{data.date}}</view>
-					<view v-else>请选择</view>
-				</picker>
 			</view>
 		</view>
 		
@@ -94,7 +87,7 @@
 			<view class="content">
 				<picker mode="multiSelector" @change="bindworkAddrChange" :range="workAddr" :value="data.workAddr">
 					<view v-if="data.workAddr" class="uni-input">
-						{{area[0][data.workAddr[0]]}} {{area[1][data.workAddr[1]]}}
+						{{workAddr[0][data.workAddr[0]]}} {{workAddr[1][data.workAddr[1]] || data.workAddr}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -106,7 +99,7 @@
 			<view class="content">
 				<picker mode="multiSelector" @change="bindhouseholdAddreChange" :range="householdAddr" :value="data.householdAddr">
 					<view v-if="data.householdAddr" class="uni-input">
-						{{householdAddr[0][data.householdAddr[0]]}} {{householdAddr[1][data.householdAddr[1]]}}
+						{{householdAddr[0][data.householdAddr[0]]}} {{householdAddr[1][data.householdAddr[1]] || data.householdAddr}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -116,9 +109,9 @@
 		<view class="section">
 			<text class="label">婚姻情况</text>
 			<view class="content">
-				<picker @change="bindMarraryChange" :range="marrary" :value="data.marrary">
-					<view v-if="data.marrary" class="uni-input">
-						{{marrary[data.marrary]}}
+				<picker @change="bindmaritalStatusChange" :range="maritalStatus" :value="data.maritalStatus">
+					<view v-if="data.maritalStatus" class="uni-input">
+						{{maritalStatus[data.maritalStatus] || data.maritalStatus }}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -132,7 +125,7 @@
 			<view class="content">
 				<picker @change="binddegreeChange" :range="degree" :value="data.degree">
 					<view v-if="data.degree" class="uni-input">
-						{{degree[data.degree]}}
+						{{degree[data.degree] || data.degree}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -162,7 +155,7 @@
 			<view class="content">
 				<picker @change="bindhousingStatusChange" :range="housingStatus" :value="data.housingStatus">
 					<view v-if="data.housingStatus" class="uni-input">
-						{{housingStatus[data.housingStatus]}}
+						{{housingStatus[data.housingStatus] || data.housingStatus}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -174,7 +167,7 @@
 			<view class="content">
 				<picker @change="bindcarStatusChange" :range="carStatus" :value="data.carStatus">
 					<view v-if="data.carStatus" class="uni-input">
-						{{carStatus[data.carStatus]}}
+						{{carStatus[data.carStatus] || data.carStatus}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -254,89 +247,45 @@
 </template>
 
 <script>
-	import { returnRate } from '@/apis/tools.js'
-	export default {
+	import myProgress from "@/components/person-information/progress/progress.vue"
+	import { mapState } from 'vuex'
+	import areaInfo from "./area-data-min.js"
+	export default {		
 		data() {
 			const workAddr = [
-				['南岸区', '巴南区'],
-				['红光大道', '渝中达到']
+				['重庆城区', '重庆郊区'],
+				['万州区', '涪陵区','渝中区',"大渡口区","江北区","沙坪坝区","九龙坡区","南岸区","北碚区","綦江区",
+				"大足区","渝北区","巴南区","黔江区","长寿区","江津区","合川区","永川区","南川区","璧山区","铜梁区",
+				"潼南区","荣昌区","开州区","梁平区","武隆区"]
 			]
 			const householdAddr = [
-				['重庆', '四川'],
-				['南岸', '渝北', '渝中', '巴南']
 			]
-			const marrary = ['请选择', '未婚', '二婚', '已婚']
+			const maritalStatus = ['请选择', '未婚', '二婚', '已婚']
 			const degree = ['请选择’,小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
 			const housingStatus = ['请选择', '已买房', '未买房']
 			const carStatus = ['请选择', '已买车', '未买车']
 			return {
 				workAddr,
 				householdAddr,
-				marrary,
+				maritalStatus,
 				degree,
 				housingStatus,
 				carStatus,
-				data: {
-					userImage: '',
-					personName: '小懒猫',
-					date: '',
-					age: 18,
-					sex: 1,
-					phone: '12355552223',
-					height: '',
-					weight: '',
-					workAddr: '', //工作地
-					householdAddr: '', //户籍
-					marrary: '', //婚姻情况
-					degree: '', //学历
-					income: '', //收入
-					housingStatus: '',
-					carStatus: '',
-					expectedMarryTime: '',
-					personIntro: '',
-					personSign: '',
-					wechat: '',
-					wechatCodeImagesPath: '',
-				},
+				data: {},
 				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
-				userImages: [{
-					imagePath: '../../static/images/admin/admin1.jpg',
-					show: true
-				}, {
-					imagePath: '../../static/images/admin/admin2.jpg',
-					show: true
-				}, {
-					imagePath: '',
-					show: false
-				}, {
-					imagePath: '',
-					show: false
-				}, {
-					imagePath: '',
-					show: false
-				}, {
-					imagePath: '',
-					show: false
-				}],
-				progress: 0, //完成度
+				userImages: [],
 			};
 		},
-		watch: {
-			data: {
-				immediate: true,
-				deep: true,
-				handler(val) {
-					this.$emit('changeProgress', returnRate(val))
-				}
-			},
+		components: { 
+			myProgress
 		},
 		computed: {
-			startDate() {
-				return this.getDate('start');
-			},
-			endDate() {
-				return this.getDate('end');
-			}
+			...mapState('common', ['moreInfo','albumInfo']),
+		},
+		created(){
+			this.data = this.moreInfo.personBasicInfo
+			this.userImages = this.albumInfo
+			this.householdAddr = this.workAddr
 		},
 		methods: {
 			// 上传动态图片
@@ -346,16 +295,20 @@
 					sizeType: ['original', 'compressed'],
 					sourceType: ['album'],
 					success: function(res) {
-						that.$set( that.userImages, i, { imagePath: res.tempFilePaths[0], show: true })
+						that.$set( that.userImages, i, { 
+							imagePath: res.tempFilePaths[0], show: true,
+						})
 					}
 				})
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
-				this.$set( this.userImages, i, { imagePath: "", show: false })
+				this.$set( this.userImages, i, { 
+					imagePath: "", show: false,
+				})
 			},
 			changeType(){
-				this.$emit('changeType', this.data)
+				this.$emit('sendBase', this.data)
 			},
 			//学历
 			binddegreeChange(e) {
@@ -370,8 +323,8 @@
 				this.data.carStatus = e.detail.value
 			},
 			// 选择婚姻情况
-			bindMarraryChange(e) {
-				this.data.marrary = e.detail.value
+			bindmaritalStatusChange(e) {
+				this.data.maritalStatus = e.detail.value
 			},
 			// 选择户籍地区
 			bindhouseholdAddreChange(e) {
@@ -381,25 +334,7 @@
 			bindworkAddrChange(e) {
 				this.data.workAddr = e.detail.value
 			},
-			// 选择生日
-			bindDateChange(e) {
-				this.data.date = e.detail.value
-			},
-			getDate(type) {
-				const date = new Date();
-				let year = date.getFullYear();
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
 
-				if (type === 'start') {
-					year = year - 60;
-				} else if (type === 'end') {
-					year = year + 2;
-				}
-				month = month > 9 ? month : '0' + month;
-				day = day > 9 ? day : '0' + day;
-				return `${year}-${month}-${day}`;
-			},
 			// 拍照
 			chooseimage(uploadPostion) {
 				var that = this;
@@ -553,7 +488,6 @@
 			}
 
 			.input {
-				width: 100rpx;
 				font-size: 14px;
 				text-align: right;
 			}

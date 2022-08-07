@@ -44,25 +44,14 @@
 						<text>择偶要求</text>
 					</view>
 				</view>
-			
-				<!-- 完成度 -->
-				<view class="progress">
-					<view class="progress-box">
-						<view class="item" :style="'background-color: rgba(255, 140, 0,' +  (item*0.1) + ');'"
-							v-for="(item, i) in progressNum" :key="i">
-						</view>
-					</view>
-					<view class="progress-text">
-						当前资料完成度{{(progress*100).toFixed(0) + '%'}}
-					</view>
-				</view>
+							
 			</view>
 			<view class="main">
-				<personage v-if="isPre" :backShow="false" :personageData="data"></personage>
-				<view v-else>
-					<baseCom v-if="type === 1" :data="personData.basicInfo" @changeProgress="data" @changeType="changeType"></baseCom>
-					<detail v-else-if="type === 2" :data="personData.detailInfo" @changeProgress="changeProgress" @changeType="changeType"></detail>
-					<marrary v-else :data="personData.marraryInfo" @changeProgress="changeProgress" @saveData="saveData"></marrary>
+				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
+				<view v-else>								
+					<baseCom v-if="type === 1" @sendBase="getBase"></baseCom>
+					<detail v-else-if="type === 2" @changeType="changeType"></detail>
+					<marrary v-else  @gotoPre="gotoPre"></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -74,7 +63,8 @@
 	import detail from "@/components/person-information/detail/detail.vue"
 	import marrary from "@/components/person-information/marrary/marrary.vue"
 	import personage from '@/components/personage/index.vue'
-	import apiService from '@/apis/my.js'
+	import my from '@/apis/my.js'
+	import { mapState } from 'vuex'
 	export default {
 		name: "checkinformation",
 		data() {
@@ -82,49 +72,59 @@
 				// 是否为预览状态
 				isPre: true,
 				isFinish: false,
-				type: 1,//三类资料组件切换
-				progress: 0,//资料完成度
-				data: {
-					imageList: [
-						"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
-					],
-				},
-				personData: {}
+				type: 1,//三类资料组件切换			
+				baseData: {},
+				personData: {},
+				albumData: [],
+				
+				cacheData: {},//缓存的更改数据
 			};
 		},
 		components: {
-			baseCom, detail, marrary,personage
+			baseCom, detail, marrary, personage
 		},
 		computed: {
-			progressNum(){
-				return parseInt(Math.floor(this.progress*10))
-			}
+			// 引入个人数据
+			...mapState('common',['baseInfo','moreInfo','albumInfo']),
+		},
+		mounted(){			
+			this.getData()
 		},
 		methods: {
 			// 获取信息
-			async getAllData(){
-				const { data: res1} = await apiService.getPersonBasicInfo({
-					personId: 750576
-				})
-				const { data: res2} = await apiService.getPersonDetailInfo({
-					personId: 14205
-				})
-				const { data: res3} = await apiService.getRequirements({
-					personId: 12718
-				})
-				if(res1.resultCode !== 200 || res2.resultCode !== 200 || res3.resultCode !== 200){
-					return uni.$showMsg('服务器出错了！')				
-				}
-				this.personData = {
-					basicInfo: res1.data,
-					detailInfo: res2.data,
-					marraryInfo: res3.data
-				}
+			getData() {
+				this.baseData = this.baseInfo
+				this.personData = this.moreInfo
+				this.albumData = this.albumInfo
+				this.cacheData = this.moreInfo
+				console.log(this.cacheData);
 			},
-			
-			saveData(data){
-				this.data = {...data}
-				console.log(this.data);
+			// 获取基础信息缓存
+			getBase(data){
+				this.cacheData.personBasicInfo = data
+				this.type = 2
+			},
+			// 获取详细信息缓存
+			getDetail(data){
+				this.cacheData.personDetailInfo = data
+				this.type = 3
+			},
+			// 获取择偶信息缓存并更新数据调往预览页
+			gotoPre(data){
+				this.cacheData.requirement = data
+				this.saveUpdate()
+				this.isPre = true
+			},
+			// 更新数据
+			async saveUpdate(){
+				uni.showLoading({title: '加载中',mask:true});
+				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
+				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
+				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
+				uni.hideLoading();
+				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
+					uni.$showMsg("保存成功！")
+				}				
 			},
 			// 进入下一页
 			changeType(data){
@@ -132,28 +132,16 @@
 				this.type++
 				console.log(this.data)
 			},
-			// 更改资料填写进度
-			changeProgress(val){
-				this.progress = val
-				console.log(val);
-			},
 			// 返回
 			gotoBack() {
-				uni.navigateBack()
+				uni.switchTab({
+					url: '/pages/person/person'
+				})
 			},
 			// 保存修改
 			finish() {
-				let $this = this
-				setTimeout(function() {
-					this.isFinish = true
-					console.log(this.data);
-					uni.$showMsg("修改成功！")
-				}, 1000)
-			},
-			// 发请求
-			getData(data) {
-				this.data = data
-				console.log(this.data);
+				this.saveUpdate()
+				this.gotoBack()
 			},
 		}
 	}
@@ -258,36 +246,7 @@
 			}
 		}
 		
-		.progress {
-			height: 120rpx;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-		
-			.progress-box {
-				height: 50rpx;
-				width: 70%;
-				background-color: #eee;
-				border-radius: 50rpx;
-				display: flex;
-				align-items: center;
-				justify-content: flex-start;
-		
-				.item {
-					height: 30rpx;
-					width: 30rpx;
-					border-radius: 50%;
-					background-color: rgba(255, 140, 0, 1);
-					margin: 0 10rpx;
-				}
-			}
-		
-			.progress-text {
-				margin-top: 20rpx;
-				color: #ddd;
-			}
-		}
+
 	}
 
 	.main {

@@ -3,7 +3,7 @@
 		<swiper class="swiper" :circular="circular" :vertical="true" @change="onSwiperChange">
 			<swiper-item v-for="(item,index) in videoList" :key="item.id">
 				<video @click="videoplay(index)" class="video" :id="item.id" :ref="item.id" :src="item.video_src"
-					:controls="false" :loop="true" :show-center-play-btn="false" preload="auto" object-fit='fill'
+					:controls="false" :loop="true" :show-center-play-btn="false" preload="auto"
 					x5-playsinline="" playsinline="true" webkit-playsinline="true" x-webkit-airplay="allow"
 					x5-video-player-type="h5" x5-video-player-fullscreen="" x5-video-orientation="portraint">
 				</video>
@@ -41,6 +41,10 @@
 					video_src: "https://vd2.bdstatic.com/mda-nh4dtsitw2ykrs3m/sc/cae_h264/1659694517752184784/mda-nh4dtsitw2ykrs3m.mp4?v_from_s=hkapp-haokan-nanjing&auth_key=1659756981-0-0-6a6d7c11a8c80e0f13b756cc5e94729d&bcevod_channel=searchbox_feed&pd=1&cd=0&pt=3&logid=0381154670&vid=5182127965963672136&abtest=103525_1-103579_2-103742_2-103890_2&klogid=0381154670",
 					id: "video0",
 					play:false
+				},{
+					video_src: "https://vd2.bdstatic.com/mda-nh4dtsitw2ykrs3m/sc/cae_h264/1659694517752184784/mda-nh4dtsitw2ykrs3m.mp4?v_from_s=hkapp-haokan-nanjing&auth_key=1659756981-0-0-6a6d7c11a8c80e0f13b756cc5e94729d&bcevod_channel=searchbox_feed&pd=1&cd=0&pt=3&logid=0381154670&vid=5182127965963672136&abtest=103525_1-103579_2-103742_2-103890_2&klogid=0381154670",
+					id: "video1",
+					play:false
 				}],
 				videoDataList: [],
 				_videoContextList: []
@@ -77,10 +81,12 @@
 					this._videoContextList.push(uni.createVideoContext('video' + i, this));
 				}
 				this._videoDataIndex = 0;
-				this.avatar_img = this.videoList[this._videoDataIndex].avatar_img
-				this.love_num = this.videoList[this._videoDataIndex].love_num
-				this.comm_num = this.videoList[this._videoDataIndex].comm_num
-				this.redo_num = this.videoList[this._videoDataIndex].redo_num
+				if(this._videoContextList.length>0){
+					setTimeout(() => {
+						this._videoContextList[this._videoIndex].play();
+					}, 200);
+				}
+
 			},
 			videoplay(index) {
 				const id = this.videoList[index].id
@@ -134,8 +140,7 @@
 				}
 
 				this._videoIndex = currentIndex;
-				var id = this._videoContextList[this._videoIndex].id
-				const video = document.getElementById(`${id}`)
+				var id = this._videoContextList[this._videoIndex].id;
 
 				setTimeout(() => {
 					this.updateVideo(isNext);
@@ -160,20 +165,9 @@
 				return index;
 			},
 			updateVideo(isNext) {
-				this.avatar_img = this.videoList[this._videoIndex].avatar_img
-				this.love_num = this.videoList[this._videoIndex].love_num
-				this.comm_num = this.videoList[this._videoIndex].comm_num
-				this.redo_num = this.videoList[this._videoIndex].redo_num
-				this.$set(this.videoList[this._videoIndex], 'src', this.videoDataList[this._videoDataIndex].src);
-				this.$set(this.videoList[this.getNextIndex(isNext)], 'src', this.videoDataList[this.getNextDataIndex(
-					isNext)].src);
-
 				setTimeout(() => {
-					// this._videoContextList[this._videoIndex].hideStatusBar(); //隐藏状态栏，仅在iOS全屏下有效
 					this._videoContextList[this._videoIndex].play();
 				}, 200);
-				console.log("v:" + this._videoIndex + " d:" + this._videoDataIndex + "; next v:" + this.getNextIndex(
-					isNext) + " next d:" + this.getNextDataIndex(isNext));
 			},
 			love(item) {
 				item.love_num += 1

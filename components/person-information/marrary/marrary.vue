@@ -1,5 +1,7 @@
 <template>
 	<view>
+		<myProgress :data="data"></myProgress>
+		
 		<view class="section">
 			<text class="label">年龄范围</text>
 			<view class="content">
@@ -19,7 +21,7 @@
 			<view class="content">
 				<picker @change="bindmarryStatusChange" :range="marryStatus" :value="data.marryStatus">
 					<view v-if="data.marryStatus" class="uni-input">
-						{{marryStatus[data.marryStatus]}}
+						{{marryStatus[data.marryStatus] || data.marryStatus}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -72,12 +74,11 @@
 </template>
 
 <script>
-	import {
-		returnRate
-	} from '@/apis/tools.js'
+	import myProgress from "@/components/person-information/progress/progress.vue"
+	import { mapState } from 'vuex'
 	export default {
 		data() {
-			const marryStatus = ['请选择', '手臂', '腿部', '耳部', '眼睛', '脑瘫', '其他']
+			const marryStatus = ['请选择', '未婚', '二婚', '已婚']
 			return {
 				marryStatus,
 				data: {
@@ -92,18 +93,18 @@
 				}
 			};
 		},
-		watch: {
-			data: {
-				immediate: true,
-				deep: true,
-				handler(val) {
-					this.$emit('changeProgress', returnRate(val))
-				}
-			}
+		components: {
+			myProgress
+		},
+		computed: {
+			...mapState('common', ['moreInfo']),
+		},
+		created(){
+			this.data = this.moreInfo.requirement
 		},
 		methods: {
 			changeType() {
-				this.$emit('saveData', this.data)
+				this.$emit('gotoPre', this.data)
 			},
 			// 单位类型
 			bindmarryStatusChange(e) {

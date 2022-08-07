@@ -23,8 +23,7 @@ const apiService = {
     dislikeUser(params) {
     	return http.post('/recomment/dislikeUser',params)
     },
-    
-    
+       
     //关注用户
     concernUser(params) {
     	return http.post('/recomment/concernUser',params)

@@ -2,22 +2,24 @@
 	<view class="home-container">
 		<mover></mover>
 		<!-- 头部 -->
-		<view :animation="animationHeader" class="home-header" v-if="header">
-			<view class="header-left">
-				<text @click="isImages = true">
-					<text
-						:style="isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">图片秀</text>
-				</text>
-				<text @click="isImages = false">
-					<text
-						:style="!isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">视频秀</text>
-				</text>
+		<uni-transition ref="ani" custom-class="transition" mode-class="fade" :show="header">
+			<view :animation="animationHeader" class="home-header">
+				<view class="header-left">
+					<text @click="isImages = true">
+						<text
+							:style="isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">图片秀</text>
+					</text>
+					<text @click="isImages = false">
+						<text
+							:style="!isImages?'color: darkorange; font-weight: bold':'color: #000000; font-weight: normal'">视频秀</text>
+					</text>
+				</view>
+				<view class="header-right">
+					<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;"></image>
+					<image @click="openPopup" src="@/static/images/home/screen.png"></image>
+				</view>
 			</view>
-			<view class="header-right">
-				<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;"></image>
-				<image @click="openPopup" src="@/static/images/home/screen.png"></image>
-			</view>
-		</view>
+		</uni-transition>	
 
 		<template v-if="isImages">
 			<view class="home-body">
@@ -28,7 +30,7 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<recomment-swiper :swiperList="personageData.imageList"></recomment-swiper>
+							<recomment-swiper :swiperList="imageList"></recomment-swiper>
 							<view class="swiper_detail">
 								<view class="mask">
 								</view>
@@ -67,7 +69,7 @@
 						</view>
 						<template v-else>
 							<personage @backdetail="backdetail" :backShow="true" :isTemplate="true"
-								:personageData="personageData"></personage>
+								:personageData="personageData" :imageList="imageList"></personage>
 						</template>
 					</movable-view>
 				</movable-area>
@@ -115,15 +117,23 @@
 				animationHeader: {},
 				header: true,
 				animationData: {},
-				personageData: {
-					imageList: [
-						"../../static/images/admin/admin1.jpg",
-						"../../static/images/admin/admin2.jpg",
-						"../../static/images/admin/admin3.jpg",
-						"../../static/images/admin/admin4.jpg",
-					],
-					
-				},
+				// 用户信息
+				personageData: {},
+				// 图片信息
+				imageList: [
+					{
+						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
+					},
+					{
+						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
+					},
+					{
+						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
+					},
+					{
+						picPath: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fjdimage.300hu.com%2Fvodtransgzp1251412368%2F9031868223359246895%2FcoverBySnapshot%2F1507969776_2560260254.100_0.jpg&refer=http%3A%2F%2Fjdimage.300hu.cm&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662211533&t=99205968ff7ea32f9ef4016b8b42b18b"
+					},
+				],
 				nowid: 3,
 				x: 0,
 				y: 0,
