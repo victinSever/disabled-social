@@ -8,8 +8,8 @@ const apiService = {
     },
     
     //获取用户消息列表
-    messageList(params) {
-    	return http.get('/message/messageList',params)
+    messageList(id) {
+    	return http.post(`/chat/lkfriends/${id}`)
     },
     
     //获取单个用户的消息
@@ -27,6 +27,11 @@ const apiService = {
     	return http.get('/message/getGroup',params)
     },
 	
+	
+	//获取聊天列表
+	lkuschatmsg(params) {
+		return http.post(`/chat/lkuschatmsg/${params.reviceuserid}/${params.userid}`)
+	},
 	
     
 }

@@ -15,7 +15,6 @@ const webSocket = {
 		//断开时的动作
 		uni.onSocketClose(() => {
 			this.socketStatus = 'closed'
-			console.log('WebSocket 已断开')
 			uni.showToast({
 				title: '实时推送已断开连接',
 				icon: 'none'
@@ -27,19 +26,20 @@ const webSocket = {
 		})
 		// 监听服务器推送的消息
 		uni.onSocketMessage((message) => {
-			uni.$emit("websocketData",message)
+			uni.$emit("websocketData",JSON.parse(message.data))
 		})
 		// 打开信道
 		uni.connectSocket({
-			url: Vue.prototype.webSocketApi + userId
+			url: Vue.prototype.webSocketApi + "1"
 		});
 	},
 
-	sendData(data) {
+	sendData(data,back) {
 		uni.sendSocketMessage({
-			data,
+			data:JSON.stringify(data),
 			success(res) {
-				console.log('发送成功', res)
+				console.log('发送成功', res);
+				back()
 			},
 			fail: e => {
 				console.log('发送失败', e)

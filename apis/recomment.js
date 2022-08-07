@@ -10,9 +10,15 @@ const apiService = {
     
     //获取推荐的视频秀
     getUserVedio(params) {
-    	return http.get('/recomment/getUserVedio',params)
+    	return http.get('/recomment/SearchVideoShowByAdvise',params)
     },
-    
+	
+	
+	//收藏图片以及视频
+	collect(params) {
+		return http.post('/recomment/collect',null,params)
+	},
+   
     
     //喜欢用户
     loveUser(params) {

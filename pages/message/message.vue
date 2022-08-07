@@ -44,15 +44,15 @@
 							<uni-swipe-action-item :right-options="options">
 								<view class="item" @click="gotoMessageDetail(item)">
 									<view class="left-box">
-										<img :src="item.imgpath" alt="">
+										<img :src="item.uimg" alt="">
 									</view>
 									<view class="right-box">
 										<view class="right-box-left">
-											<text>{{item.username}}</text>
-											<p>{{item.message}}</p>
+											<text>{{item.nickname}}</text>
+											<!-- <p>{{item.message}}</p> -->
 										</view>
 										<view class="right-box-right">
-											<text>{{item.lastTime}}{{item.lastUnit}}前</text>
+											<!-- <text>{{item.lastTime}}{{item.lastUnit}}前</text> -->
 										</view>
 									</view>
 								</view>
@@ -107,8 +107,8 @@
 
 			//获取用户列表
 			getMessageList() {
-				message.messageList().then(response => {
-
+				message.messageList("1").then(response => {
+			       this.messageData = response.data ? response.data : []
 				}).catch(error => {
 
 				})
@@ -117,7 +117,7 @@
 
 			gotoMessageDetail(item) {
 				uni.navigateTo({
-					url: '/subpkg/information/information?userId=' + item.id
+					url: '/subpkg/information/information?userId=' + item.userid
 				})
 			},
 			gotoGroup() {

@@ -16,17 +16,22 @@
 		<cover-view>
 			<cover-image :src="avatar_img" class="video-image"></cover-image>
 			<cover-view class="video-love" @click="love()">
-				<uni-icons type="heart-filled" :color="isactive==true?'#f44336':'#ffffff'" size="55" />
+				<image src="../../static/images/home/6.png" class="img2"></image>
 				<view class="video-num">{{love_num}}</view>
 			</cover-view>
-			<cover-view class="video-comm" @click="comm">
-				<uni-icons type="chat-filled" color="#ffffff" size="50" />
+			<cover-view class="video-comm" @click="comm()">
+					<image src="../../static/images/home/7.png"  class="img2"></image>
 				<view class="video-num">{{comm_num}}</view>
+			</cover-view>
+			<cover-view class="video-redo" @click="collect()">
+				<image src="../../static/images/home/8.png"  class="img2"></image>
+				<view class="video-num">{{redo_num}}</view>
 			</cover-view>
 		</cover-view>
 	</view>
 </template>
 <script>
+	import recomment from "@/apis/recomment.js"
 	export default {
 		data() {
 			return {
@@ -47,13 +52,36 @@
 					play:false
 				}],
 				videoDataList: [],
-				_videoContextList: []
+				_videoContextList: [],
+				
+				videoPage:{
+					index:1,
+					size:10
+				}
 			}
 		},
 		mounted() {
-			this.getVideoData();
+			this.getVideoList();
 		},
 		methods: {
+			
+			//获取视频秀
+			getVideoList(page){
+				let _that = this;
+				recomment.getUserVedio(
+				{
+					page:this.videoPage.index,
+					size:this.videoPage.size,
+					userId:"1"
+				}).then((res)=>{
+					console.log(res)
+					_that.init()
+				}).catch(()=>{
+					
+				})
+			},
+			
+			
 			navCurrent(index) {
 				this.current_nav = index
 				index === 1 ? uni.showToast({
@@ -100,9 +128,6 @@
 				}
 
 
-			},
-			getVideoData() {
-				this.init()
 			},
 			onSwiperChange(e) {
 				this.isactive = false
@@ -181,10 +206,20 @@
 					title: '点击评论'
 				});
 			},
-			redo() {
-				uni.showToast({
-					title: '点击分享'
-				});
+			
+			//收藏
+			collect(item) {
+				recomment.collect(
+				{
+					userId:id,
+					type:"1",
+					likedId:item.id
+					
+				}).then((res)=>{
+					
+				}).catch(()=>{
+					
+				})
 			}
 		}
 	}
@@ -267,11 +302,16 @@
 		border: 3px solid #fff;
 		z-index: 100;
 	}
+	.img2{
+		width: 90rpx;
+		height: 80rpx;
+		margin-bottom: 20rpx;
+	}
 
 	.video-love {
 		position: fixed;
 		bottom: 35vh;
-		right: 15px;
+		right: 56rpx;
 		z-index: 100;
 	}
 
@@ -288,14 +328,14 @@
 	.video-comm {
 		position: fixed;
 		bottom: 22vh;
-		right: 37rpx;
+		right: 56rpx;
 		z-index: 100;
 	}
 
 	.video-redo {
 		position: fixed;
-		bottom: 19vh;
-		right: 15px;
+		bottom: 9vh;
+		right: 56rpx;
 		z-index: 100;
 	}
 
