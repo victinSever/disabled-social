@@ -18,7 +18,7 @@
 						<text><text>VIP</text> 会员</text>
 					</view>
 					<view class="vip-bottom">
-						<image src="@/static/images/user.jpg" alt="">
+						<image :src="data.headPicPath" alt="">
 							<text v-if="!isVip">暂未激活会员</text>
 							<text v-else>会员用户<text style="margin-left: 10rpx;">{{vipDuring}}</text></text>
 					</view>
@@ -142,6 +142,7 @@
 					name: '连续包月',
 					isMain: false
 				}],
+				data: {},
 
 				// 选择的vip
 				chooseVip: {},
@@ -194,9 +195,9 @@
 				} = await my.getInfo({
 					loginName: '123456'
 				})
-				console.log(res);
 				if (res.resultCode === 200) {
 					if (res.data.isVip === 1) {
+						this.data = res.data
 						this.isVip = true
 						this.vipTime = res.data.expirationTime
 					} else {
