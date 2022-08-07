@@ -131,7 +131,7 @@
 		mounted() {
 			this.getAroundInfo(1);
 			this.$bus.$on('backUpdate', this.backUpdate)
-			this.wh = uni.getSystemInfoSync().windowHeight - 103
+			this.wh = uni.getSystemInfoSync().windowHeight - 103;
 		},
 
 	}
