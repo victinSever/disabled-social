@@ -2,57 +2,63 @@
 	<view class="root">
 		<mover></mover>
 		<!-- 头部区域 -->
-		<view class="comment-header">
-			<view class="comment-header-left">
-				<text @click="gotoBack">
-					<uni-icons type="back" size="25"></uni-icons>
-				</text>
-				<view class="comment-header-left-info">
-					<view class="info-left">
-						<img :src="userData.imagePath" alt="" style="height: 40px;width: 40px;">
+		<template v-if="showOneInfo">
+			<view class="comment-header">
+				<view class="comment-header-left">
+					<text @click="gotoBack">
+						<uni-icons type="back" size="25"></uni-icons>
+					</text>
+					<view class="comment-header-left-info">
+						<view class="info-left">
+							<image :src="userData.headPicture" alt="" style="height: 40px;width: 40px;"></image>
+						</view>
+						<view class="info-right">
+							<h2>DAisss <text>√</text></h2>
+							<p>
+								<text>2天前</text>
+								<text>·</text>
+								<text>29km</text>
+							</p>
+						</view>
 					</view>
-					<view class="info-right">
-						<h2>DAisss <text>√</text></h2>
-						<p>
-							<text>2天前</text>
-							<text>·</text>
-							<text>29km</text>
-						</p>
+				</view>
+
+				<view class="comment-header-right">
+					<text class="btnConcern">关注</text>
+					<text v-if="false">已关注</text>
+				</view>
+			</view>
+
+			<!-- 消息区 -->
+			<view class="comment-personmessage">
+				<view class="personmessage-main">
+					<p>{{userData.diary.diaryContent}}</p>
+					<view class="personmessage-images">
+						<image :src="item" alt="" v-for="(item, i) in userData.picture" :key="i"></image>
+					</view>
+				</view>
+				<view class="personmessage-btn">
+					<view class="btn-info-left">
+						<uni-icons type="more" size="25" @click="toggle"></uni-icons>
+					</view>
+					<view class="btn-info-right">
+						<view class="like" @click="addLike()">
+							<!-- 点赞 -->
+							<uni-icons type="heart"
+								:style="userData.alreadyLike == 1 ? 'color:red' : (code == 1 ? 'color:red' : '')"
+								size="25">
+							</uni-icons>
+							<text>{{userData.diary.diaryLove < 100 ? userData.diary.diaryLove : '99+'}}</text>
+						</view>
+						<view class="comment">
+							<uni-icons type="chatbubble" size="25" color="#777"></uni-icons>
+							<text>打招呼</text>
+						</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="comment-header-right">
-				<text class="btnConcern">关注</text>
-				<text v-if="false">已关注</text>
-			</view>
-		</view>
-
-		<!-- 消息区 -->
-		<view class="comment-personmessage">
-			<view class="personmessage-main">
-				<p>{{userData.activeData.text}}</p>
-				<view class="personmessage-images">
-					<img :src="item.imagePath" alt="" style="height: 100px; width: 120px;"
-						v-for="(item, i) in userData.activeData.images" :key="i">
-				</view>
-			</view>
-			<view class="personmessage-btn">
-				<view class="btn-info-left">
-					<uni-icons type="more" size="25" @click="toggle"></uni-icons>
-				</view>
-				<view class="btn-info-right">
-					<view class="like">
-						<uni-icons type="heart" size="25" color="#777"></uni-icons>
-						<text>124</text>
-					</view>
-					<view class="comment">
-						<uni-icons type="chatbubble" size="25" color="#777"></uni-icons>
-						<text>打招呼</text>
-					</view>
-				</view>
-			</view>
-		</view>
+		</template>
 
 		<!-- 评论区 -->
 		<view class="comment-box" v-if="showComments">
@@ -62,30 +68,31 @@
 </template>
 
 <script>
-	import comment from '../../apis/comment.js'
+	import comment from '../../apis/comment.js';
+	import around from '../../apis/around.js'
 	export default {
 		data() {
 			return {
+				showOneInfo: false,
 				showComments: false,
 				diaryId: 0,
 				data: [],
-				userData: {
-					imagePath: 'static/images/user.jpg',
-					activeData: {
-						text: '来给人给我一场轰轰烈烈的a恋爱吧',
-						images: [{
-							imagePath: 'static/images/content.jpg',
-						}, {
-							imagePath: 'static/images/content.jpg'
-						}]
-					},
-				},
+				userData: {},
+				code: 0,
+				backUpdate:{}
 			};
 		},
 		methods: {
+			// 返回上一页
 			gotoBack() {
-				uni.navigateBack()
+				let _this = this
+				uni.navigateBack({
+					success() {
+						_this.$bus.$emit('backUpdate')
+					}
+				})
 			},
+			// 获取新的列表数据
 			getComments(diaryId) {
 				let _this = this;
 				comment.getCommentList({
@@ -96,9 +103,35 @@
 					_this.data = res.data
 					_this.showComments = true
 				})
+			},
+			// 添加喜欢
+			addLike() {
+				let _this = this
+				this.userData.alreadyLike = 0
+
+				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
+				around.addLike({
+					userId: 1,
+					diaryId: this.userData.diary.diaryId
+				}).then(res => {
+					_this.userData.diary.diaryLove = res.data.map.total
+					_this.code = res.data.code
+				})
+			},
+			// 获取一条展示数据
+			OneInfo(diaryId) {
+				let _this = this;
+				comment.getOneInfo({
+					diaryId
+				}).then(res => {
+					_this.userData = res.data
+					_this.showOneInfo = true
+					_this.code = _this.userData.alreadyLike
+				})
 			}
 		},
 		onLoad(options) {
+			this.OneInfo(options.diaryId)
 			this.getComments(options.diaryId)
 		}
 	}
@@ -135,9 +168,9 @@
 					display: flex;
 					align-items: center;
 
-					img {
-						height: 50rpx;
-						width: 50rpx;
+					image {
+						height: 10px;
+						width: 10px;
 						border-radius: 50%;
 					}
 				}
@@ -194,7 +227,14 @@
 			.personmessage-images {
 				margin-top: 10px;
 
-				img {
+				// display: flex;
+				// flex-wrap: wrap;
+				// justify-content: space-around;
+				// align-content: flex-end;
+				// background-color: red;
+				image {
+					width: 100px;
+					height: 100px;
 					border-radius: 10px;
 					margin-right: 10px;
 				}

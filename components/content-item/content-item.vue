@@ -5,7 +5,7 @@
 				<view class="travel-img" v-if="user.replyUserName">
 					<img :src="replyPic" alt="">
 				</view>
-			
+
 				<text>{{user.replyUserName ? user.commentUserName: user.commentatorName}}</text>
 				<template v-if="user.replyUserName">
 					<view class="travel-tag">
@@ -29,21 +29,50 @@
 			</view>
 
 		</view>
-		<view class="item-right">
-			<uni-icons type="heart" color="#a9a9a9" size="20"></uni-icons>
-			<text>12</text>
+		<view class="item-right" @click="addLike ">
+			<uni-icons type="heart" :style="alreadyItem.alreadyLike == 1 ? 'color:red' : (code == 1 ? 'color:red' : '')"
+				size="20"></uni-icons>
+			<text>{{user.likeAmount < 100 ? user.likeAmount : '99+'}}</text>
 		</view>
 	</view>
 </template>
 
 <script>
+	import comment from '../../apis/comment.js'
 	export default {
 		name: "content-item",
-		props: ['user', 'replyPic'],
+		props: ['user', 'replyPic', 'alreadyItem'],
 		data() {
 			return {
-
+				code: 0
 			};
+		},
+		methods: {
+			// 添加喜欢
+			addLike() {
+				let _this = this
+				this.alreadyItem.alreadyLike = false
+				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
+				if (this.user.replyUserName) {
+					comment.addLikeComment({
+						userId: 1,
+						commentId: this.user.replyId
+					}).then(res => {
+						_this.user.likeAmount = res.data.map.total;
+						_this.code = res.data.code
+					})
+				} else {
+					comment.addLike({
+						userId: 1,
+						commentId: this.user.commentId
+					}).then(res => {
+						_this.user.likeAmount = res.data.map.total;
+						_this.code = res.data.code
+					})
+				}
+			}
+		},
+		mounted() {
 		}
 	}
 </script>
@@ -99,6 +128,7 @@
 				justify-content: space-between;
 				box-sizing: border-box;
 				padding-right: 10px;
+
 				.time-detail {
 					font-size: 12px;
 				}
