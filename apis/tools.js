@@ -42,8 +42,45 @@ export const returnDuringTime = function(allMouth) {
 	return str
 }
 
+/**
+ * 将对象数组转化为二维数组（用于用户地区的picker）
+ * @param {对象数组} data 
+ */
 export const objArrayToArray = function(data) {
 	return data.map(item => {
 		return null
 	})
 }
+
+/**
+ * 将时间字符串中的月份提取出来，形如：2022年08月03日 10时16分08秒
+ * @param {时间字符串} time 
+ */
+export const getMonth = function(time) {
+	return time.split('月')[0].split('年')[1]
+}
+
+/**
+ * 将时间字符串中的天提取出来，形如：2022年08月03日 10时16分08秒
+ * @param {时间字符串} time 
+ */
+export const getDay = function(time) {
+	return time.split('日')[0].split('月')[1]
+}
+
+
+/**
+ * 转化成formdata对象
+ * @param {params参数} params 
+ */
+export const formdataify = function(params){
+  const formData = new FormData();
+  Object.keys(params).forEach(key => {
+    if (typeof params[key] == "string") {
+      formData.append(key, params[key]);
+    } else {
+      formData.append(key, JSON.stringify(params[key]));
+    }
+  });
+  return formData;
+};

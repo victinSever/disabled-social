@@ -1,7 +1,7 @@
 <template>
 	<view class="root">
 		<mover></mover>
-		
+
 		<!-- 头部 -->
 		<view class="header">
 			<view class="left" @click="gotoBack">
@@ -9,7 +9,7 @@
 				<text>我的特权</text>
 			</view>
 		</view>
-		
+
 		<!--  -->
 		<view class="cards">
 			<view class="card-vip">
@@ -18,9 +18,9 @@
 						<text><text>VIP</text> 会员</text>
 					</view>
 					<view class="vip-bottom">
-						<image src="@/static/images/user.jpg" alt="">
-						<text v-if="!isVip">暂未激活会员</text>
-						<text v-else>会员用户<text style="margin-left: 10rpx;">{{vipDuring}}</text></text>
+						<image :src="data.headPicPath" alt="">
+							<text v-if="!isVip">暂未激活会员</text>
+							<text v-else>会员用户<text style="margin-left: 10rpx;">{{vipDuring}}</text></text>
 					</view>
 				</view>
 			</view>
@@ -47,7 +47,7 @@
 				，到期后以{{chooseVip.allprice}}元/{{chooseVip.name}}自动续费，可随时取消
 			</text>
 		</view>
-		
+
 		<!-- 按钮 -->
 		<view class="xufei" v-if="isVip && !isBuy">
 			<text @click="isBuy = true">继续充值</text>
@@ -62,10 +62,10 @@
 			<view class="privilege-list">
 				<view class="privilege-item" v-for="(item, i) in privileges" :key="i">
 					<image :src="item.icon" alt="">
-					<view class="item-right">
-						<h3>{{item.name}}</h3>
-						<p>{{item.description}}</p>
-					</view>
+						<view class="item-right">
+							<h3>{{item.name}}</h3>
+							<p>{{item.description}}</p>
+						</view>
 				</view>
 			</view>
 		</view>
@@ -75,7 +75,7 @@
 			<view class="buy-top" v-if="isWechat" @click="isWechat = false">
 				<view class="top-left">
 					<image src="@/static/images/wechat.png" alt="">
-					<text>微信</text>
+						<text>微信</text>
 				</view>
 				<view class="top-right">
 					<uni-icons type="forward" size="25" color="#777"></uni-icons>
@@ -84,7 +84,7 @@
 			<view class="buy-top" v-else @click="isWechat = true">
 				<view class="top-left">
 					<image src="static/images/pay.png" alt="">
-					<text>支付宝</text>
+						<text>支付宝</text>
 				</view>
 				<view class="top-right">
 					<uni-icons type="forward" size="25" color="#777"></uni-icons>
@@ -105,8 +105,10 @@
 </template>
 
 <script>
-	import apiService from '@/apis/my.js'
-	import { returnDuringTime } from '@/apis/tools.js'
+	import my from '@/apis/my.js'
+	import {
+		returnDuringTime
+	} from '@/apis/tools.js'
 	export default {
 		data() {
 			return {
@@ -114,9 +116,9 @@
 				isWechat: true,
 				// 勾选同意协议
 				checked: true,
-				
-				isVip: false,//vip的判断
-				isBuy: false,//继续付费
+
+				isVip: false, //vip的判断
+				isBuy: false, //继续付费
 
 				vipPrice: [{
 					id: '1',
@@ -140,10 +142,11 @@
 					name: '连续包月',
 					isMain: false
 				}],
+				data: {},
 
 				// 选择的vip
 				chooseVip: {},
-				vipTime: '',//过期时间
+				vipTime: '', //过期时间
 
 				// vip特权
 				privileges: [{
@@ -171,67 +174,77 @@
 			};
 		},
 		computed: {
-			vipDuring(){
-				if(!this.vipTime)
+			vipDuring() {
+				if (!this.vipTime)
 					return returnDuringTime(this.chooseVip.time)
-				else 
+				else
 					return '会员到期' + this.vipTime.split('T')[0]
 			}
 		},
 		created() {
 			this.chooseVip = this.vipPrice[0]
 		},
-		mounted(){
+		mounted() {
 			this.getData()
 		},
 		methods: {
 			// 获取信息
-			async getData(){
-				apiService.getInfo({
+			async getData() {
+				const {
+					data: res
+				} = await my.getInfo({
 					loginName: '123456'
-				}).then(response => {
-					if(response.data.resultCode === 200) {
-						this.isVip = response.data.data.isVip === 1 ? true : false
-					}
-				}).catch(error => {
-					uni.$showMsg('服务器出错咯！')
 				})
+				if (res.resultCode === 200) {
+					if (res.data.isVip === 1) {
+						this.data = res.data
+						this.isVip = true
+						this.vipTime = res.data.expirationTime
+					} else {
+						this.isVip = false
+					}
+				}
+
 			},
 			// 关闭续费
-			closeChecked(){
+			closeChecked() {
 				this.checked = false
 				uni.$showMsg('连续续费已关闭')
 			},
 			// 开通VIP
-			async openVip(){
-				const {data: res} = await apiService.openVip({
+			async openVip() {
+				const {
+					data: res
+				} = await my.openVip({
 					loginName: '123456',
 					month: this.chooseVip.time
 				})
-				if(res.resultCode === 200){
-					this.vipTime = res.data;
-					uni.$showMsg(res.message)
-					this.isVip = true
-					this.isBuy = false
-				}else{
-					uni.$showMsg(res.message)
-				}
-			},
-			// 续费VIP
-			async renewalVip(){
-				const {data: res} = await apiService.renewalVip({
-					loginName: '123456',
-					month: this.chooseVip.time
-				})
-				if(res.resultCode === 200){
+				if (res.resultCode === 200) {
 					this.vipTime = res.data;
 					this.isVip = true
 					this.isBuy = false
 				}
 				uni.$showMsg(res.message)
 			},
-			gotoBack(){
-				uni.navigateBack()
+			// 续费VIP
+			async renewalVip() {
+				const {
+					data: res
+				} = await my.renewalVip({
+					loginName: '123456',
+					month: this.chooseVip.time
+				})
+				if (res.resultCode === 200) {
+					this.vipTime = res.data;
+					this.isVip = true
+					this.isBuy = false
+					uni.$showMsg("你已成功续费" + this.chooseVip.time + '个月')
+				}
+			},
+			gotoBack() {
+				uni.switchTab({
+					url: '/pages/person/person'
+				})
 			},
 			// 改变vip选择
 			changeVip(index) {
@@ -244,25 +257,26 @@
 <style lang="scss" scoped>
 	.root {
 		padding: 0 20rpx;
-		
-		.header{
+
+		.header {
 			height: 80rpx;
-			
-			.left{
+
+			.left {
 				display: flex;
 				align-items: center;
-				
-				image{
+
+				image {
 					height: 35rpx;
 					width: 35rpx;
 					margin: 0 20rpx;
 				}
-				text{
+
+				text {
 					font-size: 18px;
 					font-weight: bold;
 				}
 			}
-			
+
 		}
 
 		.cards {
@@ -401,8 +415,8 @@
 				}
 			}
 		}
-		
-		.xufei{
+
+		.xufei {
 			width: 100%;
 			display: flex;
 			justify-content: space-around;
@@ -410,8 +424,8 @@
 			align-items: center;
 			color: #ddd;
 			margin-top: 20rpx;
-			
-			text:first-child{
+
+			text:first-child {
 				color: orange;
 			}
 		}

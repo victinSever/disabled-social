@@ -20,7 +20,11 @@
 	}, {
 		"path": "pages/message/message"
 	}, {
-		"path": "pages/person/person"
+		"path": "pages/person/person",
+		"style": {
+			"enablePullDownRefresh": true,
+			"onReachBottomDistance": 50
+		}
 	}, {
 		"path": "pages/photo/photo"
 	}, {

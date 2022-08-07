@@ -3,13 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
-
+import tip from './common/util/tip.js'
 //封装弹框的方法
 uni.$showMsg = function(title = '功能未完善！', duration = 1500) {
 	uni.showToast({
 		title, duration, icon: 'none'
 	})
 }
+// tip
+Vue.prototype.$tip = tip;
+
 
 Vue.config.productionTip = false
 Vue.prototype.vuex_uploadAction = "http://222.177.66.230:9898/upload";

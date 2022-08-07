@@ -43,8 +43,8 @@ const apiService = {
     },
     
     // 关注指定用户
-    concernUser(params) {
-    	return http.post('/recomment/concernUser', null, params)
+    addAttention(params) {
+    	return http.post('/fan/addAttention', null, params)
     },
     
     // 获取粉丝列表
@@ -78,35 +78,34 @@ const apiService = {
 	
 	// 修改基本信息
 	changePersonBasicInfo(params) {
-		return http.put('/personBasicInfo/update', null, params)
+		return http.put('/personBasicInfo/update', params)
 	},
 	
 	// 修改详细信息
 	changePersonDetailInfo(params) {
-		return http.put('/personDetailInfo/update', null, params)
+		return http.put('/personDetailInfo/update', params)
 	},
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update', null, params)
+		return http.put('/requirements/update',params,null,{
+			header:{
+				 'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		})
 	},
 	
 	/**************************************
 		相册
 	*************************************/
 	
-	// 获取相册信息
-	getPictureAlbumList(params) {
-		return http.get('/pictureAlbum/list', params)
-	},
-	
 	// 根据图片id查找图片信息
 	searchPictureById(params) {
 		return http.post('/pictureAlbum/id', null, params)
 	},
 	
-	// 根据用户id查找图片信息
-	searchPictureByUserId(params) {
+	// 根据用户id查找相册
+	searchAlbumListByUserId(params) {
 		return http.post('/pictureAlbum/userId', null, params)
 	},
 	
@@ -117,7 +116,12 @@ const apiService = {
 	
 	// 更新图片
 	changePicture(params) {
-		return http.get('/pictureAlbum/update', null, params)
+		return http.put('/pictureAlbum/update', params)
+	},
+	
+	// 获取我的动态列表
+	getMyDiary(params) {
+		return http.get('/mine/getMyDiary', params)
 	},
 }
 

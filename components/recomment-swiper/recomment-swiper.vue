@@ -3,7 +3,7 @@
 		<swiper class="swiper" indicator-dots="true" circular="true">
 			<swiper-item v-for="(item, i) in swiperList" :key="i">
 				<view class="swiper-item">
-					<image mode="aspectFill" :src="item.picPath" alt="" />
+					<image mode="aspectFill" :src="item" alt="" />
 				</view>
 			</swiper-item>
 		</swiper>
@@ -14,9 +14,6 @@
 	export default {
 		name: "recomment-swiper",
 		props: ['swiperList'],
-		mounted(){
-			console.log(this.swiperList);
-		}
 	}
 </script>
 

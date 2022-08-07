@@ -6,9 +6,10 @@
 				<view class="quick-login">
 					<text class="quick-text">快捷登录</text>
 				</view>
-				<button style="border: 0; background-color: #FBFBFB;" open-type="getPhoneNumber"
-					@getphonenumber="wxOneLogin">
-					<image class="icon-wechat" :src="imgUrls+'login/wechat.png'" mode="scaleToFill"></image>
+				<!-- @getphonenumber="wxOneLogin"  open-type="getPhoneNumber" -->
+				<button style="border: 0; background-color: #FBFBFB;" class="flex-button" @click="btn_login()">
+					<image class="icon-wechat" src="@/static/images/wechat.png" mode="scaleToFill"></image>
+					一键登录
 				</button>
 			</view>
 			<!-- #endif -->
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-
+	import auth from "@/apis/auth.js"
 	export default {
 		data() {
 			return {};
@@ -26,7 +27,7 @@
 
 			//获取授权码
 			// #ifdef MP-ALIPAY || MP-WEIXIN
-			this.wxGetUserInfo();
+			// this.wxGetUserInfo();
 			// #endif
 			// #ifdef  APP-PLUS
 			this.getPhoneCardDetail()
@@ -56,6 +57,7 @@
 									success(callRes) {
 										// 此处可获得手机号，调用后端接口
 										console.log(callRes.result.data);
+										
 										uni.redirectTo({
 											url: "/pages/recomment/recomment"
 										})
@@ -88,10 +90,27 @@
 					}
 				})
 			},
+			btn_login(){
+				auth.login({
+					loginName:"18375874449"
+				}).then(()=>{
+					
+				}).catch(()=>{
+					
+				})
+			}
 
 		},
 	};
 </script>
-<style scoped>
+<style scoped lang="scss">
 	@import url("./login.css");
+	
+	.flex-button{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+	
 </style>

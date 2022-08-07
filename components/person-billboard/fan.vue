@@ -9,15 +9,15 @@
 		<view class="list">
 			<view class="item" v-for="(item, i) in list" :key="i">
 				<view class="left">
-					<image :src="item.imagePath" mode=""></image>
+					<image :src="item.headPicPath" mode=""></image>
 					<view class="info">
-						<h2 class="name">{{item.userName}}</h2>
+						<h2 class="name">{{item.nickName}}</h2>
 						<p class="intro">对方关注了你</p>
 					</view>
 				</view>
 				<view class="right">
-					<text v-if="item.isAttention" @click="cancelAttention(item, i)">取消关注</text>
-					<text v-else style="background-color: darkorange;" @click="concernUser(item, i)">回关</text>
+					<text v-if="item.status === 1" @click="cancelAttention(item, i)">取消关注</text>
+					<text v-else style="background-color: darkorange;" @click="addAttention(item, i)">回关</text>
 				</view>
 			</view>
 		</view>
@@ -25,27 +25,16 @@
 </template>
 
 <script>
-	import apiService from '@/apis/my.js'
+	import my from '@/apis/my.js'
 	export default {
 		name:"cencern",
 		data() {
 			return {
 				searchValue: '',
-				list: [
-					{
-						imagePath: '../../static/images/admin/admin4.jpg',
-						userName: '亲历',
-						isAttention: false,
-					},
-					{
-						imagePath: '../../static/images/admin/admin3.jpg',
-						userName: 'admin',
-						isAttention: false,
-					},
-				],
+				list: [],
 				page: {
-					userId: 3,
-					start: 1,
+					userId: 5,
+					start: 0,
 					limit: 5,
 				}
 			};
@@ -55,34 +44,30 @@
 		},
 		methods: {
 			async getList(){
-				const { data: res} = await apiService.searchAttention(this.page)
+				const { data: res} = await my.searchAttention(this.page)
 				if(res.resultCode === 200){
-					
+					this.list = res.data
 				}
 				console.log(res);
 			},
 			async cancelAttention(item, i){
-				const { data: res} = await apiService.cancelAttention({
-					userId: 1,
-					follower: 5
+				const { data: res} = await my.cancelAttention({
+					userId: item.userId,
+					follower: page.userId
 				})
 				if(res.resultCode === 200){
-					if(res.message == 'SUCCESS'){
-						uni.$showMsg('取消成功！')
-						this.$set(this.list[i], 'isAttention', false)
-					}
+					uni.$showMsg('取消成功！')
+					this.$set(this.list[i], 'status', 1)
 				}
 			},
-			async concernUser(item, i){
-				const { data: res} = await apiService.concernUser({
-					userId: 1,
-					follower: 5
+			async addAttention(item, i){
+				const { data: res} = await my.addAttention({
+					userId: item.userId,
+					follower: page.userId
 				})
 				if(res.resultCode === 200){
-					if(res.message == 'SUCCESS'){
-						uni.$showMsg('关注成功！')
-						this.$set(this.list[i], 'isAttention', true)
-					}
+					uni.$showMsg('回关成功！')
+					this.$set(this.list[i], 'status', 2)
 				}
 				console.log(res);
 			}
@@ -107,10 +92,11 @@
 			width: 100rpx;
 			border-radius: 50%;
 			margin-right: 20rpx;
+			border: 2rpx solid #eee;
 		}
 		
 		.info{
-			width: 400rpx;
+			width: 300rpx;
 			
 			h2{
 				font-size: 14px;
@@ -127,11 +113,12 @@
 		
 	}
 	.right{
+		
 		text{
 			padding: 10rpx 30rpx;
 			border-radius: 10rpx;
 			background-color: darkorange;	
-					color: #fff;
+			color: #fff;
 		}
 	}
 }

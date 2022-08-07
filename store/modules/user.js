@@ -12,7 +12,7 @@ export default {
         UpdateUserBaseData({commit}, data) {
             return new Promise((resolve, reject) => {
                 my.getBaseData(data).then(response => {
-					state.baseData= response.data;
+					commit.state.baseData= response.data;
                  }).catch(error => {
                 })
             })
@@ -21,7 +21,7 @@ export default {
 		UpdateUserAllData({commit}, data) {
 		    return new Promise((resolve, reject) => {
 		        my.getAllData(data).then(response => {
-					state.detailData= response.data;
+					commit.state.detailData= response.data;
 		         }).catch(error => {
 		        })
 		    })

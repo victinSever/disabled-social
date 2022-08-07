@@ -49,9 +49,22 @@
 			<view class="main">
 				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
 				<view v-else>								
-					<baseCom v-if="type === 1" @sendBase="getBase"></baseCom>
-					<detail v-else-if="type === 2" @changeType="changeType"></detail>
-					<marrary v-else  @gotoPre="gotoPre"></marrary>
+					<baseCom 
+					v-if="type === 1" 
+					@changeImagesList="changeImagesList" 
+					@changeBase="changeBase" 
+					@nextPage="nextPage"
+					></baseCom>
+					<detail 
+					v-else-if="type === 2" 
+					@changeDetail="changeDetail" 
+					@nextPage="nextPage"
+					></detail>
+					<marrary 
+					v-else  
+					@changeMarry="changeMarry" 
+					@gotoPre="gotoPre"
+					></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -92,45 +105,57 @@
 		},
 		methods: {
 			// 获取信息
-			getData() {
+			async getData() {
 				this.baseData = this.baseInfo
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
-				this.cacheData = this.moreInfo
-				console.log(this.cacheData);
+				this.cacheData = this.moreInfo			
 			},
-			// 获取基础信息缓存
-			getBase(data){
-				this.cacheData.personBasicInfo = data
-				this.type = 2
+			
+			// 监视缓存数据
+			// 相册缓存的更改信息				
+			changeImagesList(val){
+				this.albumData = val
 			},
-			// 获取详细信息缓存
-			getDetail(data){
-				this.cacheData.personDetailInfo = data
-				this.type = 3
+			// 改变基础信息
+			changeBase(val){
+				this.cacheData.personBasicInfo = val
+				console.log(this.cacheData.personBasicInfo);
 			},
-			// 获取择偶信息缓存并更新数据调往预览页
+			// 改变详细信息
+			changeDetail(val){
+				this.cacheData.personDetailInfo = val
+			},
+			// 改变择偶信息
+			changeMarry(val){
+				this.cacheData.requirement = val
+			},			
+			
+			// 下一页
+			nextPage(){
+				this.type++
+			},
+			
+			// 更新数据调往预览页
 			gotoPre(data){
-				this.cacheData.requirement = data
-				this.saveUpdate()
-				this.isPre = true
+				if(this.saveUpdate())
+					this.isPre = true
 			},
 			// 更新数据
 			async saveUpdate(){
-				uni.showLoading({title: '加载中',mask:true});
+				let success = false
+				uni.showLoading({title: '数据更新中',mask:true});
+				console.log(this.cacheData);this.cacheData
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-				uni.hideLoading();
+				setTimeout(function () {uni.hideLoading();}, 100);
+				console.log(res1,res2,res3);
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
-				}				
-			},
-			// 进入下一页
-			changeType(data){
-				this.data = {...data}
-				this.type++
-				console.log(this.data)
+					success = true
+				}	
+				return success			
 			},
 			// 返回
 			gotoBack() {
@@ -140,8 +165,8 @@
 			},
 			// 保存修改
 			finish() {
-				this.saveUpdate()
-				this.gotoBack()
+				if(this.saveUpdate())
+					this.gotoBack()
 			},
 		}
 	}

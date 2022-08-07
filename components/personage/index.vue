@@ -10,7 +10,7 @@
 			<view class="footer-header">
 				<view class="userName">
 					<text>小懒猫</text>
-					<text class="focus" v-if="isTemplate">关注</text>
+					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
 				</view>
 				<view class="address">
 					<text>重庆巴南(3km)</text>
@@ -28,7 +28,7 @@
 				<view class="">
 					<scroll-view class="scroll-view" scroll-x="true" scroll-left="120">
 						<view class="scroll-view-item" v-for="(item, i) in imageList" :key="i">
-							<image :src="item.picPath" mode="aspectFill"></image>
+							<image :src="item" mode="aspectFill"></image>
 						</view>
 					</scroll-view>
 				</view>
@@ -87,7 +87,6 @@
 			};
 		},
 		mounted(){
-			console.log(this.imageList);
 		},
 		methods: {
 			backdetail() {

@@ -26,7 +26,7 @@
 
 				<div class="top-left">
 					<view class="top-logo">
-						<image v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" />
+						<image v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" mode="aspectFill"/>
 						<view class="empty-image" v-else>
 							<uni-icons type="person-filled" size="80" color="#eee"></uni-icons>
 						</view>
@@ -47,7 +47,7 @@
 					</view>
 				</div>
 				<view class="top-right">
-					<text v-if="!isSignUp" @click="makeSignUp">签到</text>
+					<text v-if="!baseData.signIn" @click="makeSignUp">签到</text>
 					<text v-else class="isFlaged">已签到</text>
 				</view>
 			</view>
@@ -60,11 +60,11 @@
 					<text class="item-num">{{baseData.fanCount}}</text>
 					<text class="item-title">粉丝</text>
 				</view>
-				<view class="bottom-item">
+				<view class="bottom-item" @click="openLikes">
 					<text class="item-num">{{baseData.like}}</text>
 					<text class="item-title">点赞</text>
 				</view>
-				<view class="bottom-item">
+				<view class="bottom-item" @click="openSorts">
 					<text class="item-num">{{baseData.sorts}}</text>
 					<text class="item-title">积分</text>
 				</view>
@@ -100,51 +100,7 @@
 		</view>
 
 		<!-- 动态 -->
-		<view class="active">
-			<view class="active-title">
-				<text>我的动态</text>
-			</view>
-			<view class="active-list" v-if="personActiveData.length !== 0">
-				<view class="active-item" v-for="(item, i) in personActiveData" :key="i">
-					<view class="item-left">
-						<text class="day">11</text>
-						<text class="mouth">07月</text>
-					</view>
-					<view class="item-right" @click="gotoComment">
-						<p class="text">{{item.text}}</p>
-						<view class="image" v-if="item.image">
-							<image :src="item.image" alt="">
-						</view>
-						<view class="btns">
-							<view class="btn-info-left">
-								<uni-icons type="more" size="30"></uni-icons>
-							</view>
-							<view class="btn-info-right">
-								<view class="like">
-									<image class="icon" src="../../static/icon/active/like.png" alt="">
-										<text class="num">{{item.likes}}</text>
-								</view>
-								<view class="comment">
-									<image class="icon" src="../../static/icon/active/comment.png" alt="">
-										<text class="num" v-if="item.contents !== 0">{{item.contents}}</text>
-										<text class="num" v-else>去评论</text>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-				<view class="active-list-empty">
-					<p>没有更多了</p>
-				</view>
-			</view>
-			<view class="active-empty" v-else>
-				<text class="empty-icon">
-					<uni-icons type="compose" size="60" color="#ccc">
-					</uni-icons>
-				</text>
-				<text>发布一条动态，让大家看到你</text>
-			</view>
-		</view>
+		<person-active :personActiveData="personActiveData"></person-active>
 
 		<!-- 发表动态按钮 -->
 		<view class="active-btn" @click="gotoShare">
@@ -157,19 +113,19 @@
 
 <script>
 	import my from '@/apis/my.js'
+	import { getDay, getMonth } from "@/apis/tools"
 	import {
-		returnRate
+		returnRate, formdataify
 	} from '@/apis/tools.js'
 	import {
 		mapMutations
 	} from 'vuex'
+	
 	export default {
 		data() {
 			return {
 				// 是否有角标
 				value: 1,
-				// 是否签到
-				isSignUp: false,
 				// 个人信息
 				baseData: {
 					username: 'xxx',
@@ -181,19 +137,20 @@
 					sorts: 0, //积分
 				},
 				moreData: {},
-				personActiveData: [{
-					publishDate: '2022-8-2 1:59:01',
-					text: '今天的天空格外好看！',
-					image: '../../static/images/sky.jpg',
-					views: 231,
-					likes: 1023,
-					contents: 52,
-					isAudit: false, //被举报
-				}]
+				// 动态的数据
+				personActiveData: [],
+				isLoading: false,//节流器
+				paramsData: {
+					userId: "1",
+					page: 1,
+					size: 5
+				}
+				
 			}
 		},
 		mounted() {
 			this.getData()
+			// this.getActiveData()
 		},
 		computed: {
 			// 资料完善比率
@@ -206,31 +163,57 @@
 				return (returnRate(obj) * 100) + '%'
 			}
 		},
+		// 下拉触底
+		onReachBottom(){
+			// 节流器
+			if(!this.isLoading){
+				this.paramsData.page++
+				this.getActiveData()
+			}					
+		},
 		methods: {
 			...mapMutations('common', ['setBaseInfo', 'setMoreInfo', 'setAlbumInfo']),
+			
+			// 获取动态信息
+			async getActiveData(){
+				uni.showLoading({title: '动态加载中',mask:true});
+				this.isLoading = true
+				const {data: res} = await my.getMyDiary(this.paramsData)
+				this.isLoading = false
+				setTimeout(function () {uni.hideLoading();}, 100);
+				// 根据动态发布时间获取日月
+				let arr = res.map(item => {
+					item.day = getDay(item.diary.createTime)
+					item.month = getMonth(item.diary.createTime)
+					return item
+				})
+				// 合并动态数组
+				this.personActiveData = [
+					...this.personActiveData,
+					...arr
+				]			
+			},
 
 			// 获取信息
 			async getData() {
-				// 系统信息
-				const {
-					data: res1
-				} = await my.getBaseData({
+				uni.showLoading({title: '信息加载中',mask:true});
+				// // 系统信息
+				const {data: res1 } = await my.getBaseData({
 					personId: 1
 				})
 				// 用户信息
-				const {
-					data: res2
-				} = await my.getAllData({
+				const {data: res2} = await my.getAllData({
 					personId: 1
 				})
+				const {data: res4} = await my.changeRequirements(res2.data.requirement)
+				console.log(res4);
 				// 相册
-				const {
-					data: res3
-				} = await my.getPictureAlbumList({
-					start: 1,
-					limit: 6
-				})
+				const {data: res3} = await my.searchAlbumListByUserId({
+					userId: 1
+				})	
+				setTimeout(function () {uni.hideLoading();}, 100);
 				this.baseData = res1.data
+				
 				this.moreData = res2.data
 				this.setBaseInfo(res1.data)
 				this.setMoreInfo(res2.data)
@@ -255,9 +238,15 @@
 					}
 				});
 			},
+			openLikes(){
+				uni.$showMsg("你的点赞有" + this.baseData.like + "个！")
+			},
+			openSorts(){
+				uni.$showMsg("下一版本更新积分功能哦！")
+			},
 			// 打开简历
 			gotoResume() {
-				uni.$showMsg("该功能未开放！")
+				uni.$showMsg("下一版本更新简历功能哦！")
 			},
 			// 查看关注页面
 			gotoBillBoard(type) {
@@ -274,7 +263,7 @@
 					loginName: '123456'
 				})
 				uni.$showMsg(res.message)
-				this.isSignUp = true
+				this.baseData.signIn = true
 				setTimeout(function() {
 					uni.$showMsg('积分 + 5')
 				}, 1000)
@@ -297,13 +286,7 @@
 				uni.navigateTo({
 					url: '/subpkg/checkPerson/checkPerson'
 				})
-			},
-			// 去网评论页面
-			gotoComment() {
-				uni.navigateTo({
-					url: '/subpkg/comment/comment'
-				})
-			}
+			},		
 		}
 	}
 </script>
@@ -501,109 +484,7 @@
 
 	}
 
-	/* 动态 */
-	.active {
-		margin-top: 20rpx;
-
-		.active-title {
-			font-weight: bold;
-			margin-bottom: 10rpx;
-		}
-
-		.active-list {
-			.active-item {
-				display: flex;
-				justify-content: space-between;
-				margin-bottom: 20px;
-
-				.item-left {
-					padding-top: 30rpx;
-					width: 100rpx;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					font-weight: bold;
-					color: #ddd;
-					margin-right: 20rpx;
-
-
-					.day {
-						font-size: 22px;
-					}
-
-					.mouth {
-						font-size: 16px;
-					}
-				}
-
-				.item-right {
-					width: calc(100% - 100rpx);
-
-					.text {
-						line-height: 80rpx;
-						font-weight: bold;
-					}
-
-					.image {
-
-						image {
-							width: calc(100% - 50rpx);
-							border-radius: 30rpx;
-						}
-					}
-
-					.btns {
-						margin-top: 10px;
-						display: flex;
-						justify-content: space-between;
-						width: calc(100% - 50rpx);
-
-						.btn-info-right {
-							display: flex;
-
-							&>view {
-								display: flex;
-								align-items: center;
-								margin-left: 40rpx;
-
-								.icon {
-									width: 40rpx;
-									height: 40rpx;
-								}
-
-								.num {
-									font-size: 12px;
-									margin-left: 10rpx;
-									color: #a5a395;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			.active-list-empty {
-				width: 100%;
-				text-align: center;
-				margin-bottom: 50rpx;
-				color: #c6c6c6;
-			}
-		}
-
-
-		.active-empty {
-			height: 400rpx;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			color: #ccc;
-
-			.empty-icon {
-				margin-bottom: 50rpx;
-			}
-		}
-	}
+	
 
 	/* 动态按钮 */
 	.active-btn {
