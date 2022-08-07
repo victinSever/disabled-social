@@ -230,7 +230,7 @@
 		</view>
 		
 		<view class="btn-next">
-			<button @click="changeType">下一步</button>
+			<button @click="nextPage">下一步</button>
 		</view>
 	</view>
 </template>
@@ -241,8 +241,8 @@
 	export default {
 		data() {
 			const isDisable = ['请选择', '正常人', '残疾人']
-			const disableType = ['请选择', '手臂', '腿部', '耳部', '眼睛', '脑瘫', '其他']
-			const disableLevel = ['请选择', '健康', '轻度残疾', '中度残疾', '重度残疾', '极重度残疾']
+			const disableType = ['请选择', '视力残疾', '听力残疾', '言语残疾', '肢体残疾', '智力残疾', '精神残疾','多重残疾']
+			const disableLevel = ['请选择', '健康', '轻度残疾(残疾四级)', '中度残疾(残疾三级)', '重度残疾(残疾二级)', '极重度残疾(残疾一级)']
 			const isProvide = ['请选择', '完全自理，并能照顾对方', '不能自理']
 			const parentStatus = ['请选择', '父母健在', '单亲', '离异']
 			const isGenetic = ['请选择', '不遗传', '遗传', '不清楚']
@@ -301,9 +301,17 @@
 		created(){
 			this.data = this.moreInfo.personDetailInfo
 		},
+		watch: {
+			data: {
+				deep: true,
+				handler(val){
+					this.$emit('changeDetail', val)
+				}
+			}
+		},
 		methods: {
-			changeType(){
-				this.$emit('changeType', this.data)
+			nextPage(){
+				this.$emit('nextPage', null)
 			},
 			// 单位类型
 			bindcompanyTypeChange(e) {

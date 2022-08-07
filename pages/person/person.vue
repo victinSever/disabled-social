@@ -47,7 +47,7 @@
 					</view>
 				</div>
 				<view class="top-right">
-					<text v-if="!isSignUp" @click="makeSignUp">签到</text>
+					<text v-if="!baseData.signIn" @click="makeSignUp">签到</text>
 					<text v-else class="isFlaged">已签到</text>
 				</view>
 			</view>
@@ -168,8 +168,6 @@
 			return {
 				// 是否有角标
 				value: 1,
-				// 是否签到
-				isSignUp: false,
 				// 个人信息
 				baseData: {
 					username: 'xxx',
@@ -226,9 +224,8 @@
 				// 相册
 				const {
 					data: res3
-				} = await my.getPictureAlbumList({
-					start: 1,
-					limit: 6
+				} = await my.searchAlbumListByUserId({
+					userId: 1
 				})
 				this.baseData = res1.data
 				this.moreData = res2.data
@@ -274,7 +271,7 @@
 					loginName: '123456'
 				})
 				uni.$showMsg(res.message)
-				this.isSignUp = true
+				this.baseData.signIn = true
 				setTimeout(function() {
 					uni.$showMsg('积分 + 5')
 				}, 1000)

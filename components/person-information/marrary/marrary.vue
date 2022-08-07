@@ -68,7 +68,7 @@
 		<view class="diliver"></view>
 
 		<view class="btn-next">
-			<button @click="changeType">保存资料</button>
+			<button @click="gotoPre">保存资料</button>
 		</view>
 	</view>
 </template>
@@ -99,12 +99,20 @@
 		computed: {
 			...mapState('common', ['moreInfo']),
 		},
+		watch: {
+			data: {
+				deep: true,
+				handler(val){
+					this.$emit('changeMarry', val)
+				}
+			}
+		},
 		created(){
 			this.data = this.moreInfo.requirement
 		},
 		methods: {
-			changeType() {
-				this.$emit('gotoPre', this.data)
+			gotoPre() {
+				this.$emit('gotoPre', null)
 			},
 			// 单位类型
 			bindmarryStatusChange(e) {

@@ -14,9 +14,6 @@
 	export default {
 		name: "recomment-swiper",
 		props: ['swiperList'],
-		mounted(){
-			console.log(this.swiperList);
-		}
 	}
 </script>
 

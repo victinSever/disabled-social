@@ -49,9 +49,22 @@
 			<view class="main">
 				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
 				<view v-else>								
-					<baseCom v-if="type === 1" @sendBase="getBase"></baseCom>
-					<detail v-else-if="type === 2" @changeType="changeType"></detail>
-					<marrary v-else  @gotoPre="gotoPre"></marrary>
+					<baseCom 
+					v-if="type === 1" 
+					@changeImagesList="changeImagesList" 
+					@changeBase="changeBase" 
+					@nextPage="nextPage"
+					></baseCom>
+					<detail 
+					v-else-if="type === 2" 
+					@changeDetail="changeDetail" 
+					@nextPage="nextPage"
+					></detail>
+					<marrary 
+					v-else  
+					@changeMarry="changeMarry" 
+					@gotoPre="gotoPre"
+					></marrary>
 				</view>
 			</view>
 		</scroll-view>
@@ -97,21 +110,35 @@
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
 				this.cacheData = this.moreInfo
-				console.log(this.cacheData);
 			},
-			// 获取基础信息缓存
-			getBase(data){
-				this.cacheData.personBasicInfo = data
-				this.type = 2
+			
+			// 监视缓存数据
+			// 相册缓存的更改信息				
+			changeImagesList(val){
+				this.albumData = val
 			},
-			// 获取详细信息缓存
-			getDetail(data){
-				this.cacheData.personDetailInfo = data
-				this.type = 3
+			// 改变基础信息
+			changeBase(val){
+				console.log(this.cacheData.personBasicInfo);
+				this.cacheData.personBasicInfo = val
+				console.log(this.cacheData.personBasicInfo);
 			},
-			// 获取择偶信息缓存并更新数据调往预览页
+			// 改变详细信息
+			changeDetail(val){
+				this.cacheData.personDetailInfo = val
+			},
+			// 改变择偶信息
+			changeMarry(val){
+				this.cacheData.requirement = val
+			},			
+			
+			// 下一页
+			nextPage(){
+				this.type++
+			},
+			
+			// 更新数据调往预览页
 			gotoPre(data){
-				this.cacheData.requirement = data
 				this.saveUpdate()
 				this.isPre = true
 			},
@@ -122,15 +149,10 @@
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
 				uni.hideLoading();
+				console.log(res1,res2,res3);
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
 				}				
-			},
-			// 进入下一页
-			changeType(data){
-				this.data = {...data}
-				this.type++
-				console.log(this.data)
 			},
 			// 返回
 			gotoBack() {

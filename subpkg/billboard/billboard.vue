@@ -39,13 +39,16 @@
 		components: {
 			concern,fan
 		},
-		onLoad(options){		
+		onLoad(options){	
+			console.log(options.type);
 			if(options.type)
-				this.isConcern = options.type
+				this.isConcern = parseInt(options.type)
 		},
 		methods: {
 			gotoBack() {
-				uni.navigateBack()
+				uni.switchTab({
+					url: '/pages/person/person'
+				})
 			},
 			input(res){
 				uni.showToast({

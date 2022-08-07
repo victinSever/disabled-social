@@ -87,7 +87,6 @@
 			};
 		},
 		mounted(){
-			console.log(this.imageList);
 		},
 		methods: {
 			backdetail() {

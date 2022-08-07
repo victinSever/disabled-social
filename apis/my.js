@@ -43,8 +43,8 @@ const apiService = {
     },
     
     // 关注指定用户
-    concernUser(params) {
-    	return http.post('/recomment/concernUser', null, params)
+    addAttention(params) {
+    	return http.post('/fan/addAttention', null, params)
     },
     
     // 获取粉丝列表
@@ -95,18 +95,13 @@ const apiService = {
 		相册
 	*************************************/
 	
-	// 获取相册信息
-	getPictureAlbumList(params) {
-		return http.get('/pictureAlbum/list', params)
-	},
-	
 	// 根据图片id查找图片信息
 	searchPictureById(params) {
 		return http.post('/pictureAlbum/id', null, params)
 	},
 	
-	// 根据用户id查找图片信息
-	searchPictureByUserId(params) {
+	// 根据用户id查找相册
+	searchAlbumListByUserId(params) {
 		return http.post('/pictureAlbum/userId', null, params)
 	},
 	

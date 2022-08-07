@@ -4,7 +4,7 @@ export default {
     state: {
 		baseInfo: {},//基础系统信息
 		moreInfo: {},//详细信息（基础，详细，择偶）
-		albumInfo: {},//相册
+		albumInfo: [],//相册
 	},
     mutations: {
 		// 存储用户基础信息

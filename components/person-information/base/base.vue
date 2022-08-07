@@ -241,7 +241,7 @@
 		</view>
 
 		<view class="btn-next">
-			<button @click="changeType">下一步</button>
+			<button @click="nextPage">下一步</button>
 		</view>
 	</view>
 </template>
@@ -282,6 +282,20 @@
 		computed: {
 			...mapState('common', ['moreInfo','albumInfo']),
 		},
+		watch: {
+			userImages: {
+				deep: true,
+				handler(val){
+					this.$emit('changeImagesList', val)
+				}
+			},
+			data: {
+				deep: true,
+				handler(val){
+					this.$emit('changeBase', val)
+				}
+			}
+		},
 		created(){
 			this.data = this.moreInfo.personBasicInfo
 			this.userImages = this.albumInfo
@@ -290,25 +304,37 @@
 		methods: {
 			// 上传动态图片
 			uploadActiveImage(item, i){
-				var that = this;
-				wx.chooseImage({
+				let that = this;
+				uni.chooseImage({
+					count: 6, //默认9
 					sizeType: ['original', 'compressed'],
-					sourceType: ['album'],
-					success: function(res) {
-						that.$set( that.userImages, i, { 
-							imagePath: res.tempFilePaths[0], show: true,
+					sourceType: ['album'], 
+					success: function(res) {				
+						res.tempFilePaths.forEach((item) => {
+							uni.uploadFile({
+								url: that.vuex_uploadAction,
+								filePath: item,
+								name: 'file',
+								header: {
+									token: "" // 挂载请求头为用户的 token
+								},
+								success: function(arr) {
+									let data = JSON.parse(arr.data);
+									that.$set(that.userImages[i], 'picPath', data.data.url)
+								}
+							});
 						})
+				
+				
 					}
-				})
+				});
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
-				this.$set( this.userImages, i, { 
-					imagePath: "", show: false,
-				})
+				this.$set( this.userImages[i], 'picPath', "")
 			},
-			changeType(){
-				this.$emit('sendBase', this.data)
+			nextPage(){
+				this.$emit('nextPage', null)
 			},
 			//学历
 			binddegreeChange(e) {
