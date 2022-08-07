@@ -6,41 +6,49 @@
 		<!-- <message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box> -->
 		<!-- </scroll-view> -->
 		<mescroll-uni ref="mescrollRef" @init="init" @down="downCallback" :down="downOption" :up="upOption"
-			@up="upCallback" :style="{height:wh+'px'}" :fixed="true"  >
+			@up="upCallback" :style="{height:wh+'px'}" :fixed="true">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
 		</mescroll-uni>
 	</view>
 </template>
 
 <script>
-	import care from '../../apis/care.js'
+	import around from '../../apis/around.js'
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	export default {
-		name: "social-close",
+		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
+				total: 0,
+				page: 2,
 				downOption: {
 					use: true, // 是否启用下拉刷新; 默认true
 					auto: false, // 是否在初始化完毕之后自动执行下拉刷新的回调; 默认true
+					page: {
+						num: 1, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
+						size: 10 // 每页数据的数量,默认10
+					},
+					textLoading: '加载中....',
 				},
 				// 上拉加载的常用配置
 				upOption: {
-					use: false, // 是否启用上拉加载; 默认true
+					use: true, // 是否启用上拉加载; 默认true
 					auto: false, // 是否在初始化完毕之后自动执行上拉加载的回调; 默认true
 					page: {
-						num: 0, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
+						num: 2, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
 						size: 10 // 每页数据的数量,默认10
 					},
-					noMoreSize: 5, // 配置列表的总数量要大于等于5条才显示'-- END --'的提示
-					empty: {
-						tip: '暂无相关数据'
-					}
+					noMoreSize: 100, // 配置列表的总数量要大于等于5条才显示'-- END --'的提示
+					// empty: {
+					// 	tip: '暂无相关数据'
+					// }
 				},
 				mescroll: null,
 				wh: 0,
 				getInfo: false,
-				acitveData: []
+				acitveData: [],
+				flag: true
 			};
 		},
 		methods: {
@@ -49,39 +57,42 @@
 				this.$emit('init', mescroll)
 			},
 			downCallback(e) {
-				// console.log('33333', e)
-				// 第2种: 下拉刷新和上拉加载调同样的接口, 那以上请求可删, 直接用mescroll.resetUpScroll()代替
-				// this.mescroll.resetUpScroll(); // 重置列表为第一页 (自动执行 page.num=1, 再触发upCallback方法 )
-				this.mescroll.endSucess()
-				console.log(e);
-				
-			},
-			scroll(e) {
-				this.$emit('scrolls', e.scrollTop)
-			},
-			upCallback(mescroll) {
-				this.callback(mescroll)
-			},
-			// 多层对象合并
-			assiginObj(target = {}, sources = {}) {
-				let obj = target;
-				if (typeof target != 'object' || typeof sources != 'object') {
-					return sources; // 如果其中一个不是对象 就返回sources
+				let _that = this;
+				if (_that.flag == true) {
+					around.getRecomment({
+						page: _that.page,
+						size: 10,
+						userId: 1
+					}).then(res => {
+						_that.page++
+						_that.acitveData.unshift(...res.data)
+						if (res.data.length < 10) {
+							_that.flag = false
+							_that.mescroll.optDown.textSuccess = '暂无更多数据'
+						}
+						_that.mescroll.endByPage(1, 1);
+					})
+				} else {
+					_that.mescroll.endByPage(1, 1);
 				}
-				for (let key in sources) {
-					// 如果target也存在 那就再次合并
-					if (target.hasOwnProperty(key)) {
-						obj[key] = assiginObj(target[key], sources[key]);
-					} else {
-						// 不存在就直接添加
-						obj[key] = sources[key];
-					}
-				}
-				return obj;
-			},
 
-			getFresh() {
-				this.triggered = true
+			},
+			upCallback(e) {
+				let _that = this;
+				console.log(e);
+				around.getRecomment({
+					page: _that.page,
+					size: 10,
+					userId: 1
+				}).then(res => {
+					_that.page++
+					console.log(res.data);
+					_that.acitveData.push(...res.data)
+					_that.mescroll.optUp.hasNext = true
+					if (res.data.length < 10)
+						_that.flag = false
+					_that.mescroll.endByPage(3, 10);
+				})
 			},
 			openPopu() {
 				this.$emit('openPopu', true)
@@ -92,30 +103,36 @@
 				})
 			},
 			// 获取附近用户信息
-			getAroundInfo() {
-				let _this = this;
+			getAroundInfo(page) {
+				let _that = this;
 				uni.showLoading({
 					title: '加载中'
 				});
-				care.getCarefor({
-					page: 1,
+				around.getRecomment({
+					page,
 					size: 10,
 					userId: 1
 				}).then(res => {
-					_this.acitveData = []
-					_this.acitveData = res.data
-					_this.getInfo = true;
+					_that.infoInit(res)
 					uni.hideLoading()
 				})
 			},
+			infoInit(res) {
+				this.acitveData = []
+				this.acitveData = res.data
+				this.page = 2;
+				this.flag = true
+				this.getInfo = true;
+				this.mescroll.optDown.textSuccess = '加载成功'
+			},
 			backUpdate() {
-				this.getAroundInfo()
+				this.getAroundInfo(1)
 			}
 		},
 		mounted() {
-			this.getAroundInfo();
+			this.getAroundInfo(1);
 			this.$bus.$on('backUpdate', this.backUpdate)
-			this.wh = uni.getSystemInfoSync().windowHeight -103
+			this.wh = uni.getSystemInfoSync().windowHeight - 103
 		},
 
 	}
