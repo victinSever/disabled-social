@@ -1,19 +1,19 @@
 <template>
 	<view>
 		<div class="header">
-			<recomment-swiper :swiperList="imageList"></recomment-swiper>
+			<recomment-swiper :swiperList="item.picShow"></recomment-swiper>
 		</div>
 
 		<view class="footer">
-						
+
 			<!-- 姓名 -->
 			<view class="footer-header">
 				<view class="userName">
-					<text>小懒猫</text>
+					<text>{{item.username}}</text>
 					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
 				</view>
 				<view class="address">
-					<text>重庆巴南(3km)</text>
+					<text>{{item.houseAddress}}</text>
 					<text class="point">·</text>
 					<text style="color: #F95F81;">26分钟前活跃</text>
 				</view>
@@ -26,9 +26,9 @@
 					<text class="look">查看全部</text>
 				</view>
 				<view class="">
-					<scroll-view class="scroll-view" scroll-x="true" scroll-left="120">
-						<view class="scroll-view-item" v-for="(item, i) in imageList" :key="i">
-							<image :src="item" mode="aspectFill"></image>
+					<scroll-view class="scroll-view" scroll-x="true" show-scrollbar="false" scroll-left="120">
+						<view class="scroll-view-item" v-for="(pic, i) in item.picShow" :key="i">
+							<image :src="pic" mode="aspectFill"></image>
 						</view>
 					</scroll-view>
 				</view>
@@ -39,14 +39,19 @@
 				<view class="title">
 					<text class="pic">个人MV</text>
 				</view>
-				<view class="">
-					暂无
+				<view class="mv-video">
+					<video id="myVideo" :src="item.mvPath" @error="videoErrorCallback" controls></video>
 				</view>
 			</view>
 
-			<homeItem title="关于我" content="美少女战士"></homeItem>
-			<homeItem title="我的标签"></homeItem>
-			<homeItem title="我的兴趣"></homeItem>
+			<!-- <homeItem title="关于我" content="美少女战士"></homeItem> -->
+			<homeItem v-if="item.tags" title="我的标签" :list="item.tags"></homeItem>
+			<!-- <homeItem title="我的标签"></homeItem> -->
+			<homeItem v-if="item.hobbies" title="我的兴趣" :list="item.hobbies"></homeItem>
+
+			<view class="homeitem-bottom" style="margin-bottom: 110rpx;">
+				~暂无更多信息~
+			</view>
 		</view>
 	</view>
 
@@ -60,35 +65,25 @@
 			homeItem
 		},
 		props: {
-			backShow: {
-				type: Boolean,
-				default: false
-			},
+			
 			isTemplate: {
 				type: Boolean,
 				default: false
 			},
-			personageData: {
+			
+			
+			item: {
 				type: Object,
 				default: {}
-			},
-			baseData: {
-				type: Object,
-				default: {}
-			},
-			imageList: {
-				type: Array,
-				default: []
 			}
 		},
 		data() {
 			return {
-				
+
 			};
 		},
-		mounted(){
-			console.log(this.imageList);
-			
+		mounted() {
+			console.log(this.item);
 		},
 		methods: {
 			backdetail() {
@@ -100,7 +95,26 @@
 </script>
 
 <style lang="scss" scoped>
-	.header{
+	::-webkit-scrollbar {
+		display: none;
+		width: 0 !important;
+		height: 0 !important;
+		-webkit-appearance: none;
+		background: transparent;
+		color: transparent;
+	}
+
+	uni-scroll-view .uni-scroll-view::-webkit-scrollbar {
+		display: none;
+		width: 0 !important;
+		height: 0 !important;
+		-webkit-appearance: none;
+		background: transparent;
+		color: transparent;
+	}
+
+
+	.header {
 		padding: 0 30rpx;
 	}
 
@@ -166,6 +180,16 @@
 				}
 			}
 
+			.mv-video {
+				height: 400rpx;
+				width: 100%;
+
+				video {
+					width: 100%;
+					height: 100%;
+				}
+			}
+
 			.scroll-view {
 				white-space: nowrap;
 				width: 100%;
@@ -179,13 +203,20 @@
 				border-radius: 14rpx;
 				text-align: center;
 				font-size: 36rpx;
-				
-				image{
+				border: 1px solid #D8D8D8;
+
+				image {
 					height: 100%;
 					width: 100%;
 				}
 			}
 		}
 
+
+		.homeitem-bottom {
+			color: #d8d8d8;
+			text-align: center;
+			
+		}
 	}
 </style>

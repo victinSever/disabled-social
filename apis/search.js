@@ -6,8 +6,8 @@ import {
 const apiService = {
 
 	// 发送动态
-	postPerson(data, params) {
-		return http.post('/social/active/publishActive', data, params)
+	getList(params) {
+		return http.get('/recomment/searchPictureShowByKeywords', params)
 	},
 
 }

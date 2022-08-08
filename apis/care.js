@@ -9,6 +9,10 @@ const apiService = {
 	getCarefor(params) {
 		return http.get('/social/getFollowsDiaryList', params)
 	},
+	
+	getTotal(){
+		return http.get('/social/getFollowPages')
+	}
 
 }
 

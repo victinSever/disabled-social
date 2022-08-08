@@ -81,7 +81,7 @@
 	.item-container {
 		width: 100%;
 		display: flex;
-		margin-bottom: 10px;
+		margin-bottom: 30rpx;
 
 		.item-left {
 			width: 85%;

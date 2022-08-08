@@ -13,20 +13,20 @@
 				</text>
 			</view>
 
-			<!-- 右侧动态按钮 -->
 			<view class="social-header-right">
 				<text class="btnSend" @click="gotoShare">发动态</text>
 			</view>
+
 		</view>
 
-		<!-- 附近 -->
+		<!-- 关注 -->
 		<uni-transition mode-class="slide-right" :show="!isClose">
-			<social-double :request="requestCare" @openPopu="openPopu"></social-double>
+			<social-double :request="requestCare" :getTotal="getTotalCare" @openPopu="openPopu"></social-double>
 		</uni-transition>
 
-		<!-- 关注 -->
+		<!-- 附近 -->
 		<uni-transition mode-class="slide-left" :show="isClose">
-			<social-double :request="requestClose" @openPopu="openPopu"></social-double> 
+			<social-double :request="requestClose" :getTotal="getTotalAround" @openPopu="openPopu"></social-double>
 		</uni-transition>
 
 		<!-- 举报和关注弹窗 -->
@@ -93,12 +93,18 @@
 				this.$refs.popup.open('top')
 			},
 		},
-		computed:{
-			requestClose(){
+		computed: {
+			requestClose() {
 				return around.getRecomment
 			},
-			requestCare(){
+			requestCare() {
 				return care.getCarefor
+			},
+			getTotalAround() {
+				return around.getTotal
+			},
+			getTotalCare() {
+				return care.getTotal
 			}
 		}
 	}
@@ -112,11 +118,11 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		
 		// position: sticky;
 		// top: 70rpx;
 		background-color: #fff;
 		padding: 0 20rpx;
-
 		// background-color: yellow;
 		.social-header-left {
 			display: flex;

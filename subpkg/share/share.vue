@@ -171,7 +171,7 @@
 				this.userMedia.splice(index, 1);
 				this.useMediaRes.splice(index, 1)
 			},
-			goBack() {
+			gotoBack() {
 				uni.navigateBack()
 			},
 			filePush() {
@@ -235,8 +235,8 @@
 					})
 				}).then(res => {
 					uni.hideLoading()
-					// uni.$showMsg('发布成功！')
-					// _that.goBack()
+					uni.$showMsg('发布成功！')
+					_that.gotoBack()
 				}).catch(error => {
 					uni.hideLoading()
 					uni.$showMsg('发布失败！')
