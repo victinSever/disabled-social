@@ -85,24 +85,24 @@
 		<view class="section">
 			<text class="label">工作地区</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindworkAddrChange" :range="workAddr" :value="data.workAddr">
-					<view v-if="data.workAddr" class="uni-input">
-						{{workAddr[0][data.workAddr[0]]}} {{workAddr[1][data.workAddr[1]] || data.workAddr}}
-					</view>
-					<view v-else>请选择</view>
-				</picker>
+                <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.workAddr">
 			</view>
+            <lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
+            	:dataset="{ name: 'label2' }" @change="handleChange" @confirm="handleConfirm"
+            	@cancel="handleCancel">
+            </lb-picker>
 		</view>
 
 		<view class="section">
 			<text class="label">户籍情况</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindhouseholdAddreChange" :range="householdAddr" :value="data.householdAddr">
-					<view v-if="data.householdAddr" class="uni-input">
-						{{householdAddr[0][data.householdAddr[0]]}} {{householdAddr[1][data.householdAddr[1]] || data.householdAddr}}
-					</view>
-					<view v-else>请选择</view>
-				</picker>
+                <view class="content">
+                    <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.householdAddr">
+                </view>
+                <lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
+                	:dataset="{ name: 'label2' }" @change="handleChange" @confirm="handleConfirms"
+                	@cancel="handleCancel">
+                </lb-picker>
 			</view>
 		</view>
 
@@ -249,15 +249,10 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
+        import LbPicker from '@/components/lb-picker'
 	import areaInfo from "./area-data-min.js"
 	export default {		
 		data() {
-			const workAddr = [
-				['重庆城区', '重庆郊区'],
-				['万州区', '涪陵区','渝中区',"大渡口区","江北区","沙坪坝区","九龙坡区","南岸区","北碚区","綦江区",
-				"大足区","渝北区","巴南区","黔江区","长寿区","江津区","合川区","永川区","南川区","璧山区","铜梁区",
-				"潼南区","荣昌区","开州区","梁平区","武隆区"]
-			]
 			const householdAddr = [
 			]
 			const maritalStatus = ['请选择', '未婚', '二婚', '已婚']
@@ -265,19 +260,22 @@
 			const housingStatus = ['请选择', '已买房', '未买房']
 			const carStatus = ['请选择', '已买车', '未买车']
 			return {
-				workAddr,
+				workAddr:areaInfo,
 				householdAddr,
 				maritalStatus,
 				degree,
 				housingStatus,
 				carStatus,
-				data: {},
+				data: {
+                    workAddr:""
+                },
 				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
 				userImages: [],
 			};
 		},
 		components: { 
-			myProgress
+			myProgress,
+            LbPicker
 		},
 		computed: {
 			...mapState('common', ['moreInfo','albumInfo']),
@@ -297,11 +295,37 @@
 			}
 		},
 		created(){
-			this.data = this.moreInfo.personBasicInfo
+			this.data = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo:{}
 			this.userImages = this.albumInfo
 			this.householdAddr = this.workAddr
 		},
 		methods: {
+            openAddres() {
+            	this.$refs.picker.show();
+            },
+            handleChange(e) {
+            	console.log('change::', e)
+            },
+            
+            // 选择工作地区
+            handleConfirm(e) {
+            	// 如果存在多个picker，可以在picker上设置dataset属性，confirm中获取，就能区分是哪个picker了
+            	if (e) {
+            		const name = e.dataset.name;
+            		this.data.householdAddr = e.item.map(m => m.label).join('-');
+            	}
+            },
+            //户籍
+            handleConfirms(e) {
+            	// 如果存在多个picker，可以在picker上设置dataset属性，confirm中获取，就能区分是哪个picker了
+            	if (e) {
+            		const name = e.dataset.name;
+            		this.data.workAddr = e.item.map(m => m.label).join('-');
+            	}
+            },
+            handleCancel(e) {
+            	console.log('cancel::', e)
+            },
 			// 上传动态图片
 			uploadActiveImage(item, i){
 				let that = this;
@@ -355,10 +379,6 @@
 			// 选择户籍地区
 			bindhouseholdAddreChange(e) {
 				this.data.householdAddr = e.detail.value
-			},
-			// 选择工作地区
-			bindworkAddrChange(e) {
-				this.data.workAddr = e.detail.value
 			},
 
 			// 拍照
