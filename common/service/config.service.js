@@ -5,7 +5,7 @@ BASE_URL = 'http://192.168.153.249:5211/'
 
 BASE_URL = 'http://120.26.7.136:8082/'
 // // #ifdef H5
-// // BASE_URL = '/api'  //H5下将地址修改为/api
+// BASE_URL = '/api'  //H5下将地址修改为/api
 // // #endif
 
 

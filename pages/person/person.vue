@@ -154,7 +154,7 @@
 		mounted() {
 			this.paramsData.userId =  this.loginUser.userId
 			this.getData()
-			// this.getActiveData()
+			this.getActiveData()
 		},
 		computed: {
 			...mapState('user',['loginUser']),
