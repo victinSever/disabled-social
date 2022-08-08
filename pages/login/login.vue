@@ -97,7 +97,13 @@
 				auth.login({
 					tel:"15102340082"
 				}).then((res)=>{
-					uni.setStorageSync(ACCESS_TOKEN,res.data.token)
+                    //登录成功token
+					uni.setStorageSync(ACCESS_TOKEN,res.data.data.token);
+                    //保存用户信息
+                    this.$store.commit('user/SETLOGINUSER',res.data.data.user);
+                    uni.reLaunch({
+                        url:"/pages/recomment/recomment"
+                    })
 					
 				}).catch(()=>{
 					

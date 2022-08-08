@@ -5,8 +5,17 @@ export default {
     state: {
         baseData:{},//个人统计信息
 		detailData: {},//个人详细信息（基础信息，详细信息，择偶信息）
+        loginUser:{
+            loginName: "",
+            nickName: "",
+            userId:"1"
+        }
     },
-    mutations: {},
+    mutations: {
+        SETLOGINUSER(state, data) {
+            state.loginUser = data;
+        }
+    },
     actions: {
         //更新用户个人统计信息
         UpdateUserBaseData({commit}, data) {
