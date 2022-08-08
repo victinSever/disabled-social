@@ -57,31 +57,30 @@
 				this.$emit('init', mescroll)
 			},
 			downCallback(e) {
+				console.log(e)
 				let _that = this;
 				if (_that.flag == true) {
 					around.getRecomment({
-						page: _that.page,
+						page: e.num,
 						size: 10,
 						userId: 1
 					}).then(res => {
-						_that.page++
 						_that.acitveData.unshift(...res.data)
 						if (res.data.length < 10) {
 							_that.flag = false
 							_that.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
-						_that.mescroll.endByPage(1, 1);
+						_that.mescroll.endByPage(res.data.length, 10000);
 					})
 				} else {
-					_that.mescroll.endByPage(1, 1);
+					// _that.mescroll.endByPage(1, 10000);
 				}
 
 			},
 			upCallback(e) {
 				let _that = this;
-				console.log(e);
 				around.getRecomment({
-					page: _that.page,
+					page: e.num,
 					size: 10,
 					userId: 1
 				}).then(res => {
@@ -90,7 +89,7 @@
 					_that.acitveData.push(...res.data)
 					if (res.data.length < 10)
 						_that.flag = false
-					_that.mescroll.endByPage(3, 10);
+					   _that.mescroll.endByPage(res.data.length, 10000);
 				})
 			},
 			openPopu() {
