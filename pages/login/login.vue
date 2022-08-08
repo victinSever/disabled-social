@@ -19,6 +19,9 @@
 
 <script>
 	import auth from "@/apis/auth.js"
+	import {
+		ACCESS_TOKEN
+	} from '@/common/util/constants.js'
 	export default {
 		data() {
 			return {};
@@ -92,8 +95,9 @@
 			},
 			btn_login(){
 				auth.login({
-					loginName:"18375874449"
-				}).then(()=>{
+					tel:"15102340082"
+				}).then((res)=>{
+					uni.setStorageSync(ACCESS_TOKEN,res.data.token)
 					
 				}).catch(()=>{
 					
