@@ -159,7 +159,7 @@
 			};
 		},
 		computed: {
-			...mapState['common','baseInfo'],
+			...mapState('user',['loginUser']),
 			vipDuring() {
 				if (!this.vipTime)
 					return returnDuringTime(this.chooseVip.time)
@@ -167,18 +167,20 @@
 					return '会员到期' + this.vipTime.split('T')[0]
 			}
 		},
-		mounted() {
+		mounted() {		
 			this.getData()
 			this.getVipPackageList()
+			console.log(this.loginUser);
+			
 		},
 		methods: {
 			// 获取是否是会员，会员到期时间信息
 			async getData() {
-				const {
-					data: res
-				} = await my.getInfo({
-					loginName: '123456'
+				uni.showLoading({title: '动态加载中',mask:true});
+				const {data: res} = await my.getInfo({
+					loginName: this.loginUser.loginName
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					if (res.data.isVip === 1) {
 						this.data = res.data
@@ -193,10 +195,9 @@
 			async getVipPackageList() {
 				const {data: res} = await my.getVipPackageList({
 					start: 1,
-					limit: 5
+					limit: 3
 				})
 				if (res.resultCode === 200) {
-					console.log(res.data);
 					this.vipPrice = res.data
 					this.chooseVip = this.vipPrice[0]
 				}
@@ -209,12 +210,14 @@
 			},
 			// 开通VIP
 			async openVip() {
+				uni.showLoading({title: '动态加载中',mask:true});
 				const {
 					data: res
 				} = await my.openVip({
-					loginName: '123456',
+					loginName: this.loginUser.loginName,
 					month: this.chooseVip.time
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					this.vipTime = res.data;
 					this.isVip = true
@@ -224,12 +227,14 @@
 			},
 			// 续费VIP
 			async renewalVip() {
+				uni.showLoading({title: '动态加载中',mask:true});
 				const {
 					data: res
 				} = await my.renewalVip({
-					loginName: '123456',
+					loginName: this.loginUser.loginName,
 					month: this.chooseVip.time
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					this.vipTime = res.data;
 					this.isVip = true

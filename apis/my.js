@@ -13,6 +13,16 @@ const apiService = {
     	return http.post('/user/getInfo', null, params)
     },
 	
+	//修改头像
+	changeUserImage(params) {
+		return http.post('/user/updateHeadPicPath', null, params)
+	},
+	
+	//修改昵称
+	changeNickName(params) {
+		return http.post('/user/updateNickName', null, params)
+	},
+	
 	/**************************************
 		特权模块
 	*************************************/
@@ -133,12 +143,25 @@ const apiService = {
 	
 	// 新增照片
 	addPicture(params) {
-		return http.post('/pictureAlbum/insertInfo', null, params)
+		return http.post('/pictureAlbum/insertInfo', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			}
+		})
+	},
+	
+	// 删除照片
+	deletePicture(params) {
+		return http.delete('/pictureAlbum/delete', null, params)
 	},
 	
 	// 更新图片
 	changePicture(params) {
-		return http.put('/pictureAlbum/update', params)
+		return http.put('/pictureAlbum/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			}
+		})
 	},
 	
 	// 获取我的动态列表

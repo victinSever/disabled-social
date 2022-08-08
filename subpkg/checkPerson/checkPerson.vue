@@ -109,7 +109,8 @@
 				this.baseData = this.baseInfo
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
-				this.cacheData = this.moreInfo			
+				this.cacheData = this.moreInfo	
+				console.log(this.moreInfo);
 			},
 			
 			// 监视缓存数据
@@ -149,15 +150,30 @@
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
 				uni.hideLoading()
-				console.log(res1);
-				console.log(res2);
-				console.log(res3);
+				
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
 					success = true
 				}
 				return success 			
 			},
+			// // 更新相册数据(没有一次更新的接口，因此只有一个一个更新)
+			// uploadAlbumList(){
+			// 	this.albumData.forEach(item => {
+			// 		delete item.createTime
+			// 		if(item.id){						
+			// 			my.changePicture(item).then(res => {
+			// 				console.log(res);
+			// 			}).catch(err => {
+			// 				console.log(err);
+			// 			})
+			// 		}else{
+			// 			my.addPicture(item).then(res => {
+			// 				console.log(res);
+			// 			})
+			// 		}										
+			// 	})
+			// },
 			// 返回
 			gotoBack() {
 				uni.switchTab({

@@ -6,7 +6,7 @@
 		</view>
 		
 		<!-- 列表 -->
-		<view class="list">
+		<view class="list" v-if="list.length != 0">
 			<view class="item" v-for="(item, i) in list" :key="i">
 				<view class="left">
 					<image :src="item.headPicPath" mode=""></image>
@@ -21,39 +21,37 @@
 				</view>
 			</view>
 		</view>
+		<view class="empty" v-else>
+			<text>你还没有粉丝关注哦！</text>
+		</view>
 	</view>
 </template>
 
 <script>
 	import my from '@/apis/my.js'
+	import { mapState } from 'vuex'
 	export default {
-		name:"cencern",
+		name:"fan",
+		props: {
+			list: {
+				type: Array,
+				default: []
+			}
+		},
 		data() {
 			return {
 				searchValue: '',
-				list: [],
-				page: {
-					userId: 5,
-					start: 0,
-					limit: 5,
-				}
 			};
 		},
-		mounted(){
-			this.getList()
+		computed: {
+			...mapState('user',['loginUser']),
 		},
 		methods: {
-			async getList(){
-				const { data: res} = await my.searchAttention(this.page)
-				if(res.resultCode === 200){
-					this.list = res.data
-				}
-				console.log(res);
-			},
+			
 			async cancelAttention(item, i){
 				const { data: res} = await my.cancelAttention({
 					userId: item.userId,
-					follower: page.userId
+					follower: this.loginUser.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('取消成功！')
@@ -63,7 +61,7 @@
 			async addAttention(item, i){
 				const { data: res} = await my.addAttention({
 					userId: item.userId,
-					follower: page.userId
+					follower: this.loginUser.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('回关成功！')
@@ -120,6 +118,22 @@
 			background-color: darkorange;	
 			color: #fff;
 		}
+	}
+}
+
+.item:not(:last-child){
+	border-bottom: 2rpx solid #eee;
+}
+
+.empty{
+	width: 100%;
+	height: 200rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	text{
+		color: #777;
 	}
 }
 </style>

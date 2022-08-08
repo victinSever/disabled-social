@@ -16,7 +16,13 @@
 					<button class="btn" @click="add">添加</button>
 				</view>
 				<h2 class="title">你的爱好</h2>
-				<view class="result">{{result ? result : "暂无爱好"}}</view>
+				<view class="result">
+					<view class="item" v-if="list.length != 0" v-for="(item, i) in list" :key="i">
+						<uni-icons type="vip-filled" size="12" color="darkorange"></uni-icons>
+						<text>{{item}}</text>
+					</view>
+					<text v-else>暂无爱好</text>
+				</view>
 			</view>
 			<view v-else>
 				<view class="add">
@@ -24,7 +30,13 @@
 					<button class="btn" @click="add">添加</button>
 				</view>
 				<h2 class="title">你的标签</h2>
-				<view class="result">{{result ? result : "暂无标签"}}</view>
+				<view class="result">
+					<view class="item" v-if="list.length != 0" v-for="(item, i) in list" :key="i">
+						<uni-icons type="vip-filled" size="12" color="darkorange"></uni-icons>
+						<text>{{item}}</text>
+					</view>
+					<text v-else>暂无标签</text>
+				</view>
 			</view>
 		</view>
 		<view class="footer">
@@ -35,11 +47,13 @@
 </template>
 
 <script>
+	import {mapMutations} from 'vuex'
 	export default {
 		data() {
 			return {
 				type: 1, //hobby或者tag
 				keyword: '',
+				list: [],
 				result: '',
 			};
 		},
@@ -47,24 +61,28 @@
 			if(value.type){
 				this.type = value.type
 			}
-			console.log(this.type);
 		},
 		methods: {
+			...mapMutations('other',['SetTag','SetHobby']),
 			add(){
-				if(!this.result){
-					this.result = this.keyword
-				}else{
-					this.result += ' ' + this.keyword
-				}
+				this.list.push(this.keyword) 
 				this.keyword = ''
 			},
 			clear(){
-				this.result = ''
+				this.list = []
 			},
 			gotoBack(){
 				uni.navigateBack()
 			},
 			finish(){
+				this.list.forEach(item => {
+					this.result += item + ' '
+				})
+				if(this.type == 1){
+					this.SetHobby(this.result)
+				}else{
+					this.SetTag(this.result)
+				}
 				this.gotoBack()
 			}
 		}
@@ -137,11 +155,23 @@
 	}
 	
 	.result{
-		border: 8rpx solid #ff557f;
+		border: 8rpx solid #eee;
 		min-height: 80rpx;
+		width: calc(100% - 80rpx);
 		border-radius: 30rpx;
-		line-height: 50rpx;
 		padding: 30rpx;
+		display: flex;
+		flex-wrap: wrap;
+		
+		.item{
+			padding: 5rpx 10rpx;
+			margin: 10rpx 20rpx;
+			display: flex;
+			align-items: center;
+			border: 4rpx solid #eee;
+			border-radius: 20rpx;
+			color: darkorange;
+		}
 	}
 	
 	.footer{

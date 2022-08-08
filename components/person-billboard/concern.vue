@@ -6,7 +6,7 @@
 		</view>
 		
 		<!-- 列表 -->
-		<view class="list">
+		<view class="list" v-if="list.length != 0">
 			<view class="item" v-for="(item, i) in list" :key="i">
 				<view class="left">
 					<image :src="item.headPicPath" mode=""></image>
@@ -21,42 +21,38 @@
 				</view>
 			</view>
 		</view>
+		<view class="empty" v-else>
+			<text>你还没有关注的陌生人哦！</text>
+		</view>
 	</view>
 </template>
 
 <script>
 	import my from '@/apis/my.js'
+	import { mapState } from 'vuex'
 	export default {
 		name:"cencern",
+		props: {
+			list: {
+				type: Array,
+				default: []
+			}
+		},
 		data() {
 			return {
-				searchValue: '',
-				list: [
-				],
-				page: {
-					follower: 5,
-					start: 1,
-					limit: 5,
-				}
+				searchValue: '',				
 			};
 		},
-		mounted(){
-			this.getList()
+		computed: {
+			...mapState('user',['loginUser']),
 		},
 		methods: {
-			// 获取信息
-			async getList(){
-				const { data: res} = await my.searchFan(this.page)
-				if(res.resultCode === 200){
-					this.list = res.data
-				}
-				console.log(res);
-			},
+			
 			// 取消关注
 			async cancelAttention(item, i){
 				const { data: res} = await my.cancelAttention({
 					userId: item.userId,
-					follower: page.follower
+					follower: this.loginUser.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('取消成功！')
@@ -67,7 +63,7 @@
 			async addAttention(item, i){
 				const { data: res} = await my.addAttention({
 					userId: item.userId,
-					follower: page.follower
+					follower: this.loginUser.userId
 				})
 				if(res.resultCode === 200){
 					uni.$showMsg('关注成功！')
@@ -100,7 +96,7 @@
 		}
 		
 		.info{
-			width: 00rpx;
+			width: 300rpx;
 							
 			h2{
 				font-size: 14px;
@@ -120,7 +116,7 @@
 		text{
 			padding: 10rpx 30rpx;
 			border-radius: 10rpx;
-			background-color: #f5f5f5;
+			background-color: #ddd;
 			color: #fff;
 		}
 	}
@@ -128,5 +124,17 @@
 
 .item:not(:last-child){
 	border-bottom: 2rpx solid #eee;
+}
+
+.empty{
+	width: 100%;
+	height: 200rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	text{
+		color: #777;
+	}
 }
 </style>

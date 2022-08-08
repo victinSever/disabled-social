@@ -265,9 +265,13 @@
 		},
 		computed: {
 			...mapState('common', ['moreInfo']),
+			...mapState('other', ['tag','hobby']),
 		},
 		created(){
 			this.data = this.moreInfo.personDetailInfo
+		},
+		onShow(){
+			this.getData()
 		},
 		watch: {
 			data: {
@@ -275,9 +279,21 @@
 				handler(val){
 					this.$emit('changeDetail', val)
 				}
+			},
+			hobby(val){
+				this.data.hobby = val
+				console.log(val);
+			},
+			tag(val){
+				this.data.personTag = val
 			}
 		},
 		methods: {
+			getData(){
+				uni.$on('updateData', function(data) {
+					console.log(data)
+				})
+			},
 			// 编辑兴趣和标签
 			gotoEditDetail(type){
 				uni.navigateTo({

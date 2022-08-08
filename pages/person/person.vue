@@ -1,5 +1,5 @@
 <template>
-	<view class="root">
+	<view>
 		<mover></mover>
 		<!-- 顶部设置 -->
 		<!-- 				<view class="header">
@@ -16,95 +16,103 @@
 				</view>
 			</uni-badge>
 		</view> -->
-		<view class="head">
-		</view>
-
-		<!-- 主信息部分 -->
-		<view class="main">
-			<view class="main-top">
-				<div class="top-left">
-					<view class="top-logo">
-						<image v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" mode="aspectFill"/>
-						<view class="empty-image" v-else>
-							<uni-icons type="person-filled" size="80" color="#eee"></uni-icons>
+		<view class="root">
+			<view class="head">
+			</view>
+			
+			<!-- 主信息部分 -->
+			<view class="main">
+				<view class="main-top">
+					<div class="top-left">
+						<view class="top-logo">
+							<image @click="chooseImage" v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" mode="aspectFill"/>
+							<view class="empty-image" v-else>
+								<uni-icons type="person-filled" size="80" color="#eee"></uni-icons>
+							</view>
 						</view>
+						<view class="top-left-right">
+							<h1 @click="inputDialogToggle">
+								<text>{{baseData.nickName}}</text>
+							</h1>
+							<p>
+								<text>用户ID：{{baseData.personId}}</text>
+								<uni-icons type="compose" size="16" @click="copyText(baseData.personId)"></uni-icons>
+							</p>
+			
+							<p>
+								<text>我的简历</text>
+								<uni-icons type="compose" size="16" @click="gotoResume"></uni-icons>
+							</p>
+						</view>
+					</div>
+					<view class="top-right">
+						<text v-if="!baseData.signIn" @click="makeSignUp">签到</text>
+						<text v-else class="isFlaged">今日已签到</text>
 					</view>
-					<view class="top-left-right">
-						<h1>
-							<text>{{baseData.username}}</text>
-						</h1>
-						<p>
-							<text>用户ID：{{baseData.personId}}</text>
-							<uni-icons type="compose" size="16" @click="copyText(baseData.personId)"></uni-icons>
-						</p>
-
-						<p>
-							<text>我的简历</text>
-							<uni-icons type="compose" size="16" @click="gotoResume"></uni-icons>
-						</p>
+				</view>
+				<view class="main-bottom">
+					<view class="bottom-item" @click="gotoBillBoard(1)">
+						<text class="item-num">{{baseData.attentionCount}}</text>
+						<text class="item-title">关注</text>
 					</view>
-				</div>
-				<view class="top-right">
-					<text v-if="!baseData.signIn" @click="makeSignUp">签到</text>
-					<text v-else class="isFlaged">已签到</text>
+					<view class="bottom-item" @click="gotoBillBoard(2)">
+						<text class="item-num">{{baseData.fanCount}}</text>
+						<text class="item-title">粉丝</text>
+					</view>
+					<view class="bottom-item" @click="openLikes">
+						<text class="item-num">{{baseData.like}}</text>
+						<text class="item-title">点赞</text>
+					</view>
+					<view class="bottom-item" @click="openSorts">
+						<text class="item-num">{{baseData.sorts}}</text>
+						<text class="item-title">积分</text>
+					</view>
 				</view>
 			</view>
-			<view class="main-bottom">
-				<view class="bottom-item" @click="gotoBillBoard(1)">
-					<text class="item-num">{{baseData.attentionCount}}</text>
-					<text class="item-title">关注</text>
+			
+			<!-- 按钮 -->
+			<view class="banner">
+				<view class="banner-vip section" @click="gotoPrivilege">
+					<view class="section-one">
+						<text>我的特权</text>
+						<uni-icons type="forward" size="20"></uni-icons>
+					</view>
+					<view class="section-two">
+						<text>特权享更多权益·飞速脱单</text>
+					</view>
+					<view class="section-three">
+						<text>开通特权</text>
+					</view>
 				</view>
-				<view class="bottom-item" @click="gotoBillBoard(2)">
-					<text class="item-num">{{baseData.fanCount}}</text>
-					<text class="item-title">粉丝</text>
-				</view>
-				<view class="bottom-item" @click="openLikes">
-					<text class="item-num">{{baseData.like}}</text>
-					<text class="item-title">点赞</text>
-				</view>
-				<view class="bottom-item" @click="openSorts">
-					<text class="item-num">{{baseData.sorts}}</text>
-					<text class="item-title">积分</text>
+				<view class="banner-info section" @click="gotoCheckPerson">
+					<view class="section-one">
+						<text>完善资料</text>
+						<uni-icons type="forward" size="20"></uni-icons>
+					</view>
+					<view class="section-two">
+						<text>完成度越高越容易推荐</text>
+					</view>
+					<view class="section-three">
+						<text>{{InfoRate}}</text>
+					</view>
 				</view>
 			</view>
+			
+			<!-- 动态 -->
+			<person-active :personActiveData="personActiveData"></person-active>
+			
+			<!-- 发表动态按钮 -->
+			<view class="active-btn" @click="gotoShare">
+				<uni-icons type="camera-filled" size="22" color="#fff"></uni-icons>
+				<text>发动态</text>
+			</view>
+			
+			<uni-popup ref="inputDialog" type="dialog">
+				<uni-popup-dialog ref="inputClose"  mode="input" title="修改你的用户昵称" :value="baseData.nickName"
+					placeholder="非VIP用户一年只能修改一次昵称哦!" @confirm="dialogInputConfirm"></uni-popup-dialog>
+			</uni-popup>
 		</view>
-
-		<!-- 按钮 -->
-		<view class="banner">
-			<view class="banner-vip section" @click="gotoPrivilege">
-				<view class="section-one">
-					<text>我的特权</text>
-					<uni-icons type="forward" size="20"></uni-icons>
-				</view>
-				<view class="section-two">
-					<text>特权享更多权益·飞速脱单</text>
-				</view>
-				<view class="section-three">
-					<text>开通特权</text>
-				</view>
-			</view>
-			<view class="banner-info section" @click="gotoCheckPerson">
-				<view class="section-one">
-					<text>完善资料</text>
-					<uni-icons type="forward" size="20"></uni-icons>
-				</view>
-				<view class="section-two">
-					<text>完成度越高越容易推荐</text>
-				</view>
-				<view class="section-three">
-					<text>{{InfoRate}}</text>
-				</view>
-			</view>
-		</view>
-
-		<!-- 动态 -->
-		<person-active :personActiveData="personActiveData"></person-active>
-
-		<!-- 发表动态按钮 -->
-		<view class="active-btn" @click="gotoShare">
-			<uni-icons type="camera-filled" size="22" color="#fff"></uni-icons>
-			<text>发动态</text>
-		</view>
+		
 
 	</view>
 </template>
@@ -113,7 +121,7 @@
 	import my from '@/apis/my.js'
 	import { getDay, getMonth } from "@/apis/tools"
 	import { returnRate, formdataify } from '@/apis/tools.js'
-	import { mapMutations } from 'vuex'
+	import { mapMutations,mapState } from 'vuex'
 	
 	export default {
 		data() {
@@ -138,15 +146,18 @@
 					userId: "1",
 					page: 1,
 					size: 5
-				}
+				},
+				reward: 5,//签到增加的积分
 				
 			}
 		},
 		mounted() {
+			this.paramsData.userId =  this.loginUser.userId
 			this.getData()
 			// this.getActiveData()
 		},
 		computed: {
+			...mapState('user',['loginUser']),
 			// 资料完善比率
 			InfoRate() {
 				const obj = {
@@ -168,13 +179,101 @@
 		methods: {
 			...mapMutations('common', ['setBaseInfo', 'setMoreInfo', 'setAlbumInfo']),
 			
+			// 弹出修改昵称的弹框
+			inputDialogToggle() {
+				if(this.baseData.isVip == 1)
+					this.$refs.inputDialog.open()
+				else
+					uni.$showMsg('修改昵称需要VIP权限！')
+			},
+			
+			async dialogInputConfirm(val) {
+				uni.showLoading({
+					title: '正在更新中'
+				})
+				const { data: res } = await my.changeNickName({
+					loginName: this.loginUser.loginName,
+					nickName: val
+				})
+				let that = this
+				setTimeout(() => {
+					uni.hideLoading()
+					console.log(res);
+					if(res.resultCode == 200) {
+						that.$set(that.baseData, 'nickName', val)				
+						uni.$showMsg('更新昵称成功！')
+					}
+					// 关闭窗口后，恢复默认内容
+					this.$refs.inputDialog.close()
+				}, 1000)
+			},
+			
+			// 更新头像
+			async changeUserImage(url){
+				uni.showLoading({title: '更新中',mask:true});
+				const { data: res } = await my.changeUserImage({
+					loginName: this.loginUser.loginName,
+					headPicPath: url
+				})				
+				setTimeout(() => {
+					uni.hideLoading();
+					if(res.resultCode == 200) {
+						this.$set(that.baseData, 'headPicPath', data.data.url)				
+						uni.$showMsg('更新头像成功！')
+					}
+				}, 1000)
+			},
+			
+			// 选择拍照还是相册
+			chooseImage() {
+				var that = this;
+				wx.showActionSheet({
+					itemList: ['相册', '拍照'],
+					itemColor: "darkorange",
+					success: function(res) {
+						if (!res.cancel) {
+							if (res.tapIndex == 0) {
+								that.chooseWxImage('album')
+							} else if (res.tapIndex == 1) {
+								that.chooseWxImage('camera')
+							}
+						}
+					}
+				})
+			},
+			// 调用微信图片
+			chooseWxImage(type) {
+				let that = this;
+				uni.chooseImage({
+					count: 6, //默认9
+					sizeType: ['original', 'compressed'],
+					sourceType: [type], 
+					success: function(res) {				
+						res.tempFilePaths.forEach((item) => {
+							uni.uploadFile({
+								url: that.vuex_uploadAction,
+								filePath: item,
+								name: 'file',
+								header: {
+									token: "" // 挂载请求头为用户的 token
+								},
+								success: function(arr) {
+									let data = JSON.parse(arr.data);									
+									that.changeUserImage(data.data.url)
+								}
+							});
+						})				
+					}
+				});
+			},
+			
 			// 获取动态信息
 			async getActiveData(){
 				uni.showLoading({title: '动态加载中',mask:true});
 				this.isLoading = true
 				const {data: res} = await my.getMyDiary(this.paramsData)
 				this.isLoading = false
-				setTimeout(function () {uni.hideLoading();}, 100);
+				uni.hideLoading();
 				// 根据动态发布时间获取日月
 				let arr = res.map(item => {
 					item.day = getDay(item.diary.createTime)
@@ -193,15 +292,15 @@
 				uni.showLoading({title: '信息加载中',mask:true})
 				// // 系统信息
 				const {data: res1 } = await my.getBaseData({
-					personId: 1
+					personId: this.loginUser.userId
 				})
 				// 用户信息
 				const {data: res2} = await my.getAllData({
-					personId: 1
-				})	
+					personId: this.loginUser.userId
+				})				
 				// 相册
 				const {data: res3} = await my.searchAlbumListByUserId({
-					userId: 1
+					userId: this.loginUser.userId
 				})	
 				uni.hideLoading()
 				this.baseData = res1.data				
@@ -217,7 +316,6 @@
 					content: value, //模板中提示的内容
 					confirmText: '复制内容',
 					success: () => { //点击复制内容的后调函数
-						//uni.setClipboardData方法就是讲内容复制到粘贴板
 						uni.setClipboardData({
 							data: value, //要被复制的内容
 							success: () => { //复制成功的回调函数
@@ -241,22 +339,36 @@
 			},
 			// 查看关注页面
 			gotoBillBoard(type) {
+				if(type === 2) {
+					if(this.baseData.isVip != 1){
+						uni.$showMsg('查看谁喜欢你？获取特权竞享权益')
+						setTimeout(function(){
+							uni.navigateTo({
+								url: '/subpkg/privilege/privilege'
+							})
+						},2000)						
+						return
+					}
+				}
 				uni.navigateTo({
 					url: '/subpkg/billboard/billboard?type=' + type
 				})
 			},
 			// 签到
 			async makeSignUp() {
+				uni.showLoading({title: '信息加载中',mask:true})
 				const {
 					data: res
 				} = await my.signIn({
-					reward: 5,
-					loginName: '123456'
+					reward: this.reward,
+					loginName: this.loginUser.loginName
 				})
+				uni.hideLoading()
 				uni.$showMsg(res.message)
 				this.baseData.signIn = true
+				let that = this
 				setTimeout(function() {
-					uni.$showMsg('积分 + 5')
+					uni.$showMsg('积分 + ' + that.reward)
 				}, 1000)
 
 			},

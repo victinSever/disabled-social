@@ -11,13 +11,13 @@
 		<view class="image-active">
 			<view class="image-list">
 				<view class="image-item" v-for="(item, i) in userImages" :key="i" @click="uploadActiveImage(item, i)">
-					<view class="box" v-if="item.picPath">
+					<view class="box" v-if="item.id">
 						<image :src="item.picPath" mode="aspectFill" alt=""></image>
 						<view class="close" @click="deleteActiveImage(item, i)">
 							<uni-icons type="closeempty" size="16" color="darkorange"></uni-icons>
 						</view>
 						<view v-if="i === 0" class="host">
-							<text>主头像</text>
+							<text>主图</text>
 						</view>
 					</view>
 					<view class="" v-else>
@@ -27,21 +27,10 @@
 
 			</view>
 			<view class="image-text">
-				<text>图片秀仅限6张图片哦！</text>
+				<text>{{baseInfo.isVip == 1 ? '特权用户可上传9':'图片秀仅限6'}}张图片哦！</text>
 			</view>
 		</view>
 
-
-		<view class="section">
-			<text class="label">头像</text>
-			<view class="content" @click="chooseimage(2)">
-				<view v-if="!data.imagePath" class="camera">
-					<text>点击上传</text>
-					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
-				</view>
-				<text v-else>已上传成功！</text>
-			</view>
-		</view>
 		
 		<view class="section">
 			<text class="label">用户名</text>
@@ -88,9 +77,9 @@
 		<view class="section">
 			<text class="label">工作地区</text>
 			<view class="content">
-                <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.workAddr">
-				<lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
-					:dataset="{ name: 'workAddr' }" @confirm="handleConfirm">
+                <input type="text" class="input" placeholder="请选择地区" @click="openAddres1" disabled="true" v-model="data.workAddr">
+				<lb-picker ref="picker1" mode="multiSelector" :list="workAddr" :level="3"
+					:dataset="{ name: '1' }" @confirm="bindworkAddrChange">
 				</lb-picker>
 			</view>          
 		</view>
@@ -99,9 +88,9 @@
 			<text class="label">户籍情况</text>
 			<view class="content">
                 <view class="content">
-                    <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.householdAddr">
-					<lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
-						:dataset="{ name: 'householdAddr' }"  @confirm="handleConfirm">
+                    <input type="text" class="input" placeholder="请选择地区" @click="openAddres2" disabled="true" v-model="data.householdAddr">
+					<lb-picker ref="picker2" mode="multiSelector" :list="workAddr" :level="3"
+						:dataset="{ name: '2' }"  @confirm="bindhouseholdAddrChange">
 					</lb-picker>
                 </view>              
 			</view>
@@ -117,9 +106,7 @@
 					<view v-else>请选择</view>
 				</picker>
 			</view>
-		</view>
-		
-		
+		</view>		
 
 		<view class="section">
 			<text class="label">学历</text>
@@ -141,8 +128,7 @@
 			</view>
 		</view>
 		
-		<view class="diliver">
-			
+		<view class="diliver">		
 		</view>
 
 		<view class="section">
@@ -221,7 +207,7 @@
 
 		<view class="section">
 			<text class="label">微信二维码</text>
-			<view class="content" @click="chooseimage(3)">
+			<view class="content" @click="chooseimage()">
 				<view v-if="!data.wechatCodeImagesPath" class="camera">
 					<text>点击上传</text>
 					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
@@ -256,10 +242,9 @@
     import LbPicker from '@/components/lb-picker'
 	import areaInfo from "./area-data-min.js"
 	import {getDate} from "@/apis/tools"
+	import my from '@/apis/my.js'
 	export default {		
 		data() {
-			const householdAddr = [
-			]
 			const maritalStatus = ['请选择', '未婚', '二婚', '已婚']
 			const degree = ['请选择','小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
 			const housingStatus = ['请选择', '已买房', '未买房']
@@ -268,8 +253,7 @@
 			            format: true
 			        })
 			return {
-				workAddr:areaInfo,
-				householdAddr,
+				workAddr: areaInfo,
 				maritalStatus,
 				degree,
 				housingStatus,
@@ -310,7 +294,6 @@
 			// 监视昵称修改，触发vip权限验证
 			"data.personName": {
 				handler(oldVal, newVal) {
-					console.log(this.baseInfo);
 					if(this.baseInfo.isVip != 1){
 						this.data.personName = oldVal
 						uni.$showMsg('昵称需要开通VIP才能修改哦！')
@@ -324,35 +307,45 @@
 			this.householdAddr = this.workAddr
 		},
 		methods: {
-			// 不足6张图片补齐空位
+			// 不足6张图片补齐空位,vip9张
 			fillInGaps(albumInfo){
-				if(albumInfo.length === 6) return albumInfo
+				let len = 6
+				if(this.baseInfo.isVip == 1)
+					len = 9
+				if(albumInfo.length === len) return albumInfo
 				let data = albumInfo
-				for(let i = 0; i < (6 - albumInfo.length); i++ ){
+				for(let i = 0; i < (len - albumInfo.length); i++ ){
 					data.push({
 						createTime: '',
 						id: '',
 						likeCounts: '',
 						picDesc: '',
 						picPath: '',
-						status: '',
+						status: '1',
 						userId: '',
 					})
 				}
 				return data
 			},		
-            openAddres() {
-            	this.$refs.picker.show();
+            openAddres1() {
+            	this.$refs.picker1.show();
             },
-            // 选择工作地区或者户籍
-            handleConfirm(e) {
+			openAddres2() {
+				this.$refs.picker2.show();
+			},
+			// 选择户籍地区
+			bindhouseholdAddrChange(e) {
+				// 如果存在多个picker，可以在picker上设置dataset属性，confirm中获取，就能区分是哪个picker了
+				if (e) {
+					const name = e.dataset.name;
+					this.data.householdAddr = e.item.map(m => m.label).join('-');
+				}
+			},
+            // 选择户籍地区
+            bindworkAddrChange(e) {
             	// 如果存在多个picker，可以在picker上设置dataset属性，confirm中获取，就能区分是哪个picker了
             	if (e) {
-            		const name = e.dataset.name;
-            		if(name == 'workAddr')
-            			this.data.workAddr = e.item.map(m => m.label).join('-');
-            		else if(name == 'householdAddr')
-            			this.data.householdAddr = e.item.map(m => m.label).join('-');
+            		this.data.workAddr = e.item.map(m => m.label).join('-');
             	}
             },
 			// 上传动态图片
@@ -373,20 +366,57 @@
 								},
 								success: function(arr) {
 									let data = JSON.parse(arr.data);
-									that.$set(that.userImages[i], 'picPath', data.data.url)
+									if(item.id){
+										that.changeActiveImage(item, i, data.data.url)
+									}else{
+										this.addActiveImage(item,i, data.data.url)
+									}								
 								}
 							});
 						})				
 					}
 				});
+				
+				
 			},
-			tips(){
-				uni.$showMsg('该信息不可更改！')
+			// 更新动态的一张图片
+			async changeActiveImage(item, i, url){
+				delete item.createTime
+				item.picPath = url
+				const {data:res} = await my.changePicture(item)
+				if(res.resultCode == 200){
+					this.$set(this.userImages[i], 'picPath', url)
+					uni.$showMsg('修改成功！')
+				}				
+			},
+			// 添加动态的一张图片
+			async addActiveImage(item, i, url){
+				delete item.createTime
+				delete item.id
+				item.picPath = url
+				const {data:res} = await my.addPicture(item)
+				if(res.resultCode == 200){
+					this.$set(this.userImages[i], 'picPath', url)
+					uni.$showMsg('添加成功！')
+				}				
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
-				this.$set( this.userImages[i], 'picPath', "")
+				console.log(item);
+				my.deletePicture(item.id).then(res => {					
+					console.log(res);
+					uni.$showMsg(res.data.message)
+					if(!res.data.message.includes('删除失败'))
+						this.$set( this.userImages[i], 'picPath', "")
+				})
+				event.stopPropagation()//组织事件冒泡
+				// this.$set( this.userImages[i], 'picPath', "")
+				
 			},
+			tips(){
+				uni.$showMsg('该信息不可更改！')
+			},			
+
 			nextPage(){
 				this.$emit('nextPage', null)
 			},
@@ -410,13 +440,10 @@
 			bindmaritalStatusChange(e) {
 				this.data.maritalStatus = e.detail.value
 			},
-			// 选择户籍地区
-			bindhouseholdAddreChange(e) {
-				this.data.householdAddr = e.detail.value
-			},
+			
 
 			// 拍照
-			chooseimage(uploadPostion) {
+			chooseimage() {
 				var that = this;
 				wx.showActionSheet({
 					itemList: ['相册', '拍照'],
@@ -424,16 +451,16 @@
 					success: function(res) {
 						if (!res.cancel) {
 							if (res.tapIndex == 0) {
-								that.chooseWxImage('album', uploadPostion)
+								that.chooseWxImage('album')
 							} else if (res.tapIndex == 1) {
-								that.chooseWxImage('camera', uploadPostion)
+								that.chooseWxImage('camera')
 							}
 						}
 					}
 				})
 			},
 			// 调用微信图片
-			chooseWxImage(type, uploadPostion) {
+			chooseWxImage(type) {
 				let that = this;
 				uni.chooseImage({
 					count: 6, //默认9
@@ -450,11 +477,7 @@
 								},
 								success: function(arr) {
 									let data = JSON.parse(arr.data);
-									if (uploadPostion === 2) {
-										that.$set(that.data, 'imagePath', data.data.url)
-									} else if (uploadPostion === 3) {
-										that.$set(that.data, 'wechatCodeImagesPath', data.data.url)
-									}
+									that.$set(that.data, 'wechatCodeImagesPath', data.data.url)
 								}
 							});
 						})				
@@ -475,6 +498,7 @@
 
 <style lang="scss">
 	.tip {
+		margin-top: 20rpx;
 		color: #777;
 		align-items: center;
 		margin-bottom: 40rpx;
@@ -483,13 +507,12 @@
 
 	.image-active {
 		.image-list {
-			height: 600rpx;
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
 
 			.image-item {
-				height: calc((100% - 40rpx) / 2);
+				height: 300rpx;
 				width: calc((100% - 80rpx) / 3);
 
 				margin: 10rpx 0;

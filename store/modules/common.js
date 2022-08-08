@@ -24,8 +24,6 @@ export default {
 		}
 	},
     actions: {
-		saveBaseInfo(){
-			
-		}
+		
     }
 }
