@@ -42,7 +42,7 @@ export const returnDuringTime = function(allMouth) {
 }
 
 /**
- * 
+ * 获取日期形如xxxx-xx-xx
  * @param {*} type 
  */
 export const getDate = function(type) {
@@ -59,16 +59,6 @@ export const getDate = function(type) {
 	month = month > 9 ? month : '0' + month;
 	day = day > 9 ? day : '0' + day;
 	return `${year}-${month}-${day}`;
-}
-
-/**
- * 将对象数组转化为二维数组（用于用户地区的picker）
- * @param {对象数组} data 
- */
-export const objArrayToArray = function(data) {
-	return data.map(item => {
-		return null
-	})
 }
 
 /**

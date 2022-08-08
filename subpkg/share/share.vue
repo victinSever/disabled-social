@@ -39,9 +39,6 @@
 									</view>
 								</uni-transition>
 							</view>
-
-
-
 						</view>
 
 					</view>
@@ -177,93 +174,85 @@
 			goBack() {
 				uni.navigateBack()
 			},
-			gotoShare() {
+			filePush() {
 				let _that = this
-				if (!this.isSubmit) {
-					return uni.$showMsg('你的编辑不完整！')
-				}
 				uni.showLoading({
 					mask: true,
 					title: '上传中...'
 				})
-				new Promise((resolve, reject) => {
-						this.useImageRes.forEach(res => {
-							res.tempFilePaths.forEach((item) => {
-								uni.uploadFile({
-									// 需要上传的地址
-									url: _that.vuex_uploadAction,
-									// filePath  需要上传的文件
-									filePath: item,
-									name: 'file',
-									header: {
-										token: "1" // 挂载请求头为用户的 token
-									},
-									success: function(arr) {
-										let data = JSON.parse(arr.data);
-										_that.userImageServer.push(data.data.url)
-										// data就是上传的成功的路径
-									},
-									fail: function(err) {
-										reject()
-									}
-								});
-							})
+				Promise.all([].concat.apply([], this.useImageRes.map(res => res.tempFilePaths.map((item) =>
+					new Promise((resolve, reject) => {
+						uni.uploadFile({
+							url: _that.vuex_uploadAction,
+							filePath: item,
+							name: 'file',
+							header: {
+								token: "1"
+							},
+							success: function(arr) {
+								let data = JSON.parse(arr.data);
+								console.log(data.data.url);
+								_that.userImageServer.push(data.data.url)
+								resolve()
+							},
+							fail: function(err) {
+								reject(err)
+							}
 						})
-						resolve()
-					}).then(res => {
-						console.log(4);
-						return new Promise((resolve, reject) => {
-							let uploadFile = ''
-							this.useMediaRes.forEach(res => {
-								uploadFile = res.tempFilePath;
-								// 2.上传所选视频到服务器
-
-								uni.uploadFile({
-									// 需要上传的地址
-									url: _that.vuex_uploadAction,
-									// filePath  需要上传的文件
-									filePath: uploadFile,
-									name: 'file',
-									header: {
-										token: "" // 挂载请求头为用户的 token
-									},
-									success: function(arr) {
-										let data = JSON.parse(arr.data);
-										// data就是上传的成功的路径
-										_that.userMediaServer.push(data.data.url)
-
-									},
-									fail: function(err) {
-										reject()
-									}
-								});
-							})
-							resolve()
-						})
-					}).then(res => {
-						console.log(_that.userImageServer);
-						console.log(_that.userMediaServer);
-						return share.postPerson({
-							diaryUserId: 1,
-							diaryTitle: 1,
-							diaryContent: _that.content,
-							diaryStatus: 1,
-							enableComment: 1,
-							enableLook: 1,
-							picPaths: _that.userImageServer,
-							videoPaths: _that.userMediaServer,
-						})
-					}).then(res => {
-						uni.hideLoading()
-						// uni.$showMsg('发布成功！')
-						// _that.goBack()
-					}).catch(error => {
-						uni.hideLoading()
-						uni.$showMsg('发布失败！')
-						_that.userImageServer = []
-						_that.userMediaServer = []
-						return
 					})
+				)))).then(res => {
+					let uploadFile = ''
+					return Promise.all(this.useMediaRes.map(res => new Promise((resolve, reject) => {
+						uploadFile = res.tempFilePath;
+						uni.uploadFile({
+							url: _that.vuex_uploadAction,
+							filePath: uploadFile,
+							name: 'file',
+							header: {
+								token: ""
+							},
+							success: function(arr) {
+								let data = JSON.parse(arr.data);
+								_that.userMediaServer.push(data.data.url)
+								resolve()
+							},
+							fail: function(err) {
+								reject(err)
+							}
+						});
+					})))
+				}).then(res => {
+					// console.log(Array.from(_that.userImageServer));
+					// console.log(_that.userImageServer);
+					// console.log(_that.userMediaServer);
+					return share.postPerson({
+						picPaths: Array.from(_that.userImageServer),
+						videoPaths: Array.from(_that.userMediaServer),
+					}, {
+						diaryUserId: 1,
+						diaryContent: _that.content,
+						diaryTitle: 1,
+						diaryStatus: 1,
+						enableComment: 1,
+						enableLook: 1,
+					})
+				}).then(res => {
+					uni.hideLoading()
+					// uni.$showMsg('发布成功！')
+					// _that.goBack()
+				}).catch(error => {
+					uni.hideLoading()
+					uni.$showMsg('发布失败！')
+				})
+				_that.userImageServer = []
+				_that.userMediaServer = []
+			},
+			gotoShare() {
+
+				if (!this.isSubmit) {
+					return uni.$showMsg('你的编辑不完整！')
+				}
+				this.filePush()
 			}
 		},
 		watch: {

@@ -98,8 +98,7 @@
 			}
 		},
 		mounted() {
-			this.code = this.data.alreadyLike
-			// console.log(this.data);
+			this.code = this.data.alreadyLike 
 		}
 	}
 </script>

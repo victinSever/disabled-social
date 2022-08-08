@@ -1,18 +1,6 @@
 <template>
 	<view>
 		<myProgress :data="data"></myProgress>
-		
-		<view class="section">
-			<text class="label">是否残疾</text>
-			<view class="content">
-				<picker @change="bindDisableChange" :range="isDisable" :value="data.isDisable">
-					<view v-if="data.isDisable" class="uni-input">
-						{{isDisable[data.isDisable] || data.isDisable}}
-					</view>
-					<view v-else>请选择</view>
-				</picker>
-			</view>
-		</view>
 
 		<view class="section">
 			<text class="label">残疾类别</text>
@@ -41,21 +29,19 @@
 		<view class="section">
 			<text class="label">是否自理</text>
 			<view class="content">
-				<picker @change="bindisProvideChange" :range="disableLevel" :value="data.isProvide">
+				<picker @change="bindisProvideChange" :range="isProvide" :value="data.isProvide">
 					<view v-if="data.isProvide" class="uni-input">
 						{{isProvide[data.isProvide] || data.isProvide}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
 			</view>
-		</view>
-		
-		<view class="diliver"></view>
+		</view>				
 
 		<view class="section">
 			<text class="label">健康状况原因</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.jiankang">
+				<input type="text" class="input" placeholder="请输入" v-model="data.cause">
 			</view>
 		</view>
 
@@ -64,12 +50,14 @@
 			<view class="content">
 				<picker @change="bindisGeneticlChange" :range="isGenetic" :value="data.isGenetic">
 					<view v-if="data.isGenetic" class="uni-input">
-						{{isGenetic[data.isGenetic]}}
+						{{isGenetic[data.isGenetic] || data.isGenetic}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
 			</view>
 		</view>
+		
+		<view class="diliver"></view>
 
 		<view class="section">
 			<text class="label">父母状况</text>
@@ -100,7 +88,7 @@
 			<view class="content">
 				<picker @change="bindlivingWillChange" :range="livingWill" :value="data.livingWill">
 					<view v-if="data.livingWill" class="uni-input">
-						{{livingWill[data.livingWill]}}
+						{{livingWill[data.livingWill] || data.livingWill}}
 					</view>
 					<view v-else>请选择</view>
 				</picker>
@@ -163,8 +151,15 @@
 		
 		<view class="section">
 			<text class="label">兴趣爱好</text>
-			<view class="content">
+			<view class="content" @click="gotoEditDetail(1)">
 				<input type="text" class="input" placeholder="请输入" v-model="data.hobby">
+			</view>
+		</view>
+		
+		<view class="section">
+			<text class="label">我的标签</text>
+			<view class="content" @click="gotoEditDetail(2)">
+				<input type="text" class="input" placeholder="请输入" v-model="data.personTag">
 			</view>
 		</view>
 		
@@ -187,6 +182,8 @@
 			</view>
 		</view>
 		
+		<view class="diliver"></view>
+		
 		<view class="section">
 			<text class="label">单位类型</text>
 			<view class="content">
@@ -206,7 +203,7 @@
 			</view>
 		</view>
 		
-		<view class="diliver"></view>
+		
 		
 		<view class="section">
 			<text class="label">工作行业</text>
@@ -222,12 +219,7 @@
 			</view>
 		</view>
 		
-		<view class="section">
-			<text class="label">我的标签</text>
-			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.personTag">
-			</view>
-		</view>
+		
 		
 		<view class="btn-next">
 			<button @click="nextPage">下一步</button>
@@ -240,13 +232,12 @@
 	import { mapState } from 'vuex'
 	export default {
 		data() {
-			const isDisable = ['请选择', '正常人', '残疾人']
 			const disableType = ['请选择', '视力残疾', '听力残疾', '言语残疾', '肢体残疾', '智力残疾', '精神残疾','多重残疾']
 			const disableLevel = ['请选择', '健康', '轻度残疾(残疾四级)', '中度残疾(残疾三级)', '重度残疾(残疾二级)', '极重度残疾(残疾一级)']
 			const isProvide = ['请选择', '完全自理，并能照顾对方', '不能自理']
 			const parentStatus = ['请选择', '父母健在', '单亲', '离异']
 			const isGenetic = ['请选择', '不遗传', '遗传', '不清楚']
-			const brotherNumber = ['请选择', '0', '1', '2','3','4','5','6','7','8','9','其他']
+			const brotherNumber = ['请选择', '无兄弟姐妹', '1个', '2个','3个','4个','5个','6个','7个','8个','9个','其他']
 			const livingWill = ['请选择', '与自己父母同住', '与Ta父母同住', '两个人同居']
 			const isSmoking = ['请选择', '吸烟', '不吸烟']
 			const marryForm = ['请选择', '两头顾', '男方家庭为主','女方家庭为主']
@@ -254,7 +245,6 @@
 			const bloodType = ['请选择', 'A型', 'B型','AB型','O型']
 			const companyType = ['请选择', '经常喝酒', '有时喝一些','不喝酒']
 			return {
-				isDisable,
 				disableType,
 				disableLevel,
 				isProvide,
@@ -267,29 +257,7 @@
 				isDrinking,
 				bloodType,
 				companyType,
-				data: {
-					isDisable: '',
-					disableType: '',
-					disableLevel: '',
-					isProvide: '',
-					parentStatus: '',
-					isGenetic: '',
-					brotherNumber:'',
-					livingWill: '',
-					isSmoking: '',
-					marryForm: '',
-					isDrinking:'',
-					fertilityStatus: '',
-					keepingStatus: '',
-					hobby: '',
-					bloodType: '',
-					habit: '',
-					companyType: '',
-					companyName: '',
-					workIndustry: '',
-					housingLocation: '',
-					personTag: '',
-				}
+				data: {}
 			};
 		},
 		components: {
@@ -310,6 +278,12 @@
 			}
 		},
 		methods: {
+			// 编辑兴趣和标签
+			gotoEditDetail(type){
+				uni.navigateTo({
+					url: '/subpkg/editDetail/editDetail?type=' + type
+				})
+			},
 			nextPage(){
 				this.$emit('nextPage', null)
 			},
@@ -334,7 +308,7 @@
 				this.data.isSmoking = e.detail.value
 			},
 			//未来居住意愿
-			bindlivingWillrChange(e) {
+			bindlivingWillChange(e) {
 				this.data.livingWill = e.detail.value
 			},
 			//西东弟姐妹
@@ -360,10 +334,6 @@
 			//残疾类型
 			bindDisableTypeChange(e) {
 				this.data.disableType = e.detail.value
-			},
-			// 是否残疾
-			bindDisableChange(e) {
-				this.data.isDisable = e.detail.value
 			},
 		}
 	}

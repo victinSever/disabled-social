@@ -53,7 +53,8 @@
 		<view class="section">
 			<text class="label">年龄</text>
 			<view class="content" @click="tips">
-				<text>{{data.age}}岁</text>
+				<text>{{data.age}}</text>
+				<text class="unit">岁</text>
 			</view>
 		</view>
 		
@@ -67,14 +68,16 @@
 		<view class="section">
 			<text class="label">身高</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.height">
+				<input type="number" class="input" placeholder="请输入" v-model="data.height">
+				<text class="unit">cm</text>
 			</view>
 		</view>
 
 		<view class="section">
 			<text class="label">体重</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.weight">
+				<input type="number" class="input" placeholder="请输入" v-model="data.weight">
+				<text class="unit">斤</text>
 			</view>
 		</view>
 		
@@ -85,24 +88,22 @@
 		<view class="section">
 			<text class="label">工作地区</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindworkAddrChange" :range="workAddr" :value="data.workAddr">
-					<view v-if="data.workAddr" class="uni-input">
-						{{workAddr[0][data.workAddr[0]]}} {{workAddr[1][data.workAddr[1]] || data.workAddr}}
-					</view>
-					<view v-else>请选择</view>
-				</picker>
-			</view>
+                <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.workAddr">
+				<lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
+					:dataset="{ name: 'workAddr' }" @confirm="handleConfirm">
+				</lb-picker>
+			</view>          
 		</view>
 
 		<view class="section">
 			<text class="label">户籍情况</text>
 			<view class="content">
-				<picker mode="multiSelector" @change="bindhouseholdAddreChange" :range="householdAddr" :value="data.householdAddr">
-					<view v-if="data.householdAddr" class="uni-input">
-						{{householdAddr[0][data.householdAddr[0]]}} {{householdAddr[1][data.householdAddr[1]] || data.householdAddr}}
-					</view>
-					<view v-else>请选择</view>
-				</picker>
+                <view class="content">
+                    <input type="text" class="input" placeholder="请选择地区" @click="openAddres" disabled="true" v-model="data.householdAddr">
+					<lb-picker ref="picker" mode="multiSelector" :list="workAddr" :level="3"
+						:dataset="{ name: 'householdAddr' }"  @confirm="handleConfirm">
+					</lb-picker>
+                </view>              
 			</view>
 		</view>
 
@@ -136,6 +137,7 @@
 			<text class="label">月收入</text>
 			<view class="content">
 				<input type="number" class="input" placeholder="请输入" v-model="data.income">
+				<text class="unit">元</text>
 			</view>
 		</view>
 		
@@ -205,7 +207,7 @@
 		
 		<view class="section">
 			<text class="label">手机</text>
-			<view class="content">
+			<view class="content" @click="tips">
 				<text>{{data.phone}}</text>
 			</view>
 		</view>
@@ -251,16 +253,11 @@
 <script>
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
+    import LbPicker from '@/components/lb-picker'
 	import areaInfo from "./area-data-min.js"
 	import {getDate} from "@/apis/tools"
 	export default {		
 		data() {
-			const workAddr = [
-				['重庆城区', '重庆郊区'],
-				['万州区', '涪陵区','渝中区',"大渡口区","江北区","沙坪坝区","九龙坡区","南岸区","北碚区","綦江区",
-				"大足区","渝北区","巴南区","黔江区","长寿区","江津区","合川区","永川区","南川区","璧山区","铜梁区",
-				"潼南区","荣昌区","开州区","梁平区","武隆区"]
-			]
 			const householdAddr = [
 			]
 			const maritalStatus = ['请选择', '未婚', '二婚', '已婚']
@@ -271,22 +268,25 @@
 			            format: true
 			        })
 			return {
-				workAddr,
+				workAddr:areaInfo,
 				householdAddr,
 				maritalStatus,
 				degree,
 				housingStatus,
 				carStatus,
-				data: {},
+				data: {
+                    workAddr:""
+                },
 				uploadPostion: 1, //上传类型，1动态，2头像，3微信二维码
 				userImages: [],
 			};
 		},
 		components: { 
-			myProgress
+			myProgress,
+            LbPicker
 		},
 		computed: {
-			...mapState('common', ['moreInfo','albumInfo']),
+			...mapState('common', ['baseInfo','moreInfo','albumInfo']),
 			startDate() {
 				return getDate('start');
 			},
@@ -307,18 +307,19 @@
 					this.$emit('changeBase', val)
 				}
 			},
-			// // 监视昵称修改，触发vip权限验证
-			// "data.personName": {
-			// 	handler(oldVal, newVal) {
-			// 		if(!this.data.isVip){
-			// 			this.data.personName = oldVal
-			// 			uni.$showMsg('昵称需要开通VIP才能修改哦！')
-			// 		}					
-			// 	}
-			// }
+			// 监视昵称修改，触发vip权限验证
+			"data.personName": {
+				handler(oldVal, newVal) {
+					console.log(this.baseInfo);
+					if(this.baseInfo.isVip != 1){
+						this.data.personName = oldVal
+						uni.$showMsg('昵称需要开通VIP才能修改哦！')
+					}					
+				}
+			}
 		},
 		created(){
-			this.data = this.moreInfo.personBasicInfo
+			this.data = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo:{}
 			this.userImages = this.fillInGaps(this.albumInfo)
 			this.householdAddr = this.workAddr
 		},
@@ -339,8 +340,21 @@
 					})
 				}
 				return data
-			},
-			
+			},		
+            openAddres() {
+            	this.$refs.picker.show();
+            },
+            // 选择工作地区或者户籍
+            handleConfirm(e) {
+            	// 如果存在多个picker，可以在picker上设置dataset属性，confirm中获取，就能区分是哪个picker了
+            	if (e) {
+            		const name = e.dataset.name;
+            		if(name == 'workAddr')
+            			this.data.workAddr = e.item.map(m => m.label).join('-');
+            		else if(name == 'householdAddr')
+            			this.data.householdAddr = e.item.map(m => m.label).join('-');
+            	}
+            },
 			// 上传动态图片
 			uploadActiveImage(item, i){
 				let that = this;
@@ -399,10 +413,6 @@
 			// 选择户籍地区
 			bindhouseholdAddreChange(e) {
 				this.data.householdAddr = e.detail.value
-			},
-			// 选择工作地区
-			bindworkAddrChange(e) {
-				this.data.workAddr = e.detail.value
 			},
 
 			// 拍照
@@ -551,6 +561,8 @@
 
 		.content {
 			color: #989898;
+			display: flex;
+			align-items: center;
 
 			.camera {
 				border: 2rpx solid #ffb795;
@@ -572,6 +584,12 @@
 			.input {
 				font-size: 14px;
 				text-align: right;
+			}
+			
+			.unit{
+				margin-left: 10rpx;
+				font-size: 14px;
+				font-family: 'kaiti';
 			}
 		}
 

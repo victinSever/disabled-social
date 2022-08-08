@@ -5,10 +5,10 @@ import {
 
 const apiService = {
 
-	//获取
-	postPerson(params) {
+	// 发送动态
+	postPerson(data, params) {
 		console.log(1123);
-		return http.post('/social/active/publishActive', null, params)
+		return http.post('/social/active/publishActive', data, params)
 	},
 
 }

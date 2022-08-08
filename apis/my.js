@@ -112,7 +112,7 @@ const apiService = {
 	changeRequirements(params) {
 		return http.put('/requirements/update', params, null, {
 			header: {
-				"Content-Type": "application/x-www-form-urlencoded"
+				"Content-Type": "application/x-www-form-urlencoded",
 			}
 		})
 	},
