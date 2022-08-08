@@ -1,10 +1,5 @@
 <template>
 	<view>
-		<!-- 附近的社交盒子滑动 -->
-		<!-- <scroll-view scroll-y="true" refresher-enabled show-scrollbar="flase" :refresher-triggered="triggered"
-			@refresherrefresh="getFresh" class="social-close" :style="{height:wh+'px'}" v-if="getInfo"> -->
-		<!-- <message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box> -->
-		<!-- </scroll-view> -->
 		<mescroll-uni ref="mescrollRef" @init="init" @down="downCallback" :down="downOption" :up="upOption"
 			@up="upCallback" :style="{height:wh+'px'}" :fixed="true">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
@@ -13,11 +8,11 @@
 </template>
 
 <script>
-	import around from '../../apis/around.js'
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	export default {
 		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin
+		props:['request'],
 		data() {
 			return {
 				total: 0,
@@ -39,7 +34,7 @@
 						num: 0,
 						size: 10
 					},
-					noMoreSize: 10,
+					textNoMore: '~暂无更多信息~'
 					// empty: {
 					// 	tip: '暂无相关数据'
 					// }
@@ -57,20 +52,44 @@
 				this.$emit('init', mescroll)
 			},
 			downCallback(e) {
-				this.mescroll.resetUpScroll();
+				let _that = this;
+				// console.log(e);
+				if (_that.flag == true) {
+					_that.request({
+						page: _that.page,
+						size: 10,
+						userId: 1
+					}).then(res => {
+						_that.page++
+						_that.acitveData.unshift(...res.data)
+						if (res.data.length < 10) {
+							_that.flag = false
+							_that.mescroll.optDown.textSuccess = '暂无更多数据'
+						}
+						_that.mescroll.endByPage(res.data.length, 1);
+					})
+				} else {
+					_that.mescroll.endByPage(1, 1);
+				}
 			},
 			upCallback(e) {
 				let _that = this;
-				around.getRecomment({
-					page: e.num,
-					size: 10,
-					userId: 1
-				}).then(res => {
-					_that.acitveData.push(...res.data)
-					if (res.data.length < 10)
-						_that.flag = false
-					   _that.mescroll.endByPage(res.data.length, 10000);
-				})
+				if (_that.flag == true) {
+					_that.request({
+						page: _that.page,
+						size: 10,
+						userId: 1
+					}).then(res => {
+						_that.page++
+						_that.acitveData.push(...res.data)
+						if (res.data.length < 10) {
+							_that.flag = false
+							_that.mescroll.optDown.textSuccess = '暂无更多数据'
+						}
+						_that.mescroll.endByPage(res.data.length, 10000);
+					})
+				}
+
 			},
 			openPopu() {
 				this.$emit('openPopu', true)
@@ -86,7 +105,10 @@
 				uni.showLoading({
 					title: '加载中'
 				});
-				around.getRecomment({
+				
+				// this.$emit('request',{})
+				
+				_that.request({
 					page,
 					size: 10,
 					userId: 1

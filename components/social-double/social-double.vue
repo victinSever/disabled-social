@@ -1,10 +1,5 @@
 <template>
 	<view>
-		<!-- 附近的社交盒子滑动 -->
-		<!-- <scroll-view scroll-y="true" refresher-enabled show-scrollbar="flase" :refresher-triggered="triggered"
-			@refresherrefresh="getFresh" class="social-close" :style="{height:wh+'px'}" v-if="getInfo"> -->
-		<!-- <message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box> -->
-		<!-- </scroll-view> -->
 		<mescroll-uni ref="mescrollRef" @init="init" @down="downCallback" :down="downOption" :up="upOption"
 			@up="upCallback" :style="{height:wh+'px'}" :fixed="true">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
@@ -13,33 +8,34 @@
 </template>
 
 <script>
-	import care from '../../apis/care.js'
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	export default {
 		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin
+		props: ['request'],
 		data() {
 			return {
 				total: 0,
 				page: 2,
 				downOption: {
-					use: true, 
-					auto: false, 
+					use: true,
+					auto: false,
 					page: {
-						num: 1, 
-						size: 10 
+						num: 1,
+						size: 10
 					},
 					textLoading: '加载中....',
 				},
 				// 上拉加载的常用配置
 				upOption: {
 					use: true,
-					auto: false, 
+					auto: false,
 					page: {
-						num: 2, 
-						size: 10 
+						num: 0,
+						size: 10
 					},
-					noMoreSize: 10, 
+					noMoreSize: 5,
+					textNoMore: '~暂无更多信息~'
 					// empty: {
 					// 	tip: '暂无相关数据'
 					// }
@@ -59,7 +55,7 @@
 			downCallback(e) {
 				let _that = this;
 				if (_that.flag == true) {
-					care.getCarefor({
+					_that.request({
 						page: _that.page,
 						size: 10,
 						userId: 1
@@ -70,7 +66,7 @@
 							_that.flag = false
 							_that.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
-						_that.mescroll.endByPage(1, 1);
+						_that.mescroll.endByPage(res.data.length, 1);
 					})
 				} else {
 					_that.mescroll.endByPage(1, 1);
@@ -78,17 +74,21 @@
 			},
 			upCallback(e) {
 				let _that = this;
-				console.log(e.num);
-				around.getRecomment({
-					page: e.num,
-					size: 10,
-					userId: 1
-				}).then(res => {
-					_that.acitveData.push(...res.data)
-					if (res.data.length < 10)
-						_that.flag = false
-					_that.mescroll.endByPage(res.data.length, 10000);
-				})
+				if (_that.flag == true) {
+					_that.request({
+						page: _that.page,
+						size: 10,
+						userId: 1
+					}).then(res => {
+						_that.page++
+						_that.acitveData.push(...res.data)
+						if (res.data.length < 10) {
+							_that.flag = false
+						}
+						_that.mescroll.endByPage(res.data.length, 1);
+					})
+				}
+
 			},
 			openPopu() {
 				this.$emit('openPopu', true)
@@ -104,7 +104,7 @@
 				uni.showLoading({
 					title: '加载中'
 				});
-				care.getCarefor({
+				_that.request({
 					page,
 					size: 10,
 					userId: 1
@@ -120,6 +120,7 @@
 				this.flag = true
 				this.getInfo = true;
 				this.mescroll.optDown.textSuccess = '加载成功'
+				console.log(res.data);
 			},
 			backUpdate() {
 				this.getAroundInfo(1)
@@ -128,7 +129,7 @@
 		mounted() {
 			this.getAroundInfo(1);
 			this.$bus.$on('backUpdate', this.backUpdate)
-			this.wh = uni.getSystemInfoSync().windowHeight - 103
+			this.wh = uni.getSystemInfoSync().windowHeight - 103;
 		},
 
 	}

@@ -222,9 +222,6 @@
 						});
 					})))
 				}).then(res => {
-					// console.log(Array.from(_that.userImageServer));
-					// console.log(_that.userImageServer);
-					// console.log(_that.userMediaServer);
 					return share.postPerson({
 						picPaths: Array.from(_that.userImageServer),
 						videoPaths: Array.from(_that.userMediaServer),
@@ -248,7 +245,6 @@
 				_that.userMediaServer = []
 			},
 			gotoShare() {
-
 				if (!this.isSubmit) {
 					return uni.$showMsg('你的编辑不完整！')
 				}
