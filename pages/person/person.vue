@@ -17,13 +17,11 @@
 			</uni-badge>
 		</view> -->
 		<view class="head">
-
 		</view>
 
 		<!-- 主信息部分 -->
 		<view class="main">
 			<view class="main-top">
-
 				<div class="top-left">
 					<view class="top-logo">
 						<image v-if="baseData.headPicPath" :src="baseData.headPicPath" alt="" mode="aspectFill"/>
@@ -114,12 +112,8 @@
 <script>
 	import my from '@/apis/my.js'
 	import { getDay, getMonth } from "@/apis/tools"
-	import {
-		returnRate, formdataify
-	} from '@/apis/tools.js'
-	import {
-		mapMutations
-	} from 'vuex'
+	import { returnRate, formdataify } from '@/apis/tools.js'
+	import { mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -196,7 +190,7 @@
 
 			// 获取信息
 			async getData() {
-				uni.showLoading({title: '信息加载中',mask:true});
+				uni.showLoading({title: '信息加载中',mask:true})
 				// // 系统信息
 				const {data: res1 } = await my.getBaseData({
 					personId: 1
@@ -204,21 +198,13 @@
 				// 用户信息
 				const {data: res2} = await my.getAllData({
 					personId: 1
-				})
-				console.log(res2.data.requirement);
-				const formdata = formdataify(res2.data.requirement)
-				console.log(formdata);
-				const {data: res4} = await my.changeRequirements({
-					formdata
-				})
-				console.log(res4);
+				})	
 				// 相册
 				const {data: res3} = await my.searchAlbumListByUserId({
 					userId: 1
 				})	
-				setTimeout(function () {uni.hideLoading();}, 100);
-				this.baseData = res1.data
-				
+				uni.hideLoading()
+				this.baseData = res1.data				
 				this.moreData = res2.data
 				this.setBaseInfo(res1.data)
 				this.setMoreInfo(res2.data)

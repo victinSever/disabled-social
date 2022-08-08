@@ -46,21 +46,21 @@
 		<view class="section">
 			<text class="label">用户名</text>
 			<view class="content">
-				<text>{{data.personName}}</text>
+				<input type="text" class="input" placeholder="请输入" v-model="data.personName">
 			</view>
 		</view>
 		
 		<view class="section">
 			<text class="label">年龄</text>
-			<view class="content">
-				<text>{{data.age}}</text>
+			<view class="content" @click="tips">
+				<text>{{data.age}}岁</text>
 			</view>
 		</view>
 		
 		<view class="section">
 			<text class="label">性别</text>
-			<view class="content">
-				<text>{{data.sex}}</text>
+			<view class="content" @click="tips">
+				<text>{{data.sex == 1 ? '男' : '女'}}</text>
 			</view>
 		</view>
 
@@ -135,7 +135,7 @@
 		<view class="section">
 			<text class="label">月收入</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.income">
+				<input type="number" class="input" placeholder="请输入" v-model="data.income">
 			</view>
 		</view>
 		
@@ -175,11 +175,13 @@
 		</view>
 		
 		
-
 		<view class="section">
 			<text class="label">期待结婚时间</text>
 			<view class="content">
-				<input type="text" class="input" placeholder="请输入" v-model="data.expectedMarryTime">
+				<!-- <input type="text" class="input" placeholder="请输入" v-model="data.expectedMarryTime"> -->
+				<picker mode="date" :value="data.expectedMarryTime" :start="startDate" :end="endDate" @change="bindexpectedMarryTimeChange">
+					<view class="uni-input">{{data.expectedMarryTime}}</view>
+				</picker>
 			</view>
 		</view>
 
@@ -250,6 +252,7 @@
 	import myProgress from "@/components/person-information/progress/progress.vue"
 	import { mapState } from 'vuex'
 	import areaInfo from "./area-data-min.js"
+	import {getDate} from "@/apis/tools"
 	export default {		
 		data() {
 			const workAddr = [
@@ -261,9 +264,12 @@
 			const householdAddr = [
 			]
 			const maritalStatus = ['请选择', '未婚', '二婚', '已婚']
-			const degree = ['请选择’,小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
+			const degree = ['请选择','小学', '初中', '高中', '本科', '中专', '职高', '大专', '其他']
 			const housingStatus = ['请选择', '已买房', '未买房']
 			const carStatus = ['请选择', '已买车', '未买车']
+			const currentDate = getDate({
+			            format: true
+			        })
 			return {
 				workAddr,
 				householdAddr,
@@ -281,6 +287,12 @@
 		},
 		computed: {
 			...mapState('common', ['moreInfo','albumInfo']),
+			startDate() {
+				return getDate('start');
+			},
+			endDate() {
+				return getDate('end');
+			}
 		},
 		watch: {
 			userImages: {
@@ -294,14 +306,41 @@
 				handler(val){
 					this.$emit('changeBase', val)
 				}
-			}
+			},
+			// // 监视昵称修改，触发vip权限验证
+			// "data.personName": {
+			// 	handler(oldVal, newVal) {
+			// 		if(!this.data.isVip){
+			// 			this.data.personName = oldVal
+			// 			uni.$showMsg('昵称需要开通VIP才能修改哦！')
+			// 		}					
+			// 	}
+			// }
 		},
 		created(){
 			this.data = this.moreInfo.personBasicInfo
-			this.userImages = this.albumInfo
+			this.userImages = this.fillInGaps(this.albumInfo)
 			this.householdAddr = this.workAddr
 		},
 		methods: {
+			// 不足6张图片补齐空位
+			fillInGaps(albumInfo){
+				if(albumInfo.length === 6) return albumInfo
+				let data = albumInfo
+				for(let i = 0; i < (6 - albumInfo.length); i++ ){
+					data.push({
+						createTime: '',
+						id: '',
+						likeCounts: '',
+						picDesc: '',
+						picPath: '',
+						status: '',
+						userId: '',
+					})
+				}
+				return data
+			},
+			
 			// 上传动态图片
 			uploadActiveImage(item, i){
 				let that = this;
@@ -323,11 +362,12 @@
 									that.$set(that.userImages[i], 'picPath', data.data.url)
 								}
 							});
-						})
-				
-				
+						})				
 					}
 				});
+			},
+			tips(){
+				uni.$showMsg('该信息不可更改！')
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
@@ -335,6 +375,10 @@
 			},
 			nextPage(){
 				this.$emit('nextPage', null)
+			},
+			//期待结婚时间
+			bindexpectedMarryTimeChange(e) {
+				this.data.expectedMarryTime = e.detail.value
 			},
 			//学历
 			binddegreeChange(e) {
@@ -370,32 +414,44 @@
 					success: function(res) {
 						if (!res.cancel) {
 							if (res.tapIndex == 0) {
-								that.chooseWxImage('album',uploadPostion)
+								that.chooseWxImage('album', uploadPostion)
 							} else if (res.tapIndex == 1) {
-								that.chooseWxImage('camera',uploadPostion)
+								that.chooseWxImage('camera', uploadPostion)
 							}
 						}
 					}
 				})
 			},
 			// 调用微信图片
-			chooseWxImage(type,uploadPostion) {
-				var that = this;
-				wx.chooseImage({
+			chooseWxImage(type, uploadPostion) {
+				let that = this;
+				uni.chooseImage({
+					count: 6, //默认9
 					sizeType: ['original', 'compressed'],
-					sourceType: [type],
-					success: function(res) {
-						// tempFilePath可以作为img标签的src属性显示图片
-						let url = res.tempFilePaths[0]
-						if (uploadPostion === 2) {
-							that.$set(that.data, 'imagePath', url)
-						} else if (uploadPostion === 3) {
-							that.data.wechatCodeImagesPath = url
-							that.$set(that.data, 'wechatCodeImagesPath', url)
-						}
+					sourceType: ['album'], 
+					success: function(res) {				
+						res.tempFilePaths.forEach((item) => {
+							uni.uploadFile({
+								url: that.vuex_uploadAction,
+								filePath: item,
+								name: 'file',
+								header: {
+									token: "" // 挂载请求头为用户的 token
+								},
+								success: function(arr) {
+									let data = JSON.parse(arr.data);
+									if (uploadPostion === 2) {
+										that.$set(that.data, 'imagePath', data.data.url)
+									} else if (uploadPostion === 3) {
+										that.$set(that.data, 'wechatCodeImagesPath', data.data.url)
+									}
+								}
+							});
+						})				
 					}
-				})
+				});
 			},
+
 			// 跳转到编辑详情页面
 			gotoEditDetail(value) {
 				uni.navigateTo({

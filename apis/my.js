@@ -12,6 +12,20 @@ const apiService = {
     getInfo(params) {
     	return http.post('/user/getInfo', null, params)
     },
+	
+	/**************************************
+		特权模块
+	*************************************/
+	
+	// 获取套餐信息
+	getVipPackageList(params) {
+		return http.get('/vipPackage/list',  params)
+	},
+	
+	// 获取权限信息
+	getVipPermissionList(params) {
+		return http.post('/vipPermission/userId', null,  params)
+	},
     
     // 购买VIP
     openVip(params) {
@@ -78,17 +92,29 @@ const apiService = {
 	
 	// 修改基本信息
 	changePersonBasicInfo(params) {
-		return http.put('/personBasicInfo/update', params)
+		return http.put('/personBasicInfo/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
 	},
 	
 	// 修改详细信息
 	changePersonDetailInfo(params) {
-		return http.put('/personDetailInfo/update', params)
+		return http.put('/personDetailInfo/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
 	},
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update', params)
+		return http.put('/requirements/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
 	},
 	
 	/**************************************
@@ -119,6 +145,7 @@ const apiService = {
 	getMyDiary(params) {
 		return http.get('/mine/getMyDiary', params)
 	},
+	
 }
 
 export default apiService;

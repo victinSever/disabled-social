@@ -120,7 +120,6 @@
 			// 改变基础信息
 			changeBase(val){
 				this.cacheData.personBasicInfo = val
-				console.log(this.cacheData.personBasicInfo);
 			},
 			// 改变详细信息
 			changeDetail(val){
@@ -144,18 +143,20 @@
 			// 更新数据
 			async saveUpdate(){
 				let success = false
-				uni.showLoading({title: '数据更新中',mask:true});
-				console.log(this.cacheData);this.cacheData
+				uni.showLoading({title: '数据更新中',mask:true})
+				console.log(this.cacheData);
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-				setTimeout(function () {uni.hideLoading();}, 100);
-				console.log(res1,res2,res3);
+				uni.hideLoading()
+				console.log(res1);
+				console.log(res2);
+				console.log(res3);
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
 					success = true
-				}	
-				return success			
+				}
+				return success 			
 			},
 			// 返回
 			gotoBack() {
