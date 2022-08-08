@@ -10,7 +10,7 @@ export default {
 		// 存储用户基础信息
 		setBaseInfo(state, data) {
 			JSON.stringify(localStorage.setItem('baseInfo', data))
-			state.userInfo = data
+			state.baseInfo = data
 		},
 		// 存储用户具体信息
 		setMoreInfo(state, data) {
@@ -24,8 +24,6 @@ export default {
 		}
 	},
     actions: {
-		saveBaseInfo(){
-			
-		}
+		
     }
 }

@@ -1,36 +1,35 @@
 {
-	"pages": [
-		{
-		"path": "pages/login/login",
-		"style": {
-			"navigationStyle": "custom",
-			"app-plus": {
-				"titleNView": false
+	"pages": [{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false
+				}
 			}
-		}
-	}, 
-    {
-    	"path": "pages/recomment/recomment"
-    
-    },{
-		"path": "pages/social/social"
+		},
+		{
+			"path": "pages/recomment/recomment"
 
-	}, {
-		"path": "pages/employment/employment"
-	}, {
-		"path": "pages/message/message"
-	}, {
-		"path": "pages/person/person",
-		"style": {
-			"enablePullDownRefresh": true,
-			"onReachBottomDistance": 50
+		}, {
+			"path": "pages/social/social"
+
+		}, {
+			"path": "pages/employment/employment"
+		}, {
+			"path": "pages/message/message"
+		}, {
+			"path": "pages/person/person",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+		}, {
+			"path": "pages/photo/photo"
+		}, {
+			"path": "pages/register/register"
 		}
-	}, {
-		"path": "pages/photo/photo"
-	}, {
-		"path": "pages/register/register"
-	}
-    ],
+	],
 	"subPackages": [{
 		"root": "subpkg",
 		"pages": [{
@@ -81,32 +80,28 @@
 				"enablePullDownRefresh": false
 			}
 
-		}    ,{
-                    "path" : "media-detail/media-detail",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "billboard/billboard",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+		}, {
+			"path": "media-detail/media-detail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "billboard/billboard",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+
+		}]
 	}],
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
-        "navigationStyle": "custom",
+		"navigationStyle": "custom",
 		"style": {
 			"app-plus": {
 				"titleNView": false

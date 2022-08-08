@@ -6,7 +6,7 @@ export default {
         baseData:{},//个人统计信息
 		detailData: {},//个人详细信息（基础信息，详细信息，择偶信息）
         loginUser:{
-            loginName: "",
+            loginName: "123456",
             nickName: "",
             userId:"1"
         }

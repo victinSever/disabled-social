@@ -109,7 +109,8 @@
 				this.baseData = this.baseInfo
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
-				this.cacheData = this.moreInfo			
+				this.cacheData = this.moreInfo	
+				console.log(this.moreInfo);
 			},
 			
 			// 监视缓存数据
@@ -120,7 +121,6 @@
 			// 改变基础信息
 			changeBase(val){
 				this.cacheData.personBasicInfo = val
-				console.log(this.cacheData.personBasicInfo);
 			},
 			// 改变详细信息
 			changeDetail(val){
@@ -144,19 +144,36 @@
 			// 更新数据
 			async saveUpdate(){
 				let success = false
-				uni.showLoading({title: '数据更新中',mask:true});
-				console.log(this.cacheData);this.cacheData
+				uni.showLoading({title: '数据更新中',mask:true})
+				console.log(this.cacheData);
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-				setTimeout(function () {uni.hideLoading();}, 100);
-				console.log(res1,res2,res3);
+				uni.hideLoading()
+				
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					uni.$showMsg("保存成功！")
 					success = true
-				}	
-				return success			
+				}
+				return success 			
 			},
+			// // 更新相册数据(没有一次更新的接口，因此只有一个一个更新)
+			// uploadAlbumList(){
+			// 	this.albumData.forEach(item => {
+			// 		delete item.createTime
+			// 		if(item.id){						
+			// 			my.changePicture(item).then(res => {
+			// 				console.log(res);
+			// 			}).catch(err => {
+			// 				console.log(err);
+			// 			})
+			// 		}else{
+			// 			my.addPicture(item).then(res => {
+			// 				console.log(res);
+			// 			})
+			// 		}										
+			// 	})
+			// },
 			// 返回
 			gotoBack() {
 				uni.switchTab({

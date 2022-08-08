@@ -44,7 +44,7 @@
 				同意
 				<text>《自动续费协议》</text>
 				<text>最高可享三倍加速配对</text>
-				，到期后以{{chooseVip.allprice}}元/{{chooseVip.name}}自动续费，可随时取消
+				，到期后以{{chooseVip.totalPrice}}元/{{chooseVip.name}}自动续费，可随时取消
 			</text>
 		</view>
 
@@ -109,6 +109,7 @@
 	import {
 		returnDuringTime
 	} from '@/apis/tools.js'
+	import { mapState } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -120,28 +121,7 @@
 				isVip: false, //vip的判断
 				isBuy: false, //继续付费
 
-				vipPrice: [{
-					id: '1',
-					time: 12,
-					price: 7.92,
-					allprice: 95,
-					name: '连续包年',
-					isMain: true
-				}, {
-					id: '2',
-					time: 3,
-					price: 8.7,
-					allprice: 26,
-					name: '连续包季',
-					isMain: false
-				}, {
-					id: '3',
-					time: 1,
-					price: 9.9,
-					allprice: 10,
-					name: '连续包月',
-					isMain: false
-				}],
+				vipPrice: [],
 				data: {},
 
 				// 选择的vip
@@ -156,24 +136,30 @@
 					},
 					{
 						icon: '../../static/icon/active/privilege/collection.png',
-						name: '每天5个超级喜欢',
-						description: '可以随时随地查看心仪的朋友'
+						name: '每天5个儿超级喜欢',
+						description: '心仪的朋友可以超级喜欢哦'
 					},
 					{
 						icon: '../../static/icon/active/privilege/collection.png',
-						name: '查看谁喜欢你',
-						description: '可以随时随地查看心仪的朋友'
+						name: '动态图片扩展',
+						description: '动态可以发更多的图片了'
+					},
+					{
+						icon: '../../static/icon/active/privilege/collection.png',
+						name: '相册扩展',
+						description: '相册长度增加至9张'
 					},
 					{
 						icon: '../../static/icon/active/privilege/back.png',
 						name: '划错随时返回',
-						description: '可以随时随地查看心仪的朋友'
+						description: '划错了，没关系，一键返回'
 					},
 				]
 
 			};
 		},
 		computed: {
+			...mapState('user',['loginUser']),
 			vipDuring() {
 				if (!this.vipTime)
 					return returnDuringTime(this.chooseVip.time)
@@ -181,20 +167,20 @@
 					return '会员到期' + this.vipTime.split('T')[0]
 			}
 		},
-		created() {
-			this.chooseVip = this.vipPrice[0]
-		},
-		mounted() {
+		mounted() {		
 			this.getData()
+			this.getVipPackageList()
+			console.log(this.loginUser);
+			
 		},
 		methods: {
-			// 获取信息
+			// 获取是否是会员，会员到期时间信息
 			async getData() {
-				const {
-					data: res
-				} = await my.getInfo({
-					loginName: '123456'
+				uni.showLoading({title: '动态加载中',mask:true});
+				const {data: res} = await my.getInfo({
+					loginName: this.loginUser.loginName
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					if (res.data.isVip === 1) {
 						this.data = res.data
@@ -204,7 +190,18 @@
 						this.isVip = false
 					}
 				}
-
+			},
+			// 获取套餐信息
+			async getVipPackageList() {
+				const {data: res} = await my.getVipPackageList({
+					start: 1,
+					limit: 3
+				})
+				if (res.resultCode === 200) {
+					this.vipPrice = res.data
+					this.chooseVip = this.vipPrice[0]
+				}
+			
 			},
 			// 关闭续费
 			closeChecked() {
@@ -213,12 +210,14 @@
 			},
 			// 开通VIP
 			async openVip() {
+				uni.showLoading({title: '动态加载中',mask:true});
 				const {
 					data: res
 				} = await my.openVip({
-					loginName: '123456',
+					loginName: this.loginUser.loginName,
 					month: this.chooseVip.time
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					this.vipTime = res.data;
 					this.isVip = true
@@ -228,12 +227,14 @@
 			},
 			// 续费VIP
 			async renewalVip() {
+				uni.showLoading({title: '动态加载中',mask:true});
 				const {
 					data: res
 				} = await my.renewalVip({
-					loginName: '123456',
+					loginName: this.loginUser.loginName,
 					month: this.chooseVip.time
 				})
+				uni.hideLoading()
 				if (res.resultCode === 200) {
 					this.vipTime = res.data;
 					this.isVip = true

@@ -12,6 +12,30 @@ const apiService = {
     getInfo(params) {
     	return http.post('/user/getInfo', null, params)
     },
+	
+	//修改头像
+	changeUserImage(params) {
+		return http.post('/user/updateHeadPicPath', null, params)
+	},
+	
+	//修改昵称
+	changeNickName(params) {
+		return http.post('/user/updateNickName', null, params)
+	},
+	
+	/**************************************
+		特权模块
+	*************************************/
+	
+	// 获取套餐信息
+	getVipPackageList(params) {
+		return http.get('/vipPackage/list',  params)
+	},
+	
+	// 获取权限信息
+	getVipPermissionList(params) {
+		return http.post('/vipPermission/userId', null,  params)
+	},
     
     // 购买VIP
     openVip(params) {
@@ -78,19 +102,27 @@ const apiService = {
 	
 	// 修改基本信息
 	changePersonBasicInfo(params) {
-		return http.put('/personBasicInfo/update', params)
+		return http.put('/personBasicInfo/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
 	},
 	
 	// 修改详细信息
 	changePersonDetailInfo(params) {
-		return http.put('/personDetailInfo/update', params)
+		return http.put('/personDetailInfo/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
 	},
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update',params,null,{
-			header:{
-				 'Content-Type': 'application/x-www-form-urlencoded'
+		return http.put('/requirements/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
 			}
 		})
 	},
@@ -111,18 +143,32 @@ const apiService = {
 	
 	// 新增照片
 	addPicture(params) {
-		return http.post('/pictureAlbum/insertInfo', null, params)
+		return http.post('/pictureAlbum/insertInfo', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			}
+		})
+	},
+	
+	// 删除照片
+	deletePicture(params) {
+		return http.delete('/pictureAlbum/delete', null, params)
 	},
 	
 	// 更新图片
 	changePicture(params) {
-		return http.put('/pictureAlbum/update', params)
+		return http.put('/pictureAlbum/update', params, null, {
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			}
+		})
 	},
 	
 	// 获取我的动态列表
 	getMyDiary(params) {
 		return http.get('/mine/getMyDiary', params)
 	},
+	
 }
 
 export default apiService;

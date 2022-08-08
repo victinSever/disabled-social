@@ -5,30 +5,55 @@
 			<!-- 头部按钮 -->
 			<view class="homeSetting-header">
 				<uni-icons type="closeempty" size="25" @click="closePopup"></uni-icons>
-				<span>筛选</span>
-				<span class="btnSure" @click="closePopup">确定</span>
+				<text>筛选</text>
+				<text class="btnSure" @click="closePopup">确定</text>
 			</view>
 			<!-- 选项区域 -->
 			<scroll-view scroll-y="true" class="homeSetting-main">
 				<view class="age-and-distance">
 					<view class="box-age">
 						<view class="age-top">
-							<span>年龄</span>
-							<span>18 - 50</span>
+							<text>年龄</text>
+							<text>{{ageRange.low}} - {{ageRange.high + (ageRange.high === 60 ? '+':'')}}</text>
 						</view>
 						<view class="age-bottom">
-							<span></span>
+							<text></text>
 						</view>
 					</view>
 					<view class="box-distance">
 						<view class="distance-top">
-							<span>距离</span>
-							<span>10km</span>
+							<text>距离</text>
+							<text>{{distance + 'km' + (distance === 100 ? '+':'')}}</text>
 						</view>
 						<view class="distance-bottom">
-							<span></span>
+							<text></text>
 						</view>
 					</view>
+				</view>
+				<view class="sex">
+					<text class="title">显示性别</text>
+					<view class="list">
+						<view :class="'item' + (sexChoose == 1 ? ' active' : '')" @click="sexChoose = 1">
+							<image src="../../static/icon/recomment/man.png" alt="" mode="aspectFill" />
+							<text>男生</text>
+						</view>
+						<view :class="'item' + (sexChoose == 2 ? ' active' : '')" @click="sexChoose = 2">
+							<image src="../../static/icon/recomment/woman.png" alt="" mode="aspectFill" />
+							<text>女生</text>
+						</view>
+						<view :class="'item' + (sexChoose == 3 ? ' active' : '')" @click="sexChoose = 3">
+							<image src="../../static/icon/recomment/no-limit.png" alt="" mode="aspectFill" />
+							<text>不限</text>
+						</view>
+					</view>				
+				</view>
+				<view class="tag">
+					<text class="title">标签</text>
+					<view class="list">
+						<view :class="'item' + (tagChoose == i ? ' active' : '')" v-for="(item, i) in tags" :key="i" @click="tagChoose = i">
+							<text>{{item}}</text>
+						</view>
+					</view>				
 				</view>
 			</scroll-view>
 		</view>
@@ -37,14 +62,21 @@
 
 <script>
 	export default {
-		name:"recomment-setting",
+		name: "recomment-setting",
 		data() {
 			return {
-				
+				tags: ["靠谱",'温柔','善良','和蔼','务实','厚道','喜欢简单','成熟'],
+				ageRange: {
+					low: 18,
+					high: 60
+				},
+				distance: 100,
+				sexChoose: 1,				
+				tagChoose: 0,
 			};
 		},
 		methods: {
-			closePopup(){
+			closePopup() {
 				this.$emit('closePopup', true)
 			}
 		}
@@ -52,18 +84,18 @@
 </script>
 
 <style lang="scss">
-// 弹出层的盒子设置
-	.homeSetting{
+	// 弹出层的盒子设置
+	.homeSetting {
 		height: 93vh;
 		background-color: transparent;
-		
-		.homeSetting-box{
+
+		.homeSetting-box {
 			height: 100%;
 			background-color: #fff;
 			border-radius: 40rpx 40rpx 0 0;
 			padding: 30rpx 20rpx 0 20rpx;
-			
-			.homeSetting-header{
+
+			.homeSetting-header {
 				height: 100rpx;
 				display: flex;
 				align-items: center;
@@ -72,41 +104,109 @@
 				font-weight: bold;
 				letter-spacing: 2rpx;
 				border-bottom: 1px solid #eee;
-				
-				.btnSure{
+
+				.btnSure {
 					color: darkorange;
 				}
 			}
-			
-			.homeSetting-main{
+
+			.homeSetting-main {
 				margin-top: 40rpx;
-				height: 2000rpx;
-				
-				.age-and-distance{
-					&>view{
+
+				.age-and-distance {
+					&>view {
 						height: 150rpx;
-						
-						
-						&>view:first-child{
+
+
+						&>view:first-child {
 							display: flex;
 							justify-content: space-between;
-							
-							span:first-child{
+
+							text:first-child {
 								color: #777;
 							}
-							span:last-child{
+
+							text:last-child {
 								font-weight: bold;
 							}
 						}
-						
-						&>view:last-child{
+
+						&>view:last-child {
 							width: 100%;
-							span{
+
+							text {
 								display: inline-block;
 								height: 4rpx;
 								width: 100%;
 								background-color: darkorange;
 							}
+						}
+					}
+				}
+
+				.sex {
+					.title{
+						height: 60rpx;
+						line-height: 60rpx;
+						color: #777;
+					}
+					
+					.list{
+						height: 300rpx;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+					}
+
+					.item {
+						width: 200rpx;
+						height: 200rpx;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						align-items: center;
+						border: 4rpx solid #eee;
+						border-radius: 40rpx;
+
+						image {
+							width: 50rpx;
+							height: 50rpx;
+							margin-bottom: 20rpx;
+						}
+					}
+					
+					.active{
+						border: 4rpx solid darkorange;
+					}
+				}
+				
+				.tag{
+					.title{
+						height: 60rpx;
+						line-height: 60rpx;
+						color: #777;
+					}
+					
+					.list{
+						width: 100%;
+						display: flex;
+						flex-wrap: wrap;
+						
+						.item{
+							margin: 15rpx;
+							padding: 10rpx 30rpx;
+							border: 4rpx solid #eee;
+							border-radius: 30rpx;
+							
+							text{
+								font-size: 12px;
+							}
+						}
+						
+						.active{
+							background-color: #fce6d8;
+							color: darkorange;
+							border: 4rpx solid transparent;
 						}
 					}
 				}
