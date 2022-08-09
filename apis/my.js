@@ -1,26 +1,26 @@
 import { http } from '@/common/service/service.js'
 
-
+let url="/api/personinfo"
 const apiService = {
     
     //每日签到
     signIn(params) {
-    	return http.put('/user/signIn', null, params)
+    	return http.put(`${url}/user/signIn`, null, params)
     },
     
     // 获取个人信息
     getInfo(params) {
-    	return http.post('/user/getInfo', null, params)
+    	return http.post(`${url}/user/getInfo`, null, params)
     },
 	
 	//修改头像
 	changeUserImage(params) {
-		return http.post('/user/updateHeadPicPath', null, params)
+		return http.post(`${url}/user/updateHeadPicPath`, null, params)
 	},
 	
 	//修改昵称
 	changeNickName(params) {
-		return http.post('/user/updateNickName', null, params)
+		return http.post(`${url}/user/updateNickName`, null, params)
 	},
 	
 	/**************************************
@@ -29,27 +29,27 @@ const apiService = {
 	
 	// 获取套餐信息
 	getVipPackageList(params) {
-		return http.get('/vipPackage/list',  params)
+		return http.get(`${url}/vipPackage/list`,  params)
 	},
 	
 	// 获取权限信息
 	getVipPermissionList(params) {
-		return http.post('/vipPermission/userId', null,  params)
+		return http.post(`${url}/vipPermission/userId`, null,  params)
 	},
     
     // 购买VIP
     openVip(params) {
-    	return http.post('/user/openVip', null,  params)
+    	return http.post(`${url}/user/openVip`, null,  params)
     },
     
     // 续费
     renewalVip(params) {
-    	return http.post('/user/renewalVip', null,  params)
+    	return http.post(`${url}/user/renewalVip`, null,  params)
     },
     
     // 获取主页个人基本信息
     getBaseData(params) {
-    	return http.post('/user/getBaseData', null, params)
+    	return http.post(`${url}/user/getBaseData`, null, params)
     },	
     
     /**************************************
@@ -58,22 +58,22 @@ const apiService = {
     
     // 获取关注者列表
     searchFan(params) {
-    	return http.post('/fan/searchFan', null, params)
+    	return http.post(`${url}/fan/searchFan`, null, params)
     },
     
     // 取消关注
     cancelAttention(params) {
-    	return http.post('/fan/cancelAttention', null, params)
+    	return http.post(`${url}/fan/cancelAttention`, null, params)
     },
     
     // 关注指定用户
     addAttention(params) {
-    	return http.post('/fan/addAttention', null, params)
+    	return http.post(`${url}/fan/addAttention`, null, params)
     },
     
     // 获取粉丝列表
     searchAttention(params) {
-    	return http.post('/fan/searchAttention', null, params)
+    	return http.post(`${url}/fan/searchAttention`, null, params)
     },
 	
 	/**************************************
@@ -82,27 +82,27 @@ const apiService = {
 	
 	// 获取一个用户所有信息
 	getAllData(params) {
-		return http.post('/user/getAllData',null, params)
+		return http.post(`${url}/user/getAllData`,null, params)
 	},
 	
 	// 获取基本信息
 	getPersonBasicInfo(params) {
-		return http.get('/personBasicInfo/personId', params)
+		return http.get(`${url}/personBasicInfo/personId`, params)
 	},
 	
 	// 获取详细信息
 	getPersonDetailInfo(params) {
-		return http.get('/personDetailInfo/personId', params)
+		return http.get(`${url}/personDetailInfo/personId`, params)
 	},
 	
 	// 获取择偶信息
 	getRequirements(params) {
-		return http.get('/requirements/personId', params)
+		return http.get(`${url}/requirements/personId`, params)
 	},
 	
 	// 修改基本信息
 	changePersonBasicInfo(params) {
-		return http.put('/personBasicInfo/update', params, null, {
+		return http.put(`${url}/personBasicInfo/update`, params, null, {
 			header: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			}
@@ -111,7 +111,7 @@ const apiService = {
 	
 	// 修改详细信息
 	changePersonDetailInfo(params) {
-		return http.put('/personDetailInfo/update', params, null, {
+		return http.put(`${url}/personDetailInfo/update`, params, null, {
 			header: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			}
@@ -120,7 +120,7 @@ const apiService = {
 	
 	// 修改择偶信息
 	changeRequirements(params) {
-		return http.put('/requirements/update', params, null, {
+		return http.put(`${url}/requirements/update`, params, null, {
 			header: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			}
@@ -133,17 +133,17 @@ const apiService = {
 	
 	// 根据图片id查找图片信息
 	searchPictureById(params) {
-		return http.post('/pictureAlbum/id', null, params)
+		return http.post(`${url}/pictureAlbum/id`, null, params)
 	},
 	
 	// 根据用户id查找相册
 	searchAlbumListByUserId(params) {
-		return http.post('/pictureAlbum/userId', null, params)
+		return http.post(`${url}/pictureAlbum/userId`, null, params)
 	},
 	
 	// 新增照片
 	addPicture(params) {
-		return http.post('/pictureAlbum/insertInfo', params, null, {
+		return http.post(`${url}/pictureAlbum/insertInfo`, params, null, {
 			header: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			}
@@ -152,12 +152,12 @@ const apiService = {
 	
 	// 删除照片
 	deletePicture(params) {
-		return http.delete('/pictureAlbum/delete', null, params)
+		return http.delete(`${url}/pictureAlbum/delete`, null, params)
 	},
 	
 	// 更新图片
 	changePicture(params) {
-		return http.put('/pictureAlbum/update', params, null, {
+		return http.put(`${url}/pictureAlbum/update`, params, null, {
 			header: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			}
@@ -166,7 +166,7 @@ const apiService = {
 	
 	// 获取我的动态列表
 	getMyDiary(params) {
-		return http.get('/mine/getMyDiary', params)
+		return http.get(`${url}/mine/getMyDiary`, params)
 	},
 	
 }

@@ -21,20 +21,32 @@
 	import auth from "@/apis/auth.js"
 	import {
 		ACCESS_TOKEN
-	} from '@/common/util/constants.js'
+	} from '@/common/util/constants.js';
+     import webSocket from "@/common/util/webSocket.js"
 	export default {
 		data() {
 			return {};
 		},
 		mounted() {
-
-			//获取授权码
-			// #ifdef MP-ALIPAY || MP-WEIXIN
-			// this.wxGetUserInfo();
-			// #endif
-			// #ifdef  APP-PLUS
-			this.getPhoneCardDetail()
-			// #endif
+            if(uni.getStorageSync(ACCESS_TOKEN)){
+                if(uni.getStorageSync("userData")){
+                   this.$store.commit('user/SETLOGINUSER',uni.getStorageSync("userData"));
+                }
+                //创建webSocket;
+                webSocket.open(this.$store.state.user.loginUser.userId);
+                uni.reLaunch({
+                    url:"/pages/recomment/recomment"
+                });
+            }else{
+                //获取授权码
+                // #ifdef MP-ALIPAY || MP-WEIXIN
+                // this.wxGetUserInfo();
+                // #endif
+                // #ifdef  APP-PLUS
+                this.getPhoneCardDetail();
+                plus.ios.importClass()
+                // #endif
+            }
 		},
 		methods: {
 			//获取当前手机手机卡信息
@@ -99,7 +111,9 @@
 				}).then((res)=>{
                     //登录成功token
 					uni.setStorageSync(ACCESS_TOKEN,res.data.data.token);
+                    uni.setStorageSync("userData",res.data.data.user);
                     //保存用户信息
+                    webSocket.open(res.data.data.user.userId);
                     this.$store.commit('user/SETLOGINUSER',res.data.data.user);
                     uni.reLaunch({
                         url:"/pages/recomment/recomment"

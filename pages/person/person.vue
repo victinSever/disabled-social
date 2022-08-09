@@ -1,21 +1,6 @@
 <template>
 	<view>
 		<mover></mover>
-		<!-- 顶部设置 -->
-		<!-- 				<view class="header">
-			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
-				<view class="header-prove" @click="gotoConnern">
-					<uni-icons type="checkbox-filled" size="25"></uni-icons>
-					<text>认证中心</text>
-					<uni-icons type="forward" size="18"></uni-icons>
-				</view>
-			</uni-badge>
-			<uni-badge size="normal" :offset="[3, 3]" :is-dot="true" :text="value" absolute="rightTop" type="error">
-				<view class="header-buttons" @click="gotoConnern">
-					<uni-icons type="bars" size="25"></uni-icons>
-				</view>
-			</uni-badge>
-		</view> -->
 		<view class="root">
 			<view class="head">
 			</view>
@@ -32,7 +17,7 @@
 						</view>
 						<view class="top-left-right">
 							<h1 @click="inputDialogToggle">
-								<text>{{baseData.nickName}}</text>
+								<text>{{baseData.nickName?baseData.nickName:""}}</text>
 							</h1>
 							<p>
 								<text>用户ID：{{baseData.personId}}</text>

@@ -2,17 +2,17 @@ import {
 	http
 } from '@/common/service/service.js'
 
-
+let url="/api/square"
 const apiService = {
 
 	//获取附近列表
 	getCommentList(params) {
-		return http.get('/social/active/getCommentList', params)
+		return http.get(`${url}/social/active/getCommentList`, params)
 	},
 
 	// 获取评论
 	getComments(params) {
-		return http.get('/social/active/getReplyList', params)
+		return http.get(`${url}/social/active/getReplyList`, params)
 	},
 
 	// 点赞
@@ -27,7 +27,7 @@ const apiService = {
 	
 	// 获取一条动态信息
 	getOneInfo(params){
-		return http.get('/social/active/getOneDiary',params)
+		return http.get(`${url}/social/active/getOneDiary`,params)
 	}
 
 }

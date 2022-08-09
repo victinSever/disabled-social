@@ -118,6 +118,7 @@
 			// 获取总数量
 			initTotal() {
 				let _that = this;
+                debugger
 				this.getTotal().then(res => {
 					_that.total = res.data
 				})

@@ -49,7 +49,7 @@
 									<view class="right-box">
 										<view class="right-box-left">
 											<text>{{item.nickname}}</text>
-											<!-- <p>{{item.message}}</p> -->
+											<text style="font-size: 30rpx;margin-top: 10rpx;color: #736f6f;">{{item.messageText}}</text>
 										</view>
 										<view class="right-box-right">
 											<!-- v-if="item.num!=0" -->
@@ -82,12 +82,21 @@
 					}
 				}],
 				isSetting: false, //是否点击设置
-
+              myInfo: {
+              	loginName: "",
+              	nickName: "",
+              	userId:""
+              },
 			}
 		},
 		onShow() {
 			this.getrecommendList();
 			this.getMessageList();
+            this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
+                loginName: "",
+                nickName: "",
+                userId:""
+            }
 			//接受消息数据
 			uni.$on("messageData", (data) => {
 				if (data.type == 1) {}
@@ -122,10 +131,11 @@
 
 			//获取用户列表
 			getMessageList() {
-				message.messageList("1").then(response => {
+				message.messageList(this.myInfo.userId).then(response => {
 					  this.messageData = response.data ? response.data : [];
 					this.messageData.forEach((item,index)=>{
-						this.$set(item,'num',0)
+						this.$set(item,'num',0);
+                        this.$set(item,'messageText',"")
 						item.num=0
 						this.$store.state.webSocket.messageList.forEach((items)=>{
 							if(item.userid==items.userid){
@@ -144,7 +154,7 @@
 			getMessageDetail(id,index){
 				message.lkuschatmsg({
 					reviceuserid: id,
-					userid: "1"
+					userid: this.myInfo.userId
 				}).then(response => {
 					response.data = response.data ? response.data : [];
 					let indexs=0;
@@ -154,6 +164,7 @@
 						}
 					})
 					this.messageData[index].num=indexs;
+                    this.messageData[index].messageText=response.data[response.data.length-1].sendtext?response.data[response.data.length-1].sendtext:"";
 				}).catch(error => {
 				
 				})
@@ -312,15 +323,10 @@
 						.right-box-left {
 							width: 80%;
 
-							text,
-							p {
-								height: 50rpx;
-								line-height: 50rpx;
-								display: inline-block;
-							}
-
 							text {
-								font-size: 40rpx;
+								height: 50rpx;
+								line-height: 50rpx;display: block;
+                                font-size: 40rpx;
 							}
 						}
 
