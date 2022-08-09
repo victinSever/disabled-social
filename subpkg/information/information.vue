@@ -7,7 +7,7 @@
 				<uni-icons type="back" size="30" color="#000" @click="backTo"></uni-icons>
 				<image :src="userInfo.headPicPath" mode="widthFix"></image>
 				<view class="info">
-					<text>{{userInfo.username}}</text>
+					<text>{{userInfo.nickName}}</text>
 					<!-- <text>{{userInfo.lastTime}}</text> -->
 				</view>
 			</view>
@@ -50,7 +50,7 @@
 							<video :src="item.sendtext"></video>
 						</template>
 									</view>
-						<image class="imageLogo" :src="myInfo.headPicPath"></image>
+						<image class="imageLogo" :src="myInfoData.headPicPath"></image>
 					</view>
 				</view>
 			</scroll-view>
@@ -84,16 +84,23 @@
 				CustomBar: this.CustomBar,
 				// 对方的信息
 				userInfo: {
-					userImage: ""
+					nickName: "",
+                    headPicPath:""
 				},
 				// 我的信息
 				myInfo: {
-					userImage: ""
+					loginName: "",
+					nickName: "",
+					userId:""
 				},
 				// 聊天内容
 				inputValue: "",
 				chattingList: [],
 				reviceuserid: "",
+                myInfoData:{
+                    nickName: "",
+                    headPicPath:""
+                },
 				messageObj: {
 					senduserid: "",
 					reciveuserid: "",
@@ -103,15 +110,20 @@
 		},
 		onLoad(option) {
 			//获取聊天列表
-			this.getLkuschatmsg(option.userId);
-			this.reviceuserid = option.userId;
-			this.getUserData()
 
 			uni.$on("websocketData", (data) => {
 				this.chattingList.push(data);
 				this.setAlreadyRead(data.id)
 			});
-			this.myInfo= this.$store.user.baseData?this.$store.user.baseData:{}
+			this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
+                loginName: "",
+                nickName: "",
+                userId:""
+            };
+            this.getLkuschatmsg(option.userId);
+            this.reviceuserid = option.userId;
+            this.getUserData();
+            this.getMyInfoData()
 		},
 		methods: {
 			
@@ -132,21 +144,29 @@
 				my.getBaseData({
 					personId:this.reviceuserid
 				}).then((res)=>{
-					this.userInfo = res.data?res.data:[]
+					this.userInfo = res.data.data?res.data.data:[]
 				}).catch(()=>{
 					
 				})
 			},
+            //获取当前用户信息
+            getMyInfoData(){
+            	my.getBaseData({
+            		personId:this.myInfo.userId
+            	}).then((res)=>{
+            		this.myInfoData = res.data.data?res.data.data:[]
+            	}).catch(()=>{
+            		
+            	})
+            },
 			
 			getLkuschatmsg(id) {
 				message.lkuschatmsg({
 					reviceuserid: id,
-					userid: "1"
+					userid: this.myInfo.userId
 				}).then(response => {
-					this.chattingList = response.data ? response.data : [];
-					
+					this.chattingList = response.data.data ? response.data.data : [];
 					this.chattingList.forEach((item)=>{
-						debugger
 						if(item.msgstatus==0){
 						  this.setAlreadyRead(item.id)
 						}

@@ -2,16 +2,16 @@ import {
 	http
 } from '@/common/service/service.js'
 
-
+let url="/api/square"
 const apiService = {
 
 	//获取
 	getCarefor(params) {
-		return http.get('/social/getFollowsDiaryList', params)
+		return http.get(`${url}/social/getFollowsDiaryList`, params)
 	},
 	
 	getTotal(){
-		return http.get('/social/getFollowPages')
+		return http.get(`${url}/social/getFollowPages`)
 	}
 
 }

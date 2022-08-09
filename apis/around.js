@@ -2,20 +2,20 @@ import {
 	http
 } from '@/common/service/service.js'
 
-
+let url="/api/square"
 const apiService = {
 
 	//获取
 	getRecomment(params) {
-		return http.get('/social/active/getNearActiveList', params)
+		return http.get(`${url}/social/active/getNearActiveList`, params)
 	},
 
 	addLike(params) {
-		return http.post('/recomment/likeDiary', null, params)
+		return http.post(`${url}/recomment/likeDiary`, null, params)
 	},
 
 	getTotal() {
-		return http.get('/social/getNearTotal')
+		return http.get(`${url}/social/getNearTotal`)
 	}
 
 

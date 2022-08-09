@@ -5,7 +5,7 @@
 		<!-- 头部 -->
 		<view class="header">
 			<view class="left" @click="gotoBack">
-				<image src="../../static/icon/active/left.png" alt="" />
+			        <uni-icons type="back" size="25"></uni-icons>
 				<text>我的特权</text>
 			</view>
 		</view>

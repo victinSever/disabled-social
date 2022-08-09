@@ -66,6 +66,10 @@
 				},
 				isClose: true,
 				activeStyle: 'font-weight: bold;color: black;', //active样式
+                requestClose:around.getRecomment,
+                requestCare:care.getCarefor,
+                getTotalAround:around.getTotal,
+                getTotalCare:care.getTotal
 			};
 		},
 		mounted() {
@@ -93,20 +97,6 @@
 				this.$refs.popup.open('top')
 			},
 		},
-		computed: {
-			requestClose() {
-				return around.getRecomment
-			},
-			requestCare() {
-				return care.getCarefor
-			},
-			getTotalAround() {
-				return around.getTotal
-			},
-			getTotalCare() {
-				return care.getTotal
-			}
-		}
 	}
 </script>
 

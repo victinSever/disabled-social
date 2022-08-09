@@ -33,7 +33,7 @@ const webSocket = {
 		})
 		// 打开信道
 		uni.connectSocket({
-			url: Vue.prototype.webSocketApi + "1"
+			url: Vue.prototype.webSocketApi + userId
 		});
 	},
 

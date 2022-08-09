@@ -70,7 +70,12 @@
 		props: ['data'],
 		data() {
 			return {
-				code: 0
+				code: 0,
+                myInfo:{
+                    loginName: "",
+                    nickName: "",
+                    userId:""
+                }
 			};
 		},
 		methods: {
@@ -89,7 +94,7 @@
 
 				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
 				around.addLike({
-					userId: 1,
+					userId:this.myInfo.userId,
 					diaryId: this.data.diary.diaryId
 				}).then(res => {
 					_this.data.diary.diaryLove = res.data.map.total
@@ -98,7 +103,12 @@
 			}
 		},
 		mounted() {
-			this.code = this.data.alreadyLike 
+			this.code = this.data.alreadyLike ;
+            this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
+                loginName: "",
+                nickName: "",
+                userId:""
+            }
 		}
 	}
 </script>

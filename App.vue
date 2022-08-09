@@ -1,6 +1,5 @@
 <script>
 	import Vue from 'vue'
-	import webSocket from "@/common/util/webSocket.js"
 	export default {
 		onLaunch: function() {
 			uni.getSystemInfo({
@@ -13,8 +12,6 @@
 					};
 				}
 			});
-			//创建webSocket;
-			webSocket.open("1111");
 		},
 		onShow: function() {},
 		onHide: function() {}
