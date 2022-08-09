@@ -137,7 +137,7 @@
 					y: 0
 				},
 				page: {
-					userId: "1",
+					userId: this.$store.state.user.loginUser.userId?this.$store.state.user.loginUser.userId:"",
 					page: 1,
 					size: 10
 				},
@@ -201,9 +201,9 @@
 			//收藏
 			collect() {
 				recomment.collect({
-					userId: "1",
+					userId: this.$store.state.user.loginUser.userId?this.$store.state.user.loginUser.userId:"",
 					type: "2",
-					likedId: this.obj.id
+					likedId: this.obj.userId
 				}).then((res) => {
 					uni.showToast({
 						icon: "none",

@@ -99,6 +99,7 @@
 					setTimeout(() => {
 						this._videoContextList[this._videoIndex].play();
 						this.alreadyLike = this.videoList[this._videoIndex].alreadyLike;
+                        this.isactive = this.videoList[this._videoIndex].alreadyCollect;
 						this.avatar_img = this.videoList[this._videoIndex].headPicture;
 						this.love_num = this.videoList[this._videoIndex].diary.diaryLove;
 						this.comm_num = this.videoList[this._videoIndex].diary.diaryComment;
@@ -119,7 +120,6 @@
 				}
 			},
 			onSwiperChange(e) {
-				this.isactive = false
 				let currentIndex = e.detail.current;
 				if (currentIndex === this._videoIndex) {
 					return;
