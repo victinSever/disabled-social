@@ -81,6 +81,7 @@
 		<template v-else>
 			<videos></videos>
 		</template>
+		
 		<!-- 设置按钮的弹框 -->
 		<uni-popup ref="homeSetting">
 			<recomment-setting @closePopup="closePopup"></recomment-setting>
