@@ -137,7 +137,6 @@
 					y: 0
 				},
 				page: {
-					userId: this.$store.state.user.loginUser.userId?this.$store.state.user.loginUser.userId:"",
 					page: 1,
 					size: 10
 				},
