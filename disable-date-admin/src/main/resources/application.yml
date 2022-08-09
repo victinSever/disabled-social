@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates
+    mode: HTML
+  datasource:
+    url: jdbc:mysql://localhost:3306/disable-date?useSSL=false
+    username: root
+    password: 2000516
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    rabbitmq:
+      host: 175.178.177.105
+      port: 5672
+      username: itcast
+      password: itcast
+      virtual-host: /
+      listener:
+        simple:
+          prefetch: 1     #（设置preFetch这个值，可以控制预取消息的上限）每次只能获取一条消息，处理完成才能获取下一个消息
+server:
+  port: 5211
+#  application:
+#    name: disablesquare
+#  cloud:
+#    nacos:
+#      server-addr: localhost:8848 # nacos服务地址
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
