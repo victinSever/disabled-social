@@ -3,75 +3,25 @@
 		<view class="title">
 			<text class="me">{{title}}</text>
 		</view>
-		<text v-if="content.length>0" class="content">
+		<text v-if="content" class="content">
 			{{content}}
 		</text>
+		
 		<view class="content-item">
 			<view v-if="title=='我的兴趣'" class="">
-				<!-- 	<view class="all run">
-					<view class="left">
-						<i class="iconfont icon-paobuji"></i>
-					</view>
-					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
-					</view>
-				</view> -->
 				<view class="all travel">
 					<view class="left">
 						<i class="iconfont icon-lvyou"></i>
 					</view>
 					<view class="right">
-						<text v-for="(item,index) in list">{{item}}</text>
+						<view class="list" v-if="list.length != 0">
+							<text class="item" v-for="(item,index) in list" :key="index">{{item}}</text>
+						</view>
+						<view class="empty" v-else>
+							<text>用户未设置兴趣哦！</text>
+						</view>
 					</view>
 				</view>
-				<!-- <view class="all popular">
-					<view class="left">
-						<i class="iconfont icon-yinle"></i>
-					</view>
-					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
-					</view>
-				</view>
-				<view class="all move">
-					<view class="left">
-						<i class="iconfont icon-yingshi"></i>
-					</view>
-					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
-					</view>
-				</view>
-				<view class="all food">
-					<view class="left">
-						<i class="iconfont icon-shiwu-"></i>
-					</view>
-					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
-					</view>
-				</view> -->
 			</view>
 			<view v-else-if="title=='我的标签'" class="">
 				<view class="all run">
@@ -79,62 +29,43 @@
 						<i class="iconfont icon-biaoqian"></i>
 					</view>
 					<view class="right">
-						<text v-for="(item,index) in list">{{item}}</text>
+						<view class="list" v-if="list.length != 0">
+							<text class="item" v-for="(item,index) in list" :key="index">{{item}}</text>
+						</view>
+						<view class="empty" v-else>
+							<text>用户未设置兴趣哦！</text>
+						</view>
 					</view>
 				</view>
 			</view>
-			<!-- 	<view v-else-if="title=='关于我'" class="aboutMe">
-				<text>郊游</text>
-				<text>郊游23</text>
-				<text>郊游</text>
-				<text>郊13游</text>
-				<text>郊3游</text>
-				<text>郊游21</text>
-				<text>郊游</text>
-			</view> -->
-			<!-- <view v-else class="account">
-				<view>13123213</view>
-				<view class="report">
-					<text>~举报~</text>
-					<text class="report-item">小月亮</text>
+			<view v-else-if="title=='更多信息'" class="">
+				<view class="more">
+					<view>ID: {{baseData.personId}}</view>
+					<view class="info">
+						<view>粉丝: <text>{{baseData.fanCount}}</text></view>
+						<view>关注: <text>{{baseData.attentionCount}}</text></view>
+					</view>				
 				</view>
-			</view> -->
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-
-		props: {
-			title: {
-				type: String,
-				default: undefined
-			},
-			content: {
-				type: String,
-				default: ''
-			},
-			list: {
-				type: Array,
-				default: []
-			}
-		},
-		data() {
-			return {
-
-			}
+		props: ['title', 'content','list', 'baseData'],
+		mounted(){
+			console.log(this.baseData);
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.about {
 		width: 100%;
 		padding-bottom: 30rpx;
 		margin-bottom: 80rpx;
 
-		// border-bottom: 6rpx solid e6e6e64f;
 		.title {
 			display: flex;
 
@@ -158,6 +89,7 @@
 			white-space: pre-wrap;
 			height: auto;
 			margin-bottom: 20rpx;
+			text-indent: 2em;
 		}
 
 		.content-item {
@@ -181,10 +113,14 @@
 
 				.right {
 					display: flex;
-					flex-wrap: wrap;
-					align-content: flex-start;
-					justify-content: flex-start;
 					width: 85%;
+					
+					.list{
+						display: flex;
+						flex-wrap: wrap;
+						align-content: flex-start;
+						justify-content: flex-start;
+					}
 
 					text {
 						margin-bottom: 20rpx;
@@ -202,65 +138,27 @@
 
 				}
 
-
-
-				// justify-content: space-around;
-
 			}
 
-			.aboutMe {
-				display: flex;
-				flex-wrap: wrap;
-				align-content: space-around;
-
-				text {
-					margin-bottom: 20rpx;
-					margin-left: 30rpx;
-					height: 60rpx;
-					display: inline-block;
-					border-radius: 12rpx;
-					border: 4rpx solid #d8d8d833;
-					border-radius: 30rpx;
-					padding: 0 20rpx;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				}
-
-				text.select {
-					border: 4rpx solid #F95F81;
-				}
-
+		}
+	}
+	
+	.more{
+		font-size: 12px;
+		
+		&>view{
+			line-height: 60rpx;
+			font-weight: bold;
+			
+			text{
+				margin: 0 30rpx 0 20rpx;
+				color: #777;
+				font-weight: normal;
 			}
-
-			.account {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				position: relative;
-				color: #777777;
-
-				&::before {
-					content: '用户ID';
-					position: absolute;
-					top: 0;
-					left: 0;
-				}
-
-				.report {
-					margin-top: 20rpx;
-
-					.report-item::before {
-						content: ' ';
-					}
-
-					.report-item::after {
-						content: ' ';
-					}
-				}
-			}
-
+		}
+		
+		.info{
+			display: flex;
 		}
 	}
 </style>

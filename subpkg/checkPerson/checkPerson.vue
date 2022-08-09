@@ -47,7 +47,13 @@
 							
 			</view>
 			<view class="main">
-				<personage v-if="isPre" :backShow="false" :baseData="baseData" :personageData="personData" :imageList="albumData"></personage>
+				<personage 
+				v-if="isPre" 
+				:backShow="false" 
+				:baseData="baseData" 
+				:personageData="personData" 
+				:imageList="albumData"
+				></personage>
 				<view v-else>								
 					<baseCom 
 					v-if="type === 1" 
@@ -110,7 +116,6 @@
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
 				this.cacheData = this.moreInfo	
-				console.log(this.moreInfo);
 			},
 			
 			// 监视缓存数据

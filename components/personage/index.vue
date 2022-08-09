@@ -43,10 +43,12 @@
 					暂无
 				</view>
 			</view>
-
-			<homeItem title="关于我" content="美少女战士"></homeItem>
-			<homeItem title="我的标签"></homeItem>
-			<homeItem title="我的兴趣"></homeItem>
+			
+			<homeItem title="关于我" :content="introduce" v-if="introduce"></homeItem>
+			<homeItem title="爱情宣言" :content="loveSaying"  v-if="loveSaying"></homeItem>
+			<homeItem title="我的标签" :list="tag"></homeItem>
+			<homeItem title="我的兴趣" :list="hobby"></homeItem>
+			<homeItem title="更多信息" :baseData="baseData"></homeItem>
 		</view>
 	</view>
 
@@ -81,14 +83,24 @@
 				default: []
 			}
 		},
-		data() {
-			return {
-				
-			};
+		computed: {
+			tag(){
+				let tagStr = this.personageData.personDetailInfo.personTag
+				return tagStr.split(' ')
+			},
+			hobby(){
+				let hobbyStr = this.personageData.personDetailInfo.hobby
+				return hobbyStr.split(' ')
+			},
+			introduce(){
+				return this.personageData.personBasicInfo.personIntro
+			},
+			loveSaying(){
+				return this.personageData.personBasicInfo.personSign
+			},
 		},
-		mounted(){
-			console.log(this.imageList);
-			
+		created(){
+			// console.log(this.personageData)			
 		},
 		methods: {
 			backdetail() {

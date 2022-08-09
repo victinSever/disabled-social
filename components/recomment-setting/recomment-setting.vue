@@ -11,22 +11,26 @@
 			<!-- 选项区域 -->
 			<scroll-view scroll-y="true" class="homeSetting-main">
 				<view class="age-and-distance">
-					<view class="box-age">
-						<view class="age-top">
-							<text>年龄</text>
-							<text>{{ageRange.low}} - {{ageRange.high + (ageRange.high === 60 ? '+':'')}}</text>
+					<view class="box">
+						<view class="top">
+							<text class="title">年龄</text>
+							<text class="value">{{ageRangeValue[0] + ' - ' + ageRangeValue[1] + (ageRangeValue[1] == ageRangeMax ? '+':'')}}</text>
 						</view>
-						<view class="age-bottom">
-							<text></text>
+						<view class="bottom">
+							<slider-range :value="ageRangeValue" :min="ageRangeMin" :max="ageRangeMax" :step="step" :bar-height="3"
+								:block-size="26" background-color="#EEEEF6" active-color="#FF6B00" :format="format"
+								:decorationVisible="true" :tipVisible="false" @change="handleAgeRangeChange"></slider-range>
 						</view>
 					</view>
-					<view class="box-distance">
-						<view class="distance-top">
-							<text>距离</text>
-							<text>{{distance + 'km' + (distance === 100 ? '+':'')}}</text>
+					<view class="box">
+						<view class="top">
+							<text class="title">距离</text>
+							<text class="value">{{distanceRangeValue[0] + ' - ' + distanceRangeValue[1] + 'km'+ (distanceRangeValue[1] == distanceRangeMax ? '+':'')}}</text>
 						</view>
-						<view class="distance-bottom">
-							<text></text>
+						<view class="bottom">
+							<slider-range :value="distanceRangeValue" :min="distanceRangeMin" :max="distanceRangeMax" :step="step" :bar-height="3"
+								:block-size="26" background-color="#EEEEF6" active-color="#FF6B00" :format="format"
+								:decorationVisible="true" :tipVisible="false" @change="handleDistanceRangeChange"></slider-range>
 						</view>
 					</view>
 				</view>
@@ -45,15 +49,16 @@
 							<image src="../../static/icon/recomment/no-limit.png" alt="" mode="aspectFill" />
 							<text>不限</text>
 						</view>
-					</view>				
+					</view>
 				</view>
 				<view class="tag">
 					<text class="title">标签</text>
 					<view class="list">
-						<view :class="'item' + (tagChoose == i ? ' active' : '')" v-for="(item, i) in tags" :key="i" @click="tagChoose = i">
+						<view :class="'item' + (tagChoose == i ? ' active' : '')" v-for="(item, i) in tags" :key="i"
+							@click="tagChoose = i">
 							<text>{{item}}</text>
 						</view>
-					</view>				
+					</view>
 				</view>
 			</scroll-view>
 		</view>
@@ -61,21 +66,36 @@
 </template>
 
 <script>
+	import SliderRange from '@/components/primewind-sliderrange/components/primewind-sliderrange/index.vue'
 	export default {
 		name: "recomment-setting",
+		components: {
+			SliderRange
+		},
 		data() {
 			return {
-				tags: ["靠谱",'温柔','善良','和蔼','务实','厚道','喜欢简单','成熟'],
-				ageRange: {
-					low: 18,
-					high: 60
-				},
-				distance: 100,
-				sexChoose: 1,				
+				tags: ["靠谱", '温柔', '善良', '和蔼', '务实', '厚道', '喜欢简单', '成熟'],
+				sexChoose: 1,
 				tagChoose: 0,
+				step: 1,//拖动的步长
+				ageRangeMin: 18,
+				ageRangeMax: 60,
+				ageRangeValue: [18, 60],
+				distanceRangeMax: 100,
+				distanceRangeMin: 0,
+				distanceRangeValue: [0,100],
 			};
 		},
 		methods: {
+			format(val) {				
+				return val + '岁'
+			},
+			handleAgeRangeChange(e) {
+				this.ageRangeValue = e
+			},
+			handleDistanceRangeChange(e) {
+				this.distanceRangeValue = e
+			},
 			closePopup() {
 				this.$emit('closePopup', true)
 			}
@@ -114,44 +134,37 @@
 				margin-top: 40rpx;
 
 				.age-and-distance {
-					&>view {
-						height: 150rpx;
+					.box {
 
-
-						&>view:first-child {
+						.top {
 							display: flex;
 							justify-content: space-between;
 
-							text:first-child {
+							.title {
 								color: #777;
 							}
 
-							text:last-child {
+							.value {
 								font-weight: bold;
 							}
 						}
 
-						&>view:last-child {
+						.bottom {
+							margin-top: -40rpx;
 							width: 100%;
-
-							text {
-								display: inline-block;
-								height: 4rpx;
-								width: 100%;
-								background-color: darkorange;
-							}
+							margin-bottom: 20rpx;
 						}
 					}
 				}
 
 				.sex {
-					.title{
+					.title {
 						height: 60rpx;
 						line-height: 60rpx;
 						color: #777;
 					}
-					
-					.list{
+
+					.list {
 						height: 300rpx;
 						display: flex;
 						justify-content: space-between;
@@ -174,36 +187,36 @@
 							margin-bottom: 20rpx;
 						}
 					}
-					
-					.active{
+
+					.active {
 						border: 4rpx solid darkorange;
 					}
 				}
-				
-				.tag{
-					.title{
+
+				.tag {
+					.title {
 						height: 60rpx;
 						line-height: 60rpx;
 						color: #777;
 					}
-					
-					.list{
+
+					.list {
 						width: 100%;
 						display: flex;
 						flex-wrap: wrap;
-						
-						.item{
+
+						.item {
 							margin: 15rpx;
 							padding: 10rpx 30rpx;
 							border: 4rpx solid #eee;
 							border-radius: 30rpx;
-							
-							text{
+
+							text {
 								font-size: 12px;
 							}
 						}
-						
-						.active{
+
+						.active {
 							background-color: #fce6d8;
 							color: darkorange;
 							border: 4rpx solid transparent;

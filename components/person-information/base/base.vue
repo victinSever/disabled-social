@@ -402,15 +402,14 @@
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
-				console.log(item);
-				my.deletePicture(item.id).then(res => {					
-					console.log(res);
+				my.deletePicture({
+					id:item.id
+				}).then(res => {					
 					uni.$showMsg(res.data.message)
 					if(!res.data.message.includes('删除失败'))
-						this.$set( this.userImages[i], 'picPath', "")
+						this.userImages.splice(i, 1)
 				})
 				event.stopPropagation()//组织事件冒泡
-				// this.$set( this.userImages[i], 'picPath', "")
 				
 			},
 			tips(){

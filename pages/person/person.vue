@@ -198,7 +198,6 @@
 				let that = this
 				setTimeout(() => {
 					uni.hideLoading()
-					console.log(res);
 					if(res.resultCode == 200) {
 						that.$set(that.baseData, 'nickName', val)				
 						uni.$showMsg('更新昵称成功！')
@@ -302,6 +301,7 @@
 				const {data: res3} = await my.searchAlbumListByUserId({
 					userId: this.loginUser.userId
 				})	
+				console.log(res2);
 				uni.hideLoading()
 				this.baseData = res1.data				
 				this.moreData = res2.data
