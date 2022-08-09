@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 日志管理
+	记录
  */
 //@CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
