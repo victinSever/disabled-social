@@ -136,7 +136,7 @@
 					},
 					{
 						icon: '../../static/icon/active/privilege/collection.png',
-						name: '每天5个儿超级喜欢',
+						name: '每天5个超级喜欢',
 						description: '心仪的朋友可以超级喜欢哦'
 					},
 					{
@@ -180,6 +180,7 @@
 				const {data: res} = await my.getInfo({
 					loginName: this.loginUser.loginName
 				})
+				console.log(res);
 				uni.hideLoading()
 				if (res.resultCode === 200) {
 					if (res.data.isVip === 1) {

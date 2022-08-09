@@ -1,6 +1,7 @@
 import { http } from '@/common/service/service.js'
 
 let url="/api/personinfo"
+let url2="/api/square"
 const apiService = {
     
     //每日签到
@@ -166,7 +167,7 @@ const apiService = {
 	
 	// 获取我的动态列表
 	getMyDiary(params) {
-		return http.get(`${url}/mine/getMyDiary`, params)
+		return http.get(`${url2}/mine/getMyDiary`, params)
 	},
 	
 }
