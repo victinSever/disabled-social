@@ -75,21 +75,19 @@
 				} else {
 					_that.mescroll.endByPage(1, 1);
 				}
-
 			},
 			upCallback(e) {
 				let _that = this;
-				care.getCarefor({
-					page: _that.page,
+				console.log(e.num);
+				around.getRecomment({
+					page: e.num,
 					size: 10,
 					userId: 1
 				}).then(res => {
-					_that.page++
-					console.log(res.data);
 					_that.acitveData.push(...res.data)
 					if (res.data.length < 10)
 						_that.flag = false
-					_that.mescroll.endByPage(3, 10);
+					_that.mescroll.endByPage(res.data.length, 10000);
 				})
 			},
 			openPopu() {

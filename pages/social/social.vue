@@ -4,32 +4,31 @@
 		<!-- social头部-->
 		<view class="social-header">
 			<!-- 关注和附近按钮切换 -->
-			<view class="social-header-left"  >
+			<view class="social-header-left">
 				<text :style="!isClose? activeStyle: ''" id="concern" @click="isClose = false">关注</text>
-				<text :style="isClose? activeStyle: ''" id="close" @click="isClose = true">附近</text>				
+				<text :style="isClose? activeStyle: ''" id="close" @click="isClose = true">附近</text>
 				<text>
-					<uni-icons type="list" size="30" color="darkorange"
-						@click="changeSetting()">					
+					<uni-icons type="list" size="30" color="darkorange" @click="changeSetting()">
 					</uni-icons>
 				</text>
-			</view>	
-			
-			<!-- 右侧动态按钮 -->
+			</view>
+
 			<view class="social-header-right">
 				<text class="btnSend" @click="gotoShare">发动态</text>
 			</view>
+
 		</view>
-		
-		<!-- 附近 -->
-		<uni-transition mode-class="slide-right" :show="!isClose">
-			<social-close @openPopu="openPopu"></social-close>
-		</uni-transition>
-		
+
 		<!-- 关注 -->
-		<uni-transition mode-class="slide-left" :show="isClose">
-			<social-concern @openPopu="openPopu"></social-concern>
+		<uni-transition mode-class="slide-right" :show="!isClose">
+			<social-double :request="requestCare" :getTotal="getTotalCare" @openPopu="openPopu"></social-double>
 		</uni-transition>
-		
+
+		<!-- 附近 -->
+		<uni-transition mode-class="slide-left" :show="isClose">
+			<social-double :request="requestClose" :getTotal="getTotalAround" @openPopu="openPopu"></social-double>
+		</uni-transition>
+
 		<!-- 举报和关注弹窗 -->
 		<uni-popup ref="tip" background-color="#fff">
 			<view class="tip-content">
@@ -39,13 +38,13 @@
 				<text>取消</text>
 			</view>
 		</uni-popup>
-		
+
 		<!-- 设置部分的抽屉盒子 -->
 		<uni-popup ref="popup" background-color="#fff">
 			<social-apps @closePopup="closePopup"></social-apps>
 		</uni-popup>
-		
-		<!-- 不定期活动按钮 -->	
+
+		<!-- 不定期活动按钮 -->
 		<uni-transition mode-class="fade" :show="activeBtn.show && isClose">
 			<activity-btn :activeBtn="activeBtn"></activity-btn>
 		</uni-transition>
@@ -53,29 +52,31 @@
 </template>
 
 <script>
+	import around from '../../apis/around.js'
+	import care from '../../apis/care.js'
 	export default {
-		name:'social',
+		name: 'social',
 		data() {
 			return {
 				// 活动按钮定制
-				activeBtn:{
-					show: false,//是否存在
-					type: 'button',//样式为按钮
-					bgc: 'light',//背景为浅色
+				activeBtn: {
+					show: false, //是否存在
+					type: 'button', //样式为按钮
+					bgc: 'light', //背景为浅色
 				},
 				isClose: true,
 				activeStyle: 'font-weight: bold;color: black;', //active样式
 			};
 		},
-		mounted(){
+		mounted() {
 			let $this = this
 			// 延时广告出现
-			setTimeout(function(){
+			setTimeout(function() {
 				$this.activeBtn.show = true
 			}, 1000)
 		},
 		methods: {
-			gotoShare(){
+			gotoShare() {
 				uni.navigateTo({
 					url: '/subpkg/share/share'
 				})
@@ -84,19 +85,32 @@
 				this.$refs.tip.open('bottom')
 			},
 			// 关闭弹窗
-			closePopup(){
+			closePopup() {
 				this.$refs.popup.close()
 			},
 			// 改变设置状态
-			changeSetting(){
+			changeSetting() {
 				this.$refs.popup.open('top')
 			},
+		},
+		computed: {
+			requestClose() {
+				return around.getRecomment
+			},
+			requestCare() {
+				return care.getCarefor
+			},
+			getTotalAround() {
+				return around.getTotal
+			},
+			getTotalCare() {
+				return care.getTotal
+			}
 		}
 	}
 </script>
 
 <style lang="scss" socped>
-	
 	// 头部
 	.social-header {
 		height: 100rpx;
@@ -104,6 +118,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		
 		// position: sticky;
 		// top: 70rpx;
 		background-color: #fff;
@@ -115,6 +130,7 @@
 			line-height: 100rpx;
 			justify-content: space-around;
 			align-items: center;
+
 			text {
 				margin-right: 15px;
 				color: gray;
@@ -122,17 +138,17 @@
 				display: flex;
 				align-items: center;
 			}
-			
-			.active{
+
+			.active {
 				font-weight: bold;
 				color: black;
 			}
 		}
-		
+
 		.social-header-right {
 			margin-right: 5px;
-			
-			.btnSend{
+
+			.btnSend {
 				display: inline-block;
 				text-align: center;
 				padding: 5px 10px;
@@ -144,32 +160,30 @@
 			}
 		}
 	}
-	
+
 	// 弹窗
-	.tip-content{
+	.tip-content {
 		margin-top: 10px;
 		border-radius: 10px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		
-		hr{
+
+		hr {
 			margin: 5px 0;
 			height: 2px;
 			width: 100%;
 			background-color: #ccc;
 		}
-		
-		text{
+
+		text {
 			display: inline-block;
 			line-height: 40px;
 		}
-		
+
 		text:nth-child(2) {
 			color: orange;
 		}
 	}
-		
-
 </style>

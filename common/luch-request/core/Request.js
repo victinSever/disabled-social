@@ -218,10 +218,11 @@ export default class Request {
 	// #endif
 
 	// #ifdef APP-PLUS || H5 || MP-WEIXIN || MP-BAIDU
-	delete(url, data, options = {}) {
+	delete(url, data, params, options = {}) {
 		return this.request({
 			url,
 			data,
+			params,
 			method: 'DELETE',
 			...options
 		})

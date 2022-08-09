@@ -12,7 +12,16 @@ const apiService = {
 
 	addLike(params) {
 		return http.post('/recomment/likeDiary', null, params)
+	},
+
+	getTotal() {
+		return http.get('/social/getNearTotal')
 	}
+
+
+
+
+
 
 }
 

@@ -171,7 +171,7 @@
 				this.userMedia.splice(index, 1);
 				this.useMediaRes.splice(index, 1)
 			},
-			goBack() {
+			gotoBack() {
 				uni.navigateBack()
 			},
 			filePush() {
@@ -222,9 +222,6 @@
 						});
 					})))
 				}).then(res => {
-					// console.log(Array.from(_that.userImageServer));
-					// console.log(_that.userImageServer);
-					// console.log(_that.userMediaServer);
 					return share.postPerson({
 						picPaths: Array.from(_that.userImageServer),
 						videoPaths: Array.from(_that.userMediaServer),
@@ -238,8 +235,8 @@
 					})
 				}).then(res => {
 					uni.hideLoading()
-					// uni.$showMsg('发布成功！')
-					// _that.goBack()
+					uni.$showMsg('发布成功！')
+					_that.gotoBack()
 				}).catch(error => {
 					uni.hideLoading()
 					uni.$showMsg('发布失败！')
@@ -248,7 +245,6 @@
 				_that.userMediaServer = []
 			},
 			gotoShare() {
-
 				if (!this.isSubmit) {
 					return uni.$showMsg('你的编辑不完整！')
 				}

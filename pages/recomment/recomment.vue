@@ -31,7 +31,8 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<image :src="obj.headPath" style="width: 100%;height: 80%;" mode="widthFix"></image>
+							<image :src="obj.headPath" class="swiper-img" style="width: 100%;height: 70%;">
+							</image>
 							<view class="swiper_detail">
 								<view class="mask">
 								</view>
@@ -41,6 +42,7 @@
 								</view>
 								<view class="userDetail">
 									<text>{{obj.houseAddress}}</text>
+									<!-- 前往详情页 -->
 									<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
 								</view>
 								<view class="userConstellation">
@@ -63,25 +65,21 @@
 									<view class="collection" @click="collect">
 										<image src="@/static/images/home/2.png"></image>
 									</view>
-
-
 								</view>
 							</view>
 						</view>
 						<template v-else>
-							<personage @backdetail="backdetail" :backShow="true" :isTemplate="true"
-								:personageData="personageData" :imageList="imageList"></personage>
+							<person-info @backdetail="backdetail" :isTemplate="true" :item="obj"></person-info>
+
 						</template>
 					</movable-view>
 				</movable-area>
 			</view>
-
 		</template>
 
 		<template v-else>
 			<videos></videos>
 		</template>
-		
 		<!-- 设置按钮的弹框 -->
 		<uni-popup ref="homeSetting">
 			<recomment-setting @closePopup="closePopup"></recomment-setting>
@@ -91,6 +89,7 @@
 		<uni-popup ref="recommentAdver" mask-background-color="rgba(0,0,0,0.2)">
 			<recomment-adver @closeAdver="closeAdver"></recomment-adver>
 		</uni-popup>
+
 
 	</view>
 </template>
@@ -143,7 +142,7 @@
 					size: 10
 				},
 				imgList: [],
-				showMove:false
+				showMove: false
 			}
 		},
 		onLoad() {
@@ -151,43 +150,49 @@
 			this.getRecommentList();
 		},
 		methods: {
-			
 			//撤回不喜欢
-			NoDislikeUser(){
+			NoDislikeUser() {
 				recomment.cancelDislikeUser({
-					user_id:"",
-					dislike_user_id:""
+					user_id: "",
+					dislike_user_id: ""
 				}).then((res) => {
-					
+
 				}).catch(() => {
 
 				})
 			},
-			
 			//不喜欢用户
 			disLike() {
-				recomment.dislikeUser().then((res) => {
+				console.log('不喜欢');
+				recomment.dislikeUser({
+					likedUserId: this.obj.userId
+				}).then((res) => {
 					if ((this.imgList.length - 2) == this.selectIndex) {
 						this.page.page++;
 						this.getRecommentList()
 					}
 					this.selectIndex++;
 					this.obj = this.imgList[this.selectIndex];
-					this.moveOutrb();
+					// this.moveOutrb();
 				}).catch(() => {
 
 				})
 			},
+
 			//喜欢用户
 			like() {
-				recomment.loveUser().then((res) => {
+				console.log('喜欢');
+				recomment.loveUser({
+					likedUserId: this.obj.userId
+				}).then((res) => {
 					if ((this.imgList.length - 2) == this.selectIndex) {
 						this.page.page++;
 						this.getRecommentList()
 					}
 					this.selectIndex++;
+
 					this.obj = this.imgList[this.selectIndex];
-					this.moveOutrb();
+					// this.moveOutrb();
 				}).catch(() => {
 
 				})
@@ -220,7 +225,6 @@
 					} else {
 						this.imgList = this.imgList.concat(response.data);
 					}
-
 				}).catch(error => {
 
 				})
@@ -341,30 +345,43 @@
 						timingFunction: 'ease-in-out',
 					})
 					this.animation = animation;
-					if (x < 0 && y > 0){
+					if (x < 0 && y > 0) {
 						this.moveOutlb();
-						if(!this.showMove){
-							setTimeout(()=>{
+						if (!this.showMove) {
+							setTimeout(() => {
 								this.disLike();
-								this.showMove=false;
-							},2000)
+								this.showMove = false;
+							}, 1000)
 						}
-						this.showMove=true;
-					}else if (x < 0 && y < 0){
-							this.moveOutlt()
-					}else if (x > 0 && y < 0){
-							this.moveOutrt()
-					}else{
-						this.moveOutrb();
-						if(!this.showMove){
-							setTimeout(()=>{
+						this.showMove = true;
+					} else if (x < 0 && y < 0) {
+						this.moveOutlt()
+						if (!this.showMove) {
+							setTimeout(() => {
+								this.disLike();
+								this.showMove = false;
+							}, 1000)
+						}
+						this.showMove = true;
+					} else if (x > 0 && y < 0) {
+						this.moveOutrt()
+						if (!this.showMove) {
+							setTimeout(() => {
 								this.like();
-								this.showMove=false;
-							},2000)
+								this.showMove = false;
+							}, 1000)
 						}
-						this.showMove=true;
+						this.showMove = true;
+					} else {
+						this.moveOutrb();
+						if (!this.showMove) {
+							setTimeout(() => {
+								this.like();
+								this.showMove = false;
+							}, 1000)
+						}
+						this.showMove = true;
 					}
-		
 				}
 
 				this.nowid = e.target.id

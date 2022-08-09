@@ -8,7 +8,7 @@
 		</text>
 		<view class="content-item">
 			<view v-if="title=='我的兴趣'" class="">
-				<view class="all run">
+				<!-- 	<view class="all run">
 					<view class="left">
 						<i class="iconfont icon-paobuji"></i>
 					</view>
@@ -21,22 +21,16 @@
 						<text>郊游21</text>
 						<text>郊游</text>
 					</view>
-				</view>
+				</view> -->
 				<view class="all travel">
 					<view class="left">
 						<i class="iconfont icon-lvyou"></i>
 					</view>
 					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
+						<text v-for="(item,index) in list">{{item}}</text>
 					</view>
 				</view>
-				<view class="all popular">
+				<!-- <view class="all popular">
 					<view class="left">
 						<i class="iconfont icon-yinle"></i>
 					</view>
@@ -77,7 +71,7 @@
 						<text>郊游21</text>
 						<text>郊游</text>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view v-else-if="title=='我的标签'" class="">
 				<view class="all run">
@@ -85,17 +79,11 @@
 						<i class="iconfont icon-biaoqian"></i>
 					</view>
 					<view class="right">
-						<text>郊游</text>
-						<text>郊游23</text>
-						<text>郊游</text>
-						<text>郊13游</text>
-						<text>郊3游</text>
-						<text>郊游21</text>
-						<text>郊游</text>
+						<text v-for="(item,index) in list">{{item}}</text>
 					</view>
 				</view>
 			</view>
-			<view v-else-if="title=='关于我'" class="aboutMe">
+			<!-- 	<view v-else-if="title=='关于我'" class="aboutMe">
 				<text>郊游</text>
 				<text>郊游23</text>
 				<text>郊游</text>
@@ -103,20 +91,21 @@
 				<text>郊3游</text>
 				<text>郊游21</text>
 				<text>郊游</text>
-			</view>
-			<view v-else class="account">
+			</view> -->
+			<!-- <view v-else class="account">
 				<view>13123213</view>
 				<view class="report">
-					<text >~举报~</text>
+					<text>~举报~</text>
 					<text class="report-item">小月亮</text>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+
 		props: {
 			title: {
 				type: String,
@@ -125,6 +114,10 @@
 			content: {
 				type: String,
 				default: ''
+			},
+			list: {
+				type: Array,
+				default: []
 			}
 		},
 		data() {
@@ -138,8 +131,9 @@
 <style lang="scss">
 	.about {
 		width: 100%;
-			padding-bottom: 30rpx;
-			margin-bottom: 80rpx;
+		padding-bottom: 30rpx;
+		margin-bottom: 80rpx;
+
 		// border-bottom: 6rpx solid e6e6e64f;
 		.title {
 			display: flex;
@@ -175,6 +169,7 @@
 
 				.left {
 					width: 15%;
+
 					i {
 						font-size: 70rpx;
 					}
@@ -187,26 +182,24 @@
 				.right {
 					display: flex;
 					flex-wrap: wrap;
-					align-content: space-around;
+					align-content: flex-start;
+					justify-content: flex-start;
 					width: 85%;
-					// background-color: blue;
 
 					text {
 						margin-bottom: 20rpx;
 						margin-left: 30rpx;
 						height: 60rpx;
-						display: inline-block;
-							border-radius: 30rpx;
+						box-sizing: border-box;
+						border-radius: 30rpx;
 						border: 4rpx solid #d8d8d833;
 						padding: 0 20rpx;
 						display: flex;
 						align-items: center;
 						justify-content: center;
 					}
-					text.select{
-						border: 4rpx solid #F95F81;
-					}
-					
+
+
 				}
 
 
@@ -233,7 +226,8 @@
 					align-items: center;
 					justify-content: center;
 				}
-				text.select{
+
+				text.select {
 					border: 4rpx solid #F95F81;
 				}
 
@@ -246,18 +240,21 @@
 				justify-content: center;
 				position: relative;
 				color: #777777;
-				&::before{
+
+				&::before {
 					content: '用户ID';
 					position: absolute;
 					top: 0;
 					left: 0;
 				}
+
 				.report {
 					margin-top: 20rpx;
-					
+
 					.report-item::before {
 						content: ' ';
 					}
+
 					.report-item::after {
 						content: ' ';
 					}
