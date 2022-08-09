@@ -5,7 +5,7 @@
 		</view>
 		<view class="right-box">
 			<view class="title-info">
-				<h2 :style="{'margin-left':data.flag ? '0px' : '10px'}">{{data.diary.diaryUserName}}</h2>
+				<!-- <h2 :style="{'margin-left':data.flag ? '0px' : '10px'}" v-if="data.diary.diaryUserName">{{data.diary.diaryUserName}}</h2> -->
 				<!-- 如果不是广告 -->
 				<p v-if="data.flag">
 					<text>{{0}}{{data.lastUnit}}前</text>
@@ -15,7 +15,7 @@
 				<!-- 如果是广告 -->
 				<template v-else>
 					<p style="font-size: 15px;margin: 5px 0;">
-						{{data.diary.diaryContent}}
+						<!-- {{data.diary.diaryContent}} -->
 					</p>
 					<view class="advertise" style="position: absolute;top: 0; right: 20px;">
 						<uni-tag text="广告"></uni-tag>

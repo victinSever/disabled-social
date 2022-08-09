@@ -154,8 +154,8 @@
 
 	.navcontent {
 		height: 45px;
-		display: -ms-flex;
-		display: -webkit-flex;
+		/* display: -ms-flex; */
+		/* display: -webkit-flex; */
 		display: flex;
 		justify-content: space-around;
 		flex-direction: row;
@@ -168,8 +168,8 @@
 	}
 
 	.livefater {
-		display: -ms-flex;
-		display: -webkit-flex;
+		/* display: -ms-flex; */
+		/* display: -webkit-flex; */
 		display: flex;
 		justify-content: center;
 		flex-direction: column;

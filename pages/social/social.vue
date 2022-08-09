@@ -64,7 +64,7 @@
 					type: 'button', //样式为按钮
 					bgc: 'light', //背景为浅色
 				},
-				isClose: true,
+				isClose: false,
 				activeStyle: 'font-weight: bold;color: black;', //active样式
                 requestClose:around.getRecomment,
                 requestCare:care.getCarefor,
@@ -108,9 +108,9 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		
-		// position: sticky;
-		// top: 70rpx;
+		position: sticky;
+		    width: 100%;
+		    z-index: 99;
 		background-color: #fff;
 		padding: 0 20rpx;
 		// background-color: yellow;

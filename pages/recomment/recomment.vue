@@ -31,14 +31,14 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<image :src="obj.headPath" class="swiper-img" style="width: 100%;height: 70%;">
+							<image :src="obj.headPath" class="swiper-img" style="width: 100%;height: 100%;">
 							</image>
 							<view class="swiper_detail">
 								<view class="mask">
 								</view>
 
 								<view class="userName">
-									<!-- {{obj.}} -->
+									{{obj.username}}
 								</view>
 								<view class="userDetail">
 									<text>{{obj.houseAddress}}</text>
@@ -46,8 +46,8 @@
 									<image @click="checkDetail" src="@/static/images/home/shang.png"></image>
 								</view>
 								<view class="userConstellation">
-									<text>肢体残疾（三级）</text>
-									<text>26岁</text>
+									<text>{{obj.disableType}}（{{obj.disableLevel}}级）</text>
+									<text>{{obj.age}}岁</text>
 								</view>
 								<view class="control">
 									<view class="back" @click="NoDislikeUser">
@@ -122,6 +122,10 @@
 				personageData: {},
 				selectIndex: 0,
 				obj: {
+					username:"",
+					disableType:"",
+					disableLevel:"",
+					age:"",
 					headPath: "",
 					houseAddress: "",
 					hobbies: [],
@@ -171,7 +175,13 @@
 						this.getRecommentList()
 					}
 					this.selectIndex++;
-					this.obj = this.imgList[this.selectIndex];
+					this.obj = this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
+						headPath: "",
+						houseAddress: "",
+						hobbies: [],
+						picShow: [],
+						tags: []
+					};
 					// this.moveOutrb();
 				}).catch(() => {
 
@@ -190,7 +200,13 @@
 					}
 					this.selectIndex++;
 
-					this.obj = this.imgList[this.selectIndex];
+					this.obj =this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
+						headPath: "",
+						houseAddress: "",
+						hobbies: [],
+						picShow: [],
+						tags: []
+					};
 					// this.moveOutrb();
 				}).catch(() => {
 
@@ -218,11 +234,17 @@
 			getRecommentList() {
 				recomment.getRecomment(this.page).then(response => {
 					if (this.page.page == 1) {
-						this.obj = response.data[0];
-						this.imgList = response.data;
+						this.obj = response.data.data[0]?response.data.data[0]:{
+							headPath: "",
+							houseAddress: "",
+							hobbies: [],
+							picShow: [],
+							tags: []
+						};
+						this.imgList = response.data.data;
 						this.selectIndex = 0
 					} else {
-						this.imgList = this.imgList.concat(response.data);
+						this.imgList = this.imgList.concat(response.data.data);
 					}
 				}).catch(error => {
 
@@ -453,7 +475,7 @@
 			width: 100%;
 			perspective: 800;
 			display: flex;
-			bottom: -10rpx;
+			bottom: 0;
 			position: absolute;
 			justify-content: center;
 

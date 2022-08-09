@@ -45,6 +45,7 @@
 <script>
 	import recomment from "@/apis/recomment.js"
 	import around from "@/apis/around.js"
+	import { mapMutations,mapState } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -70,19 +71,20 @@
 			this.getVideoList();
 		},
 		methods: {
+			...mapState('user',['loginUser']),
 			//获取视频秀
 			getVideoList(page) {
 				let _that = this;
 				recomment.getUserVedio({
 					page: this.videoPage.index,
 					size: this.videoPage.size,
-					userId: "1"
+					userId: this.loginUser.userId
 				}).then((res) => {
 					if (this.videoPage.index == 1) {
-						_that.videoList = res.data ? res.data : [];
+						_that.videoList = res.data.data ? res.data.data : [];
 						_that.init()
 					} else {
-						_that.videoList = _that.videoList.concat(res.data ? res.data : [])
+						_that.videoList = _that.videoList.concat(res.data.data ? res.data.data : [])
 					}
 				}).catch(() => {
 
@@ -282,7 +284,7 @@
 	}
 
 	.swiper {
-		height: calc(100vh - 240rpx);
+		height: calc(100vh - 320rpx);
 		flex: 1;
 		background-color: #007AFF;
 	}
