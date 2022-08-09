@@ -1,9 +1,9 @@
 let BASE_URL = ''
 
 
-BASE_URL = 'http://192.168.2.24:5211/'
-
 BASE_URL = 'http://222.177.66.230:8080/'
+
+// BASE_URL = 'http://222.177.66.230:8080/'
 // // #ifdef H5
 // BASE_URL = '/api'  //H5下将地址修改为/api
 // // #endif

@@ -32,6 +32,7 @@
 
       <!-- 滑动块-左 -->
       <view
+		v-if="showLeft"
         class="slider-handle-block"
         :class="{ decoration: decorationVisible }"
         :style="{
@@ -72,6 +73,10 @@
 export default {
   components: {},
   props: {
+	showLeft:{
+		type: Boolean,
+		default: true
+	},
     //滑块区间当前取值
     value: {
       type: Array,

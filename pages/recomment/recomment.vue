@@ -200,7 +200,7 @@
 			//收藏
 			collect() {
 				recomment.collect({
-					userId: this.$store.state.user.loginUser.userId?this.$store.state.user.loginUser.userId:"",
+					userId: this.$store.state.user.loginUser.userId ? this.$store.state.user.loginUser.userId : "",
 					type: "2",
 					likedId: this.obj.userId
 				}).then((res) => {
@@ -243,7 +243,8 @@
 				// }, 1000)
 			},
 			// 关闭筛选弹出层
-			closePopup() {
+			closePopup(obj={}) {
+				// console.log(obj); //筛选的数据
 				this.$refs.homeSetting.close()
 			},
 			// 弹出筛选弹出层

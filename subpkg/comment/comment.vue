@@ -143,19 +143,19 @@
 						page: this.page
 					}).then(res => {
 						if (_this.data.length + res.data.length == _this.total) {
-							console.log('进了');
+							// console.log('进了');
 							_this.flag = false
 							_this.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
 						_this.page++
 						_this.data[fn](...res.data)
-						console.log(res.data);
-						console.log(_this.data.length);
+						// console.log(res.data);
+						// console.log(_this.data.length);
 
 						_this.mescroll.endByPage(10, parseInt(_this.total / 10));
 					})
 				} else {
-					console.log('走了');
+					// console.log('走了');
 					_this.mescroll.endByPage(10, parseInt(_this.total / 10));
 				}
 			},
@@ -168,12 +168,12 @@
 					size: 10
 				}).then(res => {
 					_this.data = res.data
-					console.log(res.data);
+					// console.log(res.data);
 					_this.showComments = true
 					if (_this.data.length > 0)
 						_this.total = _this.data[0].total
-					console.log(_this.total);
-					console.log(_this.data.length);
+					// console.log(_this.total);
+					// console.log(_this.data.length);
 				})
 			},
 			// 添加喜欢

@@ -6,7 +6,7 @@
 			<view class="homeSetting-header">
 				<uni-icons type="closeempty" size="25" @click="closePopup"></uni-icons>
 				<text>筛选</text>
-				<text class="btnSure" @click="closePopup">确定</text>
+				<text class="btnSure" @click="sendMessage">确定</text>
 			</view>
 			<!-- 选项区域 -->
 			<scroll-view scroll-y="true" class="homeSetting-main">
@@ -14,23 +14,28 @@
 					<view class="box">
 						<view class="top">
 							<text class="title">年龄</text>
-							<text class="value">{{ageRangeValue[0] + ' - ' + ageRangeValue[1] + (ageRangeValue[1] == ageRangeMax ? '+':'')}}</text>
+							<text
+								class="value">{{ageRangeValue[0] + ' - ' + ageRangeValue[1] + (ageRangeValue[1] == ageRangeMax ? '+':'')}}</text>
 						</view>
 						<view class="bottom">
-							<slider-range :value="ageRangeValue" :min="ageRangeMin" :max="ageRangeMax" :step="step" :bar-height="3"
-								:block-size="26" background-color="#EEEEF6" active-color="#FF6B00" :format="format"
-								:decorationVisible="true" :tipVisible="false" @change="handleAgeRangeChange"></slider-range>
+							<slider-range :value="ageRangeValue" :min="ageRangeMin" :max="ageRangeMax" :step="step"
+								:bar-height="3" :block-size="26" background-color="#EEEEF6" active-color="#FF6B00"
+								:format="format" :decorationVisible="true" :tipVisible="false"
+								@change="handleAgeRangeChange"></slider-range>
 						</view>
 					</view>
 					<view class="box">
 						<view class="top">
 							<text class="title">距离</text>
-							<text class="value">{{distanceRangeValue[0] + ' - ' + distanceRangeValue[1] + 'km'+ (distanceRangeValue[1] == distanceRangeMax ? '+':'')}}</text>
+							<text
+								class="value">{{distanceRangeValue[0] + ' - ' + distanceRangeValue[1] + 'km'+ (distanceRangeValue[1] == distanceRangeMax ? '+':'')}}</text>
 						</view>
 						<view class="bottom">
-							<slider-range :value="distanceRangeValue" :min="distanceRangeMin" :max="distanceRangeMax" :step="step" :bar-height="3"
-								:block-size="26" background-color="#EEEEF6" active-color="#FF6B00" :format="format"
-								:decorationVisible="true" :tipVisible="false" @change="handleDistanceRangeChange"></slider-range>
+							<slider-range :value="distanceRangeValue" :showLeft="false" :min="distanceRangeMin"
+								:max="distanceRangeMax" :step="step" :bar-height="3" :block-size="26"
+								background-color="#EEEEF6" active-color="#FF6B00" :format="format"
+								:decorationVisible="true" :tipVisible="false" @change="handleDistanceRangeChange">
+							</slider-range>
 						</view>
 					</view>
 				</view>
@@ -67,6 +72,7 @@
 
 <script>
 	import SliderRange from '@/components/primewind-sliderrange/components/primewind-sliderrange/index.vue'
+	import filters from '../../apis/filter.js'
 	export default {
 		name: "recomment-setting",
 		components: {
@@ -75,19 +81,20 @@
 		data() {
 			return {
 				tags: ["靠谱", '温柔', '善良', '和蔼', '务实', '厚道', '喜欢简单', '成熟'],
-				sexChoose: 1,
+				sexList: ['男', '女', '不限'],
+				sexChoose: 3,
 				tagChoose: 0,
-				step: 1,//拖动的步长
+				step: 1, //拖动的步长
 				ageRangeMin: 18,
 				ageRangeMax: 60,
 				ageRangeValue: [18, 60],
 				distanceRangeMax: 100,
 				distanceRangeMin: 0,
-				distanceRangeValue: [0,100],
+				distanceRangeValue: [0, 100],
 			};
 		},
 		methods: {
-			format(val) {				
+			format(val) {
 				return val + '岁'
 			},
 			handleAgeRangeChange(e) {
@@ -97,7 +104,17 @@
 				this.distanceRangeValue = e
 			},
 			closePopup() {
-				this.$emit('closePopup', true)
+				this.$emit('closePopup')
+			},
+			sendMessage() {
+				this.$emit('closePopup', {
+					age1: this.ageRangeValue[0],
+					age2: this.ageRangeValue[1],
+					distance: this.distanceRangeValue[1],
+					sex: this.sexList[this.sexChoose],
+					tag: this.tags[this.tagChoose],
+				})
+
 			}
 		}
 	}
