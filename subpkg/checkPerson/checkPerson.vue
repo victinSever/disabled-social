@@ -162,23 +162,7 @@
 				}
 				return success 			
 			},
-			// // 更新相册数据(没有一次更新的接口，因此只有一个一个更新)
-			// uploadAlbumList(){
-			// 	this.albumData.forEach(item => {
-			// 		delete item.createTime
-			// 		if(item.id){						
-			// 			my.changePicture(item).then(res => {
-			// 				console.log(res);
-			// 			}).catch(err => {
-			// 				console.log(err);
-			// 			})
-			// 		}else{
-			// 			my.addPicture(item).then(res => {
-			// 				console.log(res);
-			// 			})
-			// 		}										
-			// 	})
-			// },
+
 			// 返回
 			gotoBack() {
 				uni.switchTab({

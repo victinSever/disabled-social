@@ -40,7 +40,7 @@
 					<text class="pic">个人MV</text>
 				</view>
 				<view class="mv-video">
-					<video id="myVideo" :src="item.mvPath" @error="videoErrorCallback" controls></video>
+					<video id="myVideo" :src="item.mvPath" controls></video>
 				</view>
 			</view>
 
@@ -59,6 +59,7 @@
 
 <script>
 	import homeItem from '@/components/recomment-item/recomment-item.vue'
+	import { mapMutations,mapState } from 'vuex'
 	export default {
 		name: "personage",
 		components: {
@@ -86,10 +87,16 @@
 			console.log(this.item);
 		},
 		methods: {
+			...mapState('user',['loginUser']),
+			
 			backdetail() {
 				uni.$emit("backdetail");
 			},
-
+			
+			//关注用户
+			sendAttention(){
+				
+			},
 		}
 	}
 </script>

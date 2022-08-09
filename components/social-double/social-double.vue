@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<mescroll-uni ref="mescrollRef" @init="init" @down="downCallback" :down="downOption" :up="upOption"
-			@up="upCallback" :style="{height:wh+'px'}" :fixed="true">
+			@up="upCallback" :height="wh+'px'" :fixed="true" style="width: 100%;display: block;">
 			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
 		</mescroll-uni>
 	</view>
@@ -9,6 +9,7 @@
 
 <script>
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+		import { mapMutations,mapState } from 'vuex'
 	export default {
 		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin
@@ -47,15 +48,17 @@
 			};
 		},
 		methods: {
+			...mapState('user',['loginUser']),
 			init(mescroll) {
 				this.mescroll = mescroll;
 				this.$emit('init', mescroll)
 			},
 			downCallback(e) {
-				this.getMoreInfo('unshift')
+				this.mescroll.resetUpScroll();
 			},
 			upCallback(e) {
-				this.getMoreInfo('push')
+				this.page=e.num;
+				this.getMoreInfo()
 			},
 			getMoreInfo(fn) {
 				let _that = this;
@@ -63,14 +66,18 @@
 					_that.request({
 						page: _that.page,
 						size: 10,
-						userId: 1
+						userId: this.loginUser.userId
 					}).then(res => {
 						if (_that.acitveData.length + res.data.length == _that.total) {
 							_that.flag = false
 							_that.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
-						_that.page++
-						_that.acitveData[fn](...res.data)
+						if(_that.page==1){
+							_that.acitveData=res.data.data
+						}else{
+							_that.acitveData=_that.acitveData.concat(res.data.data)
+						}
+						
 						
 						_that.mescroll.endByPage(10, parseInt(_that.total / 10));
 					})
@@ -104,7 +111,7 @@
 			// 初始化信息
 			infoInit(res) {
 				this.acitveData = []
-				this.acitveData = res.data
+				this.acitveData = res.data.data;
 				this.page = 2
 				this.flag = true
 				this.getInfo = true
@@ -118,9 +125,12 @@
 			// 获取总数量
 			initTotal() {
 				let _that = this;
+<<<<<<< HEAD
                 // debugger
+=======
+>>>>>>> 7c53fedfa582ee788dfc673be488002a7582430c
 				this.getTotal().then(res => {
-					_that.total = res.data
+					_that.total = res.data.data
 				})
 			}
 		},
@@ -128,7 +138,7 @@
 			this.initTotal();
 			this.getAroundInfo(1);
 			this.$bus.$on('backUpdate', this.backUpdate)
-			this.wh = uni.getSystemInfoSync().windowHeight - 95;
+			this.wh = uni.getSystemInfoSync().windowHeight - 135;
 		},
 
 	}

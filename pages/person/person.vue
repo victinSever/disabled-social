@@ -130,7 +130,7 @@
 				paramsData: {
 					userId: "1",
 					page: 1,
-					size: 5
+					size: 3
 				},
 				reward: 5,//签到增加的积分
 				
@@ -173,10 +173,6 @@
 				uni.showLoading({
 					title: '正在更新中'
 				})
-				console.log({
-					loginName: this.loginUser.loginName,
-					nickName: val
-				});
 				const { data: res } = await my.changeNickName({
 					loginName: this.loginUser.loginName,
 					nickName: val
@@ -226,6 +222,7 @@
 					}
 				})
 			},
+			
 			// 调用微信图片
 			chooseWxImage(type) {
 				let that = this;
@@ -260,7 +257,7 @@
 				this.isLoading = false
 				uni.hideLoading();
 				// 根据动态发布时间获取日月
-				let arr = res.map(item => {
+				let arr = res.data.map(item => {
 					item.day = getDay(item.diary.createTime)
 					item.month = getMonth(item.diary.createTime)
 					return item
@@ -283,8 +280,9 @@
 				const {data: res2} = await my.getAllData({
 					personId: this.loginUser.userId
 				})
+				console.log(res1.data);
 				// 解决后端传来的时间字段不匹配问题
-				res2.data.personBasicInfo.expectedMarryTime = res2.data.personBasicInfo.expectedMarryTime.split('T')[0]
+				// res2.data.personBasicInfo.expectedMarryTime = res2.data.personBasicInfo.expectedMarryTime.split('T')[0]
 				// 相册
 				const {data: res3} = await my.searchAlbumListByUserId({
 					userId: this.loginUser.userId
@@ -314,6 +312,7 @@
 					}
 				});
 			},
+			
 			openLikes(){
 				uni.$showMsg("你的点赞有" + this.baseData.like + "个！")
 			},
@@ -341,6 +340,7 @@
 					url: '/subpkg/billboard/billboard?type=' + type
 				})
 			},
+			
 			// 签到
 			async makeSignUp() {
 				uni.showLoading({title: '信息加载中',mask:true})

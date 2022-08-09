@@ -28,6 +28,9 @@
 			return {};
 		},
 		mounted() {
+			uni.reLaunch({
+			    url:"/pages/recomment/recomment"
+			});
             if(uni.getStorageSync(ACCESS_TOKEN)){
                 if(uni.getStorageSync("userData")){
                    this.$store.commit('user/SETLOGINUSER',uni.getStorageSync("userData"));
@@ -44,7 +47,7 @@
                 // #endif
                 // #ifdef  APP-PLUS
                 this.getPhoneCardDetail();
-                plus.ios.importClass()
+                // plus.ios.importClass()
                 // #endif
             }
 		},

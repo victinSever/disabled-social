@@ -316,6 +316,7 @@
 			this.data = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo:{}
 			this.userImages = this.fillInGaps(this.albumInfo)
 			this.householdAddr = this.workAddr
+			console.log(this.userImages);
 		},
 		methods: {
 			// 选择MV视频
@@ -362,9 +363,11 @@
 				}
 				return data
 			},		
-            openAddres1() {
+            
+			openAddres1() {
             	this.$refs.picker1.show();
             },
+			
 			openAddres2() {
 				this.$refs.picker2.show();
 			},
@@ -406,7 +409,7 @@
 									if(item.id){
 										that.changeActiveImage(item, i, data.data.url)
 									}else{
-										this.addActiveImage(item,i, data.data.url)
+										that.addActiveImage(item, i, data.data.url)
 									}								
 								}
 							});
@@ -450,11 +453,14 @@
 					uni.hideLoading()
 					uni.$showMsg(res.data.message)
 					if(!res.data.message.includes('删除失败'))
-						this.userImages.splice(i, 1)
+						this.userImages[i] = {
+							id: '-'
+						}
 				})
 				event.stopPropagation()//组织事件冒泡
 				
 			},
+			
 			tips(){
 				uni.$showMsg('该信息不可更改！')
 			},			
@@ -501,6 +507,7 @@
 					}
 				})
 			},
+			
 			// 调用微信图片
 			chooseWxImage(type) {
 				let that = this;
