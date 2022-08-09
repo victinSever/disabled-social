@@ -30,6 +30,17 @@
 				<text>{{baseInfo.isVip == 1 ? '特权用户可上传9':'图片秀仅限6'}}张图片哦！</text>
 			</view>
 		</view>
+		
+		<view class="section">
+			<text class="label">个人MV</text>
+			<view class="content" @click="chooseVedio()">
+				<view v-if="!data.mv" class="camera">
+					<text>点击上传</text>
+					<uni-icons class="icon-camera" type="camera-filled" size="30" color="#ffb795"></uni-icons>
+				</view>
+				<text v-else>已上传成功！</text>
+			</view>
+		</view>
 
 		
 		<view class="section">
@@ -307,6 +318,30 @@
 			this.householdAddr = this.workAddr
 		},
 		methods: {
+			// 选择MV视频
+			chooseVedio() {
+				let that = this;
+				uni.chooseVideo({
+					sourceType: ['camera', 'album'], 
+					success: function(res) {				
+						uni.showLoading({title: '视频上传中',mask:true})
+						uni.uploadFile({
+							url: that.vuex_uploadAction,
+							filePath: res.tempFilePath,
+							name: 'file',
+							header: {
+								token: "" // 挂载请求头为用户的 token
+							},
+							success: function(arr) {
+								uni.hideLoading()
+								let data = JSON.parse(arr.data);
+								that.$set(that.data, 'mv', data.data.url)
+							}
+						});				
+					}
+				});
+			},
+			
 			// 不足6张图片补齐空位,vip9张
 			fillInGaps(albumInfo){
 				let len = 6
@@ -357,6 +392,7 @@
 					sourceType: ['album'], 
 					success: function(res) {				
 						res.tempFilePaths.forEach((item) => {
+							uni.showLoading({title: '图片上传中',mask:true})
 							uni.uploadFile({
 								url: that.vuex_uploadAction,
 								filePath: item,
@@ -365,6 +401,7 @@
 									token: "" // 挂载请求头为用户的 token
 								},
 								success: function(arr) {
+									uni.hideLoading()
 									let data = JSON.parse(arr.data);
 									if(item.id){
 										that.changeActiveImage(item, i, data.data.url)
@@ -383,7 +420,9 @@
 			async changeActiveImage(item, i, url){
 				delete item.createTime
 				item.picPath = url
+				uni.showLoading({title: '图片更新中',mask:true})
 				const {data:res} = await my.changePicture(item)
+				uni.hideLoading()
 				if(res.resultCode == 200){
 					this.$set(this.userImages[i], 'picPath', url)
 					uni.$showMsg('修改成功！')
@@ -394,7 +433,9 @@
 				delete item.createTime
 				delete item.id
 				item.picPath = url
+				uni.showLoading({title: '图片上传中',mask:true})
 				const {data:res} = await my.addPicture(item)
+				uni.hideLoading()
 				if(res.resultCode == 200){
 					this.$set(this.userImages[i], 'picPath', url)
 					uni.$showMsg('添加成功！')
@@ -402,9 +443,11 @@
 			},
 			// 删除动态的一张图片
 			deleteActiveImage(item, i){
+				uni.showLoading({title: '图片正在删除',mask:true})
 				my.deletePicture({
 					id:item.id
-				}).then(res => {					
+				}).then(res => {
+					uni.hideLoading()
 					uni.$showMsg(res.data.message)
 					if(!res.data.message.includes('删除失败'))
 						this.userImages.splice(i, 1)
@@ -464,7 +507,7 @@
 				uni.chooseImage({
 					count: 6, //默认9
 					sizeType: ['original', 'compressed'],
-					sourceType: ['album'], 
+					sourceType: [type], 
 					success: function(res) {				
 						res.tempFilePaths.forEach((item) => {
 							uni.uploadFile({

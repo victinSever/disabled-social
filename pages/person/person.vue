@@ -166,16 +166,17 @@
 			
 			// 弹出修改昵称的弹框
 			inputDialogToggle() {
-				if(this.baseData.isVip == 1)
-					this.$refs.inputDialog.open()
-				else
-					uni.$showMsg('修改昵称需要VIP权限！')
+				this.$refs.inputDialog.open()
 			},
 			
 			async dialogInputConfirm(val) {
 				uni.showLoading({
 					title: '正在更新中'
 				})
+				console.log({
+					loginName: this.loginUser.loginName,
+					nickName: val
+				});
 				const { data: res } = await my.changeNickName({
 					loginName: this.loginUser.loginName,
 					nickName: val
@@ -281,12 +282,13 @@
 				// 用户信息
 				const {data: res2} = await my.getAllData({
 					personId: this.loginUser.userId
-				})				
+				})
+				// 解决后端传来的时间字段不匹配问题
+				res2.data.personBasicInfo.expectedMarryTime = res2.data.personBasicInfo.expectedMarryTime.split('T')[0]
 				// 相册
 				const {data: res3} = await my.searchAlbumListByUserId({
 					userId: this.loginUser.userId
 				})	
-				console.log(res2);
 				uni.hideLoading()
 				this.baseData = res1.data				
 				this.moreData = res2.data
