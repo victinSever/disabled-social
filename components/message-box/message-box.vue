@@ -65,7 +65,7 @@
 </template>
 
 <script>
-	import around from '../../apis/around.js'
+	import around from '../../apis/share.js'
 	export default {
 		name: "message-box",
 		props: ['data'],

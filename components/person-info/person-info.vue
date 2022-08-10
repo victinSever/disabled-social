@@ -10,7 +10,7 @@
 			<view class="footer-header">
 				<view class="userName">
 					<text>{{item.username}}</text>
-					<text class="focus" @click="sendAttention">{{item.attention==0?"关注":"已关注"}}</text>
+					<text class="focus" @click="sendAttention">{{item.alreadyCollect==0?"关注":"已关注"}}</text>
 				</view>
 				<view class="address">
 					<text>{{item.houseAddress}}</text>
@@ -96,18 +96,18 @@
 				recomment.concernUser({
 					concernedUserId: this.item.userId
 				}).then((res) => {
-					if (this.item.attention == 1) {
+					if (this.item.alreadyCollect == 1) {
 						uni.showToast({
 							icon: "none",
 							title: "已取消"
 						})
-						this.item.attention = 0
+						this.item.alreadyCollect = 0
 					} else {
 						uni.showToast({
 							icon: "none",
 							title: "关注成功"
 						})
-						this.item.attention = 1
+						this.item.alreadyCollect = 1
 					}
 
 				}).catch(() => {

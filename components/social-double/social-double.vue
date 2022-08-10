@@ -2,7 +2,7 @@
 	<view>
 		<mescroll-uni ref="mescrollRef" @init="init" @down="downCallback" :down="downOption" :up="upOption"
 			@up="upCallback" :height="wh+'px'" :fixed="true" style="width: 100%;display: block;">
-			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu"></message-box>
+			<message-box :data="item" v-for="(item, i) in acitveData" :key="i" @openPopu="openPopu(item)"></message-box>
 		</mescroll-uni>
 	</view>
 </template>
@@ -85,8 +85,8 @@
 					_that.mescroll.endByPage(10, parseInt(_that.total / 10));
 				}
 			},
-			openPopu() {
-				this.$emit('openPopu', true)
+			openPopu(item) {
+				this.$emit('openPopu', item)
 			},
 			gotoComment() {
 				uni.navigateTo({

@@ -202,7 +202,7 @@
 						this.getRecommentList()
 					}
 					this.selectIndex++;
-					this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?false:false;
+					this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?true:false;
 					this.obj =this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
 						headPath: "",
 						houseAddress: "",
