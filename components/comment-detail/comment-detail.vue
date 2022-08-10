@@ -2,7 +2,7 @@
 	<view class="comment-container">
 		<view class="comment-title">评论</view>
 
-		<template v-if="data.length > 0">
+		<template v-if="data">
 			<view class="comment-content" v-for="(item,index) in data" :key="index">
 				<view class="content-left">
 					<img :src="item.headPicture" alt="" />
@@ -63,9 +63,11 @@
 						page: item.page,
 						size: 10
 					}).then(res => {
-						_this.commentList = _this.commentList.concat(res.data)
-						item.replyAmountTemp -= 10
-						item.page++
+						if (res.data.data) {
+							_this.commentList = _this.commentList.concat(res.data.data)
+							item.replyAmountTemp -= 10
+							item.page++
+						}
 						uni.hideToast()
 					})
 				} else {
@@ -81,6 +83,7 @@
 			}
 		},
 		mounted() {
+			// console.log(this.data);
 		}
 	}
 </script>
@@ -90,7 +93,7 @@
 		border-top: 1px solid #f5f5f5;
 		padding-top: 15px;
 		height: 200px;
-		
+
 		.comment-title {
 			font-weight: bold;
 			margin-bottom: 10px;
