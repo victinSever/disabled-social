@@ -217,7 +217,7 @@
 			// 选择拍照还是相册
 			chooseImage() {
 				var that = this;
-				wx.showActionSheet({
+				uni.showActionSheet({
 					itemList: ['相册', '拍照'],
 					itemColor: "darkorange",
 					success: function(res) {
@@ -275,7 +275,7 @@
 				this.personActiveData = [
 					...this.personActiveData,
 					...arr
-				]			
+				]	
 			},
 
 			// 获取信息
