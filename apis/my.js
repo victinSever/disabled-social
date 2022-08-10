@@ -3,16 +3,21 @@ import { http } from '@/common/service/service.js'
 let url="/api/personinfo"
 let url2="/api/square"
 const apiService = {
+	
+	// 获取主页个人基本信息
+	getBaseData(params) {
+		return http.post(`${url}/user/getBaseData`, null, params)
+	},	
+	
+	// 获取一个用户所有信息
+	getAllData(params) {
+		return http.post(`${url}/user/getAllData`,null, params)
+	},
     
     //每日签到
     signIn(params) {
     	return http.put(`${url}/user/signIn`, null, params)
-    },
-    
-    // 获取个人信息
-    getInfo(params) {
-    	return http.post(`${url}/user/getInfo`, null, params)
-    },
+    },  
 	
 	//修改头像
 	changeUserImage(params) {
@@ -48,10 +53,7 @@ const apiService = {
     	return http.post(`${url}/user/renewalVip`, null,  params)
     },
     
-    // 获取主页个人基本信息
-    getBaseData(params) {
-    	return http.post(`${url}/user/getBaseData`, null, params)
-    },	
+   
     
     /**************************************
     	关注模块
@@ -81,10 +83,7 @@ const apiService = {
 		修改资料
 	*************************************/
 	
-	// 获取一个用户所有信息
-	getAllData(params) {
-		return http.post(`${url}/user/getAllData`,null, params)
-	},
+	
 	
 	// 获取基本信息
 	getPersonBasicInfo(params) {

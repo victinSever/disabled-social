@@ -49,10 +49,8 @@
 			<view class="main">
 				<personage 
 				v-if="isPre" 
-				:backShow="false" 
-				:baseData="baseData" 
-				:personageData="personData" 
 				:imageList="albumData"
+				@gotoEdit="gotoEdit"
 				></personage>
 				<view v-else>								
 					<baseCom 
@@ -111,12 +109,18 @@
 		},
 		methods: {
 			...mapMutations('common',['setMoreInfo']),
+			// 从预览页主动跳转至编辑
+			gotoEdit(val){
+				this.isPre = false
+				this.type = val
+			},
 			// 获取信息
 			async getData() {
 				this.baseData = this.baseInfo
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
 				this.cacheData = this.moreInfo	
+				console.log(this.moreInfo);
 			},
 			
 			// 监视缓存数据
@@ -150,27 +154,21 @@
 			// 更新数据
 			async saveUpdate(){
 				let success = false
-				// uni.showLoading({title: '数据更新中',mask:true})
-				// console.log(this.cacheData.personBasicInfo);
-					// const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
-					// // const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
-					// // const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-					// // uni.hideLoading()
-					// console.log(res1);
-				my.changePersonBasicInfo(this.cacheData.personBasicInfo).then(res => {
-					console.log(res);
-				}).catch(err=>{
-					console.log(err);
-				})
-				
-				
-				// console.log(res1,res2,res2);
-				// if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
-				// 	this.setMoreInfo(this.cacheData)//更新vuex
-				// 	uni.$showMsg("保存成功！")
-				// 	console.log(2);
-				// 	success = true
-				// }
+				uni.showLoading({title: '数据更新中',mask:true})
+				console.log(this.cacheData.personBasicInfo);
+				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
+				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
+				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
+				uni.hideLoading()
+							
+				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
+					this.setMoreInfo(this.cacheData)//更新vuex
+					uni.$showMsg("保存成功！")
+					console.log(2);
+					success = true
+				}else{
+					uni.$showMsg("部分数据遗失！")
+				}
 				return success 			
 			},
 

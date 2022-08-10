@@ -284,7 +284,6 @@
 			},
 			hobby(val){
 				this.data.hobby = val
-				console.log(val);
 			},
 			tag(val){
 				this.data.personTag = val

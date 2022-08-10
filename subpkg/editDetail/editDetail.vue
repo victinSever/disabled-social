@@ -77,7 +77,7 @@
 			},
 			finish(){
 				this.list.forEach((item, i) => {
-					this.result += item + (i === this.list.length ? '':' ')
+					this.result += item + (i === this.list.length - 1 ? '':' ')
 				})
 				if(this.type == 1){
 					this.SetHobby(this.result)

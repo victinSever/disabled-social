@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<div class="header">
-			<image :src="baseData.headPicPath" mode="aspectFill"></image>
+			<image :src="baseInfo.headPicPath" mode="aspectFill"></image>
 		</div>
 
 		<view class="footer">
@@ -9,11 +9,10 @@
 			<!-- 姓名 -->
 			<view class="footer-header">
 				<view class="userName">
-					<text>{{baseData.nickName}}</text>
-					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
+					<text>{{baseInfo.nickName}}</text>
 				</view>
 				<view class="address">
-					<text>{{baseData.householdAddr}}(0km)</text>
+					<text>{{baseInfo.householdAddr}}(0km)</text>
 					<text class="point">·</text>
 					<text style="color: #F95F81;">正活跃</text>
 				</view>
@@ -40,7 +39,11 @@
 					<text class="pic">个人MV</text>
 				</view>
 				<view class="">
-					快来添加自己的MV吧，上传自己showTime时刻！
+					<view class="mvBox" v-if="mvPath">
+						<video id="myVideo" :src="mvPath" controls></video>
+						<text class="mvTip">对外最闪亮的一张名片</text>
+					</view>
+					<text v-else @click="gotoEdit">快来添加自己的MV吧，上传自己showTime时刻！</text>
 				</view>
 			</view>
 			
@@ -48,7 +51,7 @@
 			<homeItem title="爱情宣言" :content="loveSaying"  v-if="loveSaying"></homeItem>
 			<homeItem title="我的标签" :list="tag"></homeItem>
 			<homeItem title="我的兴趣" :list="hobby"></homeItem>
-			<homeItem title="更多信息" :baseData="baseData"></homeItem>
+			<homeItem title="更多信息" :baseData="baseInfo"></homeItem>
 		</view>
 	</view>
 
@@ -63,22 +66,6 @@
 			homeItem
 		},
 		props: {
-			backShow: {
-				type: Boolean,
-				default: false
-			},
-			isTemplate: {
-				type: Boolean,
-				default: false
-			},
-			personageData: {
-				type: Object,
-				default: {}
-			},
-			baseData: {
-				type: Object,
-				default: {}
-			},
 			imageList: {
 				type: Array,
 				default: []
@@ -86,7 +73,8 @@
 		},
 		
 		computed: {
-			...mapState('common', ['moreInfo']),
+			...mapState('common', ['baseInfo', 'moreInfo']),
+			
 			tag(){
 				let tagStr = this.moreInfo.personDetailInfo.personTag
 				return tagStr.split(' ')
@@ -101,15 +89,17 @@
 			},
 			loveSaying(){
 				let personSign = this.moreInfo.personBasicInfo.personSign || ''
-				return personSign
-				
+				return personSign			
+			},
+			mvPath(){
+				let mv = this.moreInfo.personBasicInfo.mv || ''
+				return mv			
 			},
 		},
 		methods: {
-			backdetail() {
-				uni.$emit("backdetail");
+			gotoEdit(){
+				this.$emit('gotoEdit', 1)
 			},
-
 		}
 	}
 </script>
@@ -203,6 +193,22 @@
 				image{
 					height: 100%;
 					width: 100%;
+				}
+			}
+		}
+		
+		.mv{
+			.mvBox{
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				justify-content: center;
+				
+				
+				.mvTip{
+					margin-top: 10rpx;
+					font-size: 12px;
+					color: #ddd;
 				}
 			}
 		}
