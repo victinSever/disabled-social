@@ -138,12 +138,22 @@
 			}
 		},
 		mounted() {
+			// <<<<<<< HEAD
+			// 			this.code = this.data.alreadyLike ;
+			// 			console.log(this.data);
+			//             this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
+			//                 loginName: "",
+			//                 nickName: "",
+			//                 userId:""
+			//             }
+			// =======
 			this.code = this.data.alreadyLike;
 			this.myInfo = this.$store.state.user.loginUser ? this.$store.state.user.loginUser : {
 				loginName: "",
 				nickName: "",
 				userId: ""
 			}
+			// >>>>>>> 5e0a2d691b2c90f825cc5cc289e3fd0bffcb35f3
 		}
 	}
 </script>

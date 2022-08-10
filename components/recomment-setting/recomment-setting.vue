@@ -104,7 +104,7 @@
 				this.$emit('closePopup')
 			},
 			sendMessage() {
-				this.$emit('closePopup', {
+				this.$emit('selectPopup', {
 					age1: this.ageRangeValue[0],
 					age2: this.ageRangeValue[1],
 					distance: this.distanceRangeValue[1],
@@ -121,6 +121,7 @@
 	// 弹出层的盒子设置
 	.homeSetting {
 		height: 93vh;
+		overflow: auto;
 		background-color: transparent;
 
 		.homeSetting-box {

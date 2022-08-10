@@ -5,7 +5,7 @@
 		<template v-if="showOneInfo">
 			<view class="comment-header">
 				<view class="comment-header-left">
-						<uni-icons @click="gotoBack" type="back" size="25"></uni-icons>
+					<uni-icons @click="gotoBack" type="back" size="25"></uni-icons>
 					<view class="comment-header-left-info">
 						<view class="info-left">
 							<image :src="userData.headPicture" alt="" style="height: 40px;width: 40px;"></image>
@@ -131,7 +131,7 @@
 				const halfamonth = day * 15
 				const month = day * 30
 				const year = month * 12
-			
+
 				const _year = diffValue / year
 				const _month = diffValue / month
 				const _week = diffValue / (7 * day)
@@ -148,30 +148,30 @@
 				return result
 			},
 			//关注和取消用户
-				sendAttention() {
-					recomment.concernUser({
-						concernedUserId: this.userData.userId
-					}).then((res) => {
-						if (this.userData.attention == 1) {
-							uni.showToast({
-								icon: "none",
-								title: "已取消"
-							})
-							this.userData.attention = 0
-						} else {
-							uni.showToast({
-								icon: "none",
-								title: "关注成功"
-							})
-							this.userData.attention = 1
-						}
-			
-					}).catch(() => {
-			
-					})
-			
-				},
-			
+			sendAttention() {
+				recomment.concernUser({
+					concernedUserId: this.userData.userId
+				}).then((res) => {
+					if (this.userData.attention == 1) {
+						uni.showToast({
+							icon: "none",
+							title: "已取消"
+						})
+						this.userData.attention = 0
+					} else {
+						uni.showToast({
+							icon: "none",
+							title: "关注成功"
+						})
+						this.userData.attention = 1
+					}
+
+				}).catch(() => {
+
+				})
+
+			},
+
 			init(mescroll) {
 				this.mescroll = mescroll;
 				this.$emit('init', mescroll)
@@ -179,6 +179,10 @@
 			// 返回上一页
 			gotoBack() {
 				let _this = this
+				console.log(1);
+				// uni.switchTab({
+				// 	url: '/pages/social/social'
+				// });
 				uni.navigateBack({
 					success() {
 						_this.$bus.$emit('backUpdate')
@@ -189,6 +193,7 @@
 				this.getMoreInfo('unshift')
 			},
 			upCallback(e) {
+				this.page = e.num;
 				this.getMoreInfo('push')
 			},
 			getMoreInfo(fn) {
@@ -199,20 +204,19 @@
 						size: 10,
 						page: this.page
 					}).then(res => {
-						if (_this.data.length + res.data.length == _this.total) {
-							// console.log('进了');
+						if (_this.data.length + res.data.data.length == _this.total) {
 							_this.flag = false
 							_this.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
-						_this.page++
-						_this.data[fn](...res.data)
-						// console.log(res.data);
-						// console.log(_this.data.length);
+						if (_that.page == 1) {
+							_that.data = res.data.data
+						} else {
+							_that.data = _that.data.concat(res.data.data)
+						}
 
 						_this.mescroll.endByPage(10, parseInt(_this.total / 10));
 					})
 				} else {
-					// console.log('走了');
 					_this.mescroll.endByPage(10, parseInt(_this.total / 10));
 				}
 			},
@@ -224,13 +228,10 @@
 					page: 1,
 					size: 10
 				}).then(res => {
-					_this.data = res.data
-					// console.log(res.data);
+					_this.data = res.data.data
 					_this.showComments = true
-					if (_this.data.length > 0)
+					if (_this.data)
 						_this.total = _this.data[0].total
-					// console.log(_this.total);
-					// console.log(_this.data.length);
 				})
 			},
 			// 添加喜欢
@@ -242,8 +243,8 @@
 					userId: 1,
 					diaryId: this.userData.diary.diaryId
 				}).then(res => {
-					_this.userData.diary.diaryLove = res.data.map.total
-					_this.code = res.data.code
+					_this.userData.diary.diaryLove = res.data.data.map.total
+					_this.code = res.data.data.code
 				})
 			},
 			// 获取一条展示数据
@@ -252,13 +253,15 @@
 				comment.getOneInfo({
 					diaryId: this.diaryId
 				}).then(res => {
-					_this.userData = res.data
+					console.log(res);
+					_this.userData = res.data.data
 					_this.showOneInfo = true
 					_this.code = _this.userData.alreadyLike
 				})
 			}
 		},
 		onLoad(options) {
+			console.log(options.diaryId);
 			this.diaryId = options.diaryId
 			this.OneInfo()
 			this.getComments()

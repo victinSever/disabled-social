@@ -189,7 +189,7 @@
 		}
 
 		.social-header-right {
-			margin-right: 5px;
+			margin-right: 10rpx;
 
 			.btnSend {
 				display: inline-block;
