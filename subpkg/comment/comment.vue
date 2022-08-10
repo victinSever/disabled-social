@@ -47,7 +47,7 @@
 							</uni-icons>
 							<text>{{userData.diary.diaryLove < 100 ? userData.diary.diaryLove : '99+'}}</text>
 						</view>
-						<view class="comment">
+						<view class="comment" @click="showHuifu">
 							<uni-icons type="chatbubble" size="25" color="#777"></uni-icons>
 							<text>打招呼</text>
 						</view>
@@ -66,6 +66,13 @@
 				</mescroll-uni>
 			</view>
 		</uni-transition>
+
+
+
+		<uni-popup ref="huifu" background-color="#fff">
+			<comment-replay @closeHuifu="closeHuifu"></comment-replay>
+		</uni-popup>
+
 	</view>
 </template>
 
@@ -74,6 +81,7 @@
 	import around from '../../apis/around.js';
 	import recomment from "@/apis/recomment.js"
 	export default {
+
 		data() {
 			return {
 				wh: 500,
@@ -113,6 +121,14 @@
 			};
 		},
 		methods: {
+			showHuifu() {
+				this.$refs.huifu.open('bottom');
+			},
+			closeHuifu(info) {
+				console.log(1);
+				console.log(info);
+				this.$refs.huifu.close();
+			},
 			dateDiff(nowTime) {
 				if (!nowTime) return '';
 				nowTime = nowTime.replace(/年/g, '/');
@@ -179,7 +195,6 @@
 			// 返回上一页
 			gotoBack() {
 				let _this = this
-				console.log(1);
 				// uni.switchTab({
 				// 	url: '/pages/social/social'
 				// });
@@ -244,7 +259,7 @@
 					diaryId: this.userData.diary.diaryId
 				}).then(res => {
 					_this.userData.diary.diaryLove = res.data.data.map.total
-					_this.code = res.data.data.code
+					_this.code = _this.code == 0 ? 1 : 0
 				})
 			},
 			// 获取一条展示数据
@@ -273,6 +288,7 @@
 	.root {
 		box-sizing: border-box;
 		padding: 10px;
+
 
 		.comment-header {
 			position: relative;

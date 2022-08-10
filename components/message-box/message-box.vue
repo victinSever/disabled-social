@@ -65,7 +65,7 @@
 </template>
 
 <script>
-	import around from '../../apis/share.js'
+	import around from '../../apis/around.js'
 	export default {
 		name: "message-box",
 		props: ['data'],
@@ -132,28 +132,19 @@
 					userId: this.myInfo.userId,
 					diaryId: this.data.diary.diaryId
 				}).then(res => {
-					_this.data.diary.diaryLove = res.data.map.total
-					_this.code = res.data.code
+					// 待改 
+					_this.data.diary.diaryLove = res.data.data.map.total
+					_this.code = _this.code == 0 ? 1 : 0
 				})
 			}
 		},
 		mounted() {
-			// <<<<<<< HEAD
-			// 			this.code = this.data.alreadyLike ;
-			// 			console.log(this.data);
-			//             this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
-			//                 loginName: "",
-			//                 nickName: "",
-			//                 userId:""
-			//             }
-			// =======
 			this.code = this.data.alreadyLike;
 			this.myInfo = this.$store.state.user.loginUser ? this.$store.state.user.loginUser : {
 				loginName: "",
 				nickName: "",
-				userId: ""
+				userId: "1"
 			}
-			// >>>>>>> 5e0a2d691b2c90f825cc5cc289e3fd0bffcb35f3
 		}
 	}
 </script>

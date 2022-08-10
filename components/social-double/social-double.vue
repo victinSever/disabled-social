@@ -105,6 +105,7 @@
 					size: 10,
 					userId: 1
 				}).then(res => {
+					console.log(res);
 					_that.infoInit(res)
 					uni.hideLoading()
 				})

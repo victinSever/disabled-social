@@ -9,7 +9,7 @@
 				<text>{{user.replyUserName ? user.commentUserName: user.commentatorName}}</text>
 				<template v-if="user.replyUserName">
 					<view class="travel-tag">
-						<text class="tag-content">回复</text>
+						<text class="tag-content" @click="showHuifu">回复</text>
 						<uni-icons type="paperplane" size="14"></uni-icons>
 					</view>
 					<text>{{user.replyUserName}}</text>
@@ -23,7 +23,7 @@
 				<view class="time-detail">
 					{{user.replyUserName ? user.createTime : user.commentCreateTime}}
 				</view>
-				<view class="btn-comment" style="color: #797a82;">
+				<view class="btn-comment" style="color: #797a82;" @click="showHuifu">
 					回复
 				</view>
 			</view>
@@ -34,6 +34,10 @@
 				size="20"></uni-icons>
 			<text>{{user.likeAmount < 100 ? user.likeAmount : '99+'}}</text>
 		</view>
+
+		<uni-popup ref="huifu" background-color="#fff">
+			<comment-replay @closeHuifu="closeHuifu"></comment-replay>
+		</uni-popup>
 	</view>
 </template>
 
@@ -49,6 +53,14 @@
 		},
 		methods: {
 			// 添加喜欢
+			showHuifu() {
+				this.$refs.huifu.open('bottom');
+			},
+			closeHuifu(info) {
+				console.log(2);
+				console.log(info);
+				this.$refs.huifu.close();
+			},
 			addLike() {
 				let _this = this
 				this.alreadyItem.alreadyLike = false
@@ -59,21 +71,23 @@
 						commentId: this.user.replyId
 					}).then(res => {
 						_this.user.likeAmount = res.data.map.total;
-						_this.code = res.data.code
 					})
+					_this.code = _this.code == 0 ? 1 : 0
 				} else {
 					comment.addLike({
 						userId: 1,
 						commentId: this.user.commentId
 					}).then(res => {
-						_this.user.likeAmount = res.data.map.total;
-						_this.code = res.data.code
+						_this.user.likeAmount = res.data.data.map.total;
 					})
+					_this.code = _this.code == 0 ? 1 : 0
 				}
+			},
+			show() {
+				this.$emit('showHuifu')
 			}
 		},
-		mounted() {
-		}
+		mounted() {}
 	}
 </script>
 

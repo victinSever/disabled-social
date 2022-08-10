@@ -12,14 +12,14 @@
 
 					<uni-transition mode-class="slide-bottom" :show="item.flag">
 						<view v-if="item.flag" v-for="(item2,indexs) in commentList" :key="indexs">
-							<content-item :user="item2.comment" :alreadyItem="item2" :replyPic="item2.headPicture">
+							<content-item  :user="item2.comment" :alreadyItem="item2" :replyPic="item2.headPicture">
 							</content-item>
 						</view>
 					</uni-transition>
 
 					<view class="btn-content">
 						<view class="btn-moreInfo" v-if="item.replyAmountTemp > 0" @click="showDown(item)">
-							<text>—— 展开{{item.flag == false ? item.comment.replyAmount : item.replyAmountTemp}}回复</text>
+							<text @click="commentReply">—— 展开{{item.flag == false ? item.comment.replyAmount : item.replyAmountTemp}}回复</text>
 							<uni-icons type="bottom" size="20"></uni-icons>
 						</view>
 						<view class="btn-shouqi" v-if="item.flag" @click="showUp(item)">
@@ -80,6 +80,9 @@
 				item.flag = false
 				item.Flag = true
 				item.replyAmountTemp = item.comment.replyAmount
+			},
+			commentReply(){
+				
 			}
 		},
 		mounted() {

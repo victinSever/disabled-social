@@ -2,7 +2,7 @@ import {
 	http
 } from '@/common/service/service.js'
 
-let url="/api/square"
+let url = "/api/square"
 const apiService = {
 
 	//获取附近列表
@@ -24,10 +24,20 @@ const apiService = {
 	addLikeComment(params) {
 		return http.post('/recomment/likeReply', null, params)
 	},
-	
+
 	// 获取一条动态信息
-	getOneInfo(params){
-		return http.get(`${url}/social/active/getOneDiary`,params)
+	getOneInfo(params) {
+		return http.get(`${url}/social/active/getOneDiary`, params)
+	},
+
+	// 发布评论
+	publishComment(params) {
+		return http.post(`${url}/social/active/publishComment`, params)
+	},
+
+	// 回复评论
+	publishCommentReply(params) {
+		return http.post(`${url}/social/active/publishCommentReply`, params)
 	}
 
 }

@@ -3,7 +3,7 @@
 		<view class="main">
 			<text class="h2">请填写举报原因</text>
 		</view>
-		<textarea class="input1" v-model="reason" placeholder="请填写举报原因"/>
+		<textarea class="input1" v-model="reason"  placeholder="请填写举报原因"/>
 		<view class="body">
 			<button @click="saves">确认</button>
 			<text @click="btnNo()">取消</text>

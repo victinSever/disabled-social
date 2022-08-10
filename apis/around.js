@@ -2,7 +2,7 @@ import {
 	http
 } from '@/common/service/service.js'
 
-let url="/api/square"
+let url = "/api/square"
 const apiService = {
 
 	//获取
@@ -16,9 +16,11 @@ const apiService = {
 
 	getTotal() {
 		return http.get(`${url}/social/getNearTotal`)
-	}
+	},
 
-
+	insertReport(params) {
+		return http.post(`${url}/report/insertReport`, null, params)
+	},
 
 
 

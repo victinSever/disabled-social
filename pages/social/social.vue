@@ -32,7 +32,7 @@
 		<!-- 举报和关注弹窗 -->
 		<uni-popup ref="tip" background-color="#fff">
 			<view class="tip-content">
-				<text @click="btn_attention()">{{alreadyCollect==0?"关注":"不再关注"}}</text>
+				<text @click="btn_attention()">{{alreadyCollect == 0 ? "关注":"不再关注"}}</text>
 				<text @click="btn_report()">匿名举报</text>
 				<hr>
 				<text @click="$refs.tip.close()">取消</text>
@@ -48,12 +48,15 @@
 		<uni-transition mode-class="fade" :show="activeBtn.show && isClose">
 			<activity-btn :activeBtn="activeBtn"></activity-btn>
 		</uni-transition>
-		
-		
+
+
 		<!-- 投诉 -->
 		<uni-popup ref="report" background-color="#fff">
-			<report-check @close="closeReport" :reportedUserId="reportedUserId" :reportedId="reportedId" :type="1"></report-check>
+			<report-check @close="closeReport" :reportedUserId="reportedUserId" :reportedId="reportedId" :type="1">
+			</report-check>
 		</uni-popup>
+
+
 	</view>
 </template>
 
@@ -62,9 +65,12 @@
 	import recomment from '../../apis/recomment.js'
 	import care from '../../apis/care.js'
 	import reportCheck from '@/components/report-check/report-check.vue'
+
 	export default {
 		name: 'social',
-		components:{reportCheck},
+		components: {
+			reportCheck
+		},
 		data() {
 			return {
 				// 活动按钮定制
@@ -75,14 +81,13 @@
 				},
 				isClose: false,
 				activeStyle: 'font-weight: bold;color: black;', //active样式
-                requestClose:around.getRecomment,
-                requestCare:care.getCarefor,
-                getTotalAround:around.getTotal,
-                getTotalCare:care.getTotal,
-				reportedUserId:"",
-				reportedId:"",
-				alreadyCollect:0
-				
+				requestClose: around.getRecomment,
+				requestCare: care.getCarefor,
+				getTotalAround: around.getTotal,
+				getTotalCare: care.getTotal,
+				reportedUserId: "",
+				reportedId: "",
+				alreadyCollect: 0
 			};
 		},
 		mounted() {
@@ -95,50 +100,59 @@
 		methods: {
 			
 			//审核
-			btn_report(){
+			btn_report() {
 				this.$refs.report.open();
 			},
-			
+
 			//关注
-			btn_attention(){
-				recomment.concernUser({
-					concernedUserId:this.reportedUserId
-				}).then((res) => {
-					if (this.alreadyCollect == 1) {
-						uni.showToast({
-							icon: "none",
-							title: "已取消"
-						})
-						this.alreadyCollect = 0
-					} else {
+			btn_attention() {
+				let _that = this
+
+				if (this.alreadyCollect == 0) {
+					recomment.concernUser({
+						concernedUserId: this.reportedUserId
+					}).then((res) => {
 						uni.showToast({
 							icon: "none",
 							title: "关注成功"
 						})
-						this.alreadyCollect = 1
-					}
-					this.$refs.tip.close();
-				
-				}).catch(() => {
-				
-				})
+						_that.alreadyCollect = 1
+						_that.$refs.tip.close();
+					}).catch(() => {
+
+					})
+				} else {
+					recomment.cancelConcernUser({
+						concernedUserId: this.reportedUserId
+					}).then((res) => {
+						uni.showToast({
+							icon: "none",
+							title: "已取消"
+						})
+						_that.alreadyCollect = 0
+						_that.$refs.tip.close();
+					}).catch(() => {
+
+					})
+				}
+
 			},
-			
+
 			//关闭
-			closeReport(){
+			closeReport() {
 				this.$refs.tip.close();
 				this.$refs.report.close();
 			},
-			
+
 			gotoShare() {
 				uni.navigateTo({
 					url: '/subpkg/share/share'
 				})
 			},
 			openPopu(item) {
-				this.alreadyCollect= item.alreadyCollect;
-				this.reportedId=item.diary.diaryUserId
-				this.reportedUserId=item.diary.diaryUserId
+				this.alreadyCollect = item.alreadyCollect;
+				this.reportedId = item.diary.diaryUserId
+				this.reportedUserId = item.diary.diaryUserId
 				this.$refs.tip.open('bottom')
 			},
 			// 关闭弹窗
@@ -162,10 +176,11 @@
 		justify-content: space-between;
 		align-items: center;
 		position: sticky;
-		    width: 100%;
-		    z-index: 99;
+		width: 100%;
+		z-index: 99;
 		background-color: #fff;
 		padding: 0 20rpx;
+
 		// background-color: yellow;
 		.social-header-left {
 			display: flex;
@@ -175,7 +190,7 @@
 			align-items: center;
 
 			text {
-				margin-right: 15px;
+				margin-right: 30rpx;
 				color: gray;
 				font-size: 18px;
 				display: flex;
@@ -221,6 +236,7 @@
 		}
 
 		text {
+			background-color: red;
 			display: inline-block;
 			line-height: 40px;
 		}
