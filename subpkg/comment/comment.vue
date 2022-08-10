@@ -195,6 +195,7 @@
 				comment.getOneInfo({
 					diaryId: this.diaryId
 				}).then(res => {
+					console.log(res);
 					_this.userData = res.data
 					_this.showOneInfo = true
 					_this.code = _this.userData.alreadyLike
@@ -202,6 +203,7 @@
 			}
 		},
 		onLoad(options) {
+			console.log(options.diaryId);
 			this.diaryId = options.diaryId
 			this.OneInfo()
 			this.getComments()

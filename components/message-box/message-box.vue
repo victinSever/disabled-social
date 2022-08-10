@@ -104,6 +104,7 @@
 		},
 		mounted() {
 			this.code = this.data.alreadyLike ;
+			console.log(this.data);
             this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
                 loginName: "",
                 nickName: "",

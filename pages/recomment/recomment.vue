@@ -86,7 +86,7 @@
 		</uni-popup>
 
 		<!-- 提示或者广告按钮的弹框 -->
-		<uni-popup ref="recommentAdver" mask-background-color="rgba(0,0,0,0.2)">
+		<uni-popup  ref="recommentAdver" mask-background-color="rgba(0,0,0,0.2)">
 			<recomment-adver @closeAdver="closeAdver"></recomment-adver>
 		</uni-popup>
 
