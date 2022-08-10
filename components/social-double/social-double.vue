@@ -9,7 +9,7 @@
 
 <script>
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
-		import { mapMutations,mapState } from 'vuex'
+	import { mapMutations,mapState } from 'vuex'
 	export default {
 		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin

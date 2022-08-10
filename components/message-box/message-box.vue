@@ -1,32 +1,33 @@
 <template>
 	<view class="item-box">
 		<view class="left-img">
-			<img :src="data.headPicture" alt="">
+			<image :src="data.headPicture" mode="aspectFill" alt="">
 		</view>
 		<view class="right-box">
 			<view class="title-info">
-				<!-- <h2 :style="{'margin-left':data.flag ? '0px' : '10px'}" v-if="data.diary.diaryUserName">{{data.diary.diaryUserName}}</h2> -->
+				<text class="h2" :style="{'margin-left':data.flag ? '0px' : '10px'}"
+					v-if="data.diary.diaryUserName">{{data.diary.diaryUserName}}</text>
 				<!-- 如果不是广告 -->
-				<p v-if="data.flag">
-					<text>{{0}}{{data.lastUnit}}前</text>
+				<text class="p1" v-if="data.flag">
+					<text style="margin-left: 20rpx;">{{dateDiff(data.diary.createTime)}}</text>
 					<text>·</text>
 					<text>{{20}}km</text>
-				</p>
+				</text>
 				<!-- 如果是广告 -->
 				<template v-else>
-					<p style="font-size: 15px;margin: 5px 0;">
-						<!-- {{data.diary.diaryContent}} -->
-					</p>
-					<view class="advertise" style="position: absolute;top: 0; right: 20px;">
+					<text class="p1" style="font-size: 30rpx;margin: 10rpx 0;">
+						{{data.diary.diaryContent}}
+					</text>
+					<view class="advertise" style="position: absolute;top: 0; right: 40rpx;">
 						<uni-tag text="广告"></uni-tag>
 					</view>
 				</template>
 			</view>
 			<view class="content-info" @click="gotoComment">
 				<!-- 不是广告 -->
-				<p v-if="data.flag">{{data.diary.diaryContent}}</p>
+				<text v-if="data.flag">{{data.diary.diaryContent}}</text>
 				<view class="cont-info-img">
-					<img :src="item" alt="" v-for="(item, i) in data.picture" :key="i" model="widthFix">
+					<image :src="item" v-for="(item, i) in data.picture" :key="i" mode="aspectFill">
 				</view>
 			</view>
 			<view class="btn-info">
@@ -71,20 +72,54 @@
 		data() {
 			return {
 				code: 0,
-                myInfo:{
-                    loginName: "",
-                    nickName: "",
-                    userId:""
-                }
+				myInfo: {
+					loginName: "",
+					nickName: "",
+					userId: ""
+				}
 			};
 		},
 		methods: {
+			dateDiff(nowTime) {
+				if (!nowTime) return '';
+				nowTime = nowTime.replace(/年/g, '/');
+				nowTime = nowTime.replace(/月/g, '/');
+				nowTime = nowTime.replace(/日/g, '/');
+				nowTime = nowTime.replace(/时/g, ':')
+				nowTime = nowTime.replace(/分/g, ':');
+				nowTime = nowTime.replace(/秒/g, '');
+				const arg = [nowTime]
+				const now = arg[1] ? arg[1] : new Date().getTime()
+				const diffValue = now - new Date(arg[0].replace(/-/g, '/')).getTime()
+				let result = ""
+				const minute = 1000 * 60
+				const hour = minute * 60
+				const day = hour * 24
+				const halfamonth = day * 15
+				const month = day * 30
+				const year = month * 12
+
+				const _year = diffValue / year
+				const _month = diffValue / month
+				const _week = diffValue / (7 * day)
+				const _day = diffValue / day
+				const _hour = diffValue / hour
+				const _min = diffValue / minute
+				if (_year >= 1) result = parseInt(_year) + "年前"
+				else if (_month >= 1) result = parseInt(_month) + "个月前"
+				else if (_week >= 1) result = parseInt(_week) + "周前"
+				else if (_day >= 1) result = parseInt(_day) + "天前"
+				else if (_hour >= 1) result = parseInt(_hour) + "个小时前"
+				else if (_min >= 1) result = parseInt(_min) + "分钟前"
+				else result = "刚刚"
+				return result
+			},
 			openPopu() {
 				this.$emit('openPopu', true)
 			},
 			gotoComment() {
 				uni.navigateTo({
-					url: `/subpkg/comment/comment?diaryId=${this.data.diary.diaryId}`  
+					url: `/subpkg/comment/comment?diaryId=${this.data.diary.diaryId}`
 				})
 			},
 			// 添加喜欢
@@ -94,7 +129,7 @@
 
 				this.code == 1 ? uni.$showMsg('取消成功', 1000) : uni.$showMsg('点赞成功', 1000)
 				around.addLike({
-					userId:this.myInfo.userId,
+					userId: this.myInfo.userId,
 					diaryId: this.data.diary.diaryId
 				}).then(res => {
 					_this.data.diary.diaryLove = res.data.map.total
@@ -103,6 +138,7 @@
 			}
 		},
 		mounted() {
+<<<<<<< HEAD
 			this.code = this.data.alreadyLike ;
 			console.log(this.data);
             this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
@@ -110,6 +146,14 @@
                 nickName: "",
                 userId:""
             }
+=======
+			this.code = this.data.alreadyLike;
+			this.myInfo = this.$store.state.user.loginUser ? this.$store.state.user.loginUser : {
+				loginName: "",
+				nickName: "",
+				userId: ""
+			}
+>>>>>>> 5e0a2d691b2c90f825cc5cc289e3fd0bffcb35f3
 		}
 	}
 </script>
@@ -119,7 +163,7 @@
 		display: flex;
 		background-color: #fff;
 		position: relative;
-		margin-bottom: 20px;
+		margin-bottom: 40rpx;
 
 		&::after {
 			content: '';
@@ -128,43 +172,43 @@
 			left: 50%;
 			transform: translateX(-50%);
 			width: 90%;
-			height: 1px;
+			height: 2rpx;
 			background-color: #f0eef1;
 		}
 
 		.left-img {
 
-			img {
-				margin: 0 8px;
-				width: 40px;
-				height: 40px;
+			image {
+				margin: 0 16rpx;
+				width: 80rpx;
+				height: 80rpx;
 				border-radius: 50%;
 			}
 		}
 
 		.right-box {
-			width: calc(100vw - 56px);
+			width: calc(100vw - 112rpx);
 			box-sizing: border-box;
-			padding-right: 10px;
+			padding-right: 20rpx;
 
 			.title-info {
 				// height: 140px;
 				position: relative;
 
-				h2 {
-					font-size: 14px;
-					height: 25px;
-					line-height: 25px;
+				.h2 {
+					font-size: 28rpx;
+					height: 50rpx;
+					line-height: 50rpx;
 				}
 
-				p {
-					font-size: 12px;
-					height: 15px;
-					line-height: 15px;
+				.p1 {
+					font-size: 24rpx;
+					height: 30rpx;
+					line-height: 30rpx;
 					color: #a5a395;
 
 					text:nth-child(2) {
-						margin: 0 2px;
+						margin: 0 4rpx;
 					}
 				}
 
@@ -172,29 +216,29 @@
 			}
 
 			.content-info {
-				margin-top: 10px;
+				margin-top: 20rpx;
 
-				p {
-					font-size: 14px;
+				text {
+					font-size: 28rpx;
 					word-wrap: break-word;
 				}
 
 				.cont-info-img {
-					margin-top: 10px;
+					margin-top: 20rpx;
 
 					// background-color: red;
-					img {
-						width: 130px;
-						margin-right: 5px;
-						height: 130px;
-						border-radius: 10px;
+					image {
+						width: 260rpx;
+						margin-right: 10rpx;
+						height: 260rpx;
+						border-radius: 20rpx;
 					}
 				}
 			}
 
 			.btn-info {
-				margin-top: 10px;
-				margin-bottom: 10px;
+				margin-top: 20rpx;
+				margin-bottom: 20rpx;
 				display: flex;
 				justify-content: space-between;
 
@@ -206,8 +250,8 @@
 						align-items: center;
 
 						text {
-							font-size: 12px;
-							margin-right: 3px;
+							font-size: 24rpx;
+							margin-right: 6rpx;
 							color: #a5a395;
 						}
 					}
