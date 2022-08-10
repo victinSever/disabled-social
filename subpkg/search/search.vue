@@ -13,7 +13,8 @@
 		</view>
 		<uni-transition mode-class="slide-right" :show="true">
 			<view class="body-recomment">
-				<mescroll-uni ref="mescrollRef" class="test" @init="init" :style="{height:wh+'px'}" @down="downCallback"
+				<mescroll-uni ref="mescrollRef" class="test" @init="init" style="width: 100%;
+				display: block;" :style="{height:wh+'px'}" @down="downCallback"
 					:down="downOption" :up="upOption" @up="upCallback" :fixed="true">
 					<view class="recomment-list">
 						<view class="recomment-item" v-for="(item, i) in searchList" :key="i">
@@ -103,30 +104,26 @@
 				this.$emit('init', mescroll)
 			},
 			downCallback() {
-				this.getMoreInfo('unshift')
+		     	this.mescroll.resetUpScroll();
 			},
-			upCallback() {
-				this.getMoreInfo('push')
+			upCallback(e) {
+				this.page=e.num;
+				this.getMoreInfo()
 			},
 			getMoreInfo(fn) {
 				let _that = this;
-				if (_that.flag == true) {
 					search.getList({
 						page: _that.page,
 						size: 10,
 						keyword: _that.searchMessage,
 					}).then(res => {
-						_that.page++
-						_that.searchList[fn](...res.data)
-						if (_that.searchList.length + res.data.length == _that.total) {
-							_that.flag = false
-							_that.mescroll.optDown.textSuccess = '暂无更多数据'
+						if(_that.page==1){
+							_that.searchList=res.data.data?res.data.data:[];
+						}else{
+							_that.searchList=_that.searchList.concat(res.data.data?res.data.data:[])
 						}
 						_that.mescroll.endByPage(10, parseInt(_that.total / 10));
 					})
-				} else {
-					_that.mescroll.endByPage(10, parseInt(_that.total / 10));
-				}
 			},
 			inputInfo(e) {
 				let _that = this;
@@ -145,10 +142,10 @@
 						page: 1,
 						size: 10
 					}).then(res => {
-						_that.searchList = res.data
+						_that.searchList = res.data.data
 						// 如果查询到的数据大于0添加总数
-						if (res.data.length > 0)
-							_that.total = res.data[0].total
+						if (res.data.data&&res.data.data.length > 0)
+							_that.total = res.data.data[0].total
 					})
 				}, 500)
 			},
@@ -157,7 +154,7 @@
 			},
 		},
 		mounted() {
-			this.wh = uni.getSystemInfoSync().windowHeight - 133;
+			this.wh = uni.getSystemInfoSync().windowHeight - 163;
 		}
 	}
 </script>
