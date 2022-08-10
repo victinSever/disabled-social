@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<div class="header">
-			<recomment-swiper :swiperList="item.picShow"></recomment-swiper>
+			<image :src="item.headPath" class="swiper-img" mode="aspectFill" />
 		</div>
 
 		<view class="footer">
@@ -10,7 +10,7 @@
 			<view class="footer-header">
 				<view class="userName">
 					<text>{{item.username}}</text>
-					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
+					<text class="focus" @click="sendAttention">{{item.attention==0?"关注":"已关注"}}</text>
 				</view>
 				<view class="address">
 					<text>{{item.houseAddress}}</text>
@@ -59,20 +59,18 @@
 
 <script>
 	import homeItem from '@/components/recomment-item/recomment-item.vue'
-	import { mapMutations,mapState } from 'vuex'
+	import recomment from "@/apis/recomment.js"
+	import {
+		mapMutations,
+		mapState
+	} from 'vuex'
 	export default {
 		name: "personage",
 		components: {
 			homeItem
 		},
 		props: {
-			
-			isTemplate: {
-				type: Boolean,
-				default: false
-			},
-			
-			
+
 			item: {
 				type: Object,
 				default: {}
@@ -87,21 +85,46 @@
 			console.log(this.item);
 		},
 		methods: {
-			...mapState('user',['loginUser']),
-			
+			...mapState('user', ['loginUser']),
+
 			backdetail() {
 				uni.$emit("backdetail");
 			},
-			
+
 			//关注用户
-			sendAttention(){
-				
+			sendAttention() {
+				recomment.concernUser({
+					concernedUserId: this.item.userId
+				}).then((res) => {
+					if (this.item.attention == 1) {
+						uni.showToast({
+							icon: "none",
+							title: "已取消"
+						})
+						this.item.attention = 0
+					} else {
+						uni.showToast({
+							icon: "none",
+							title: "关注成功"
+						})
+						this.item.attention = 1
+					}
+
+				}).catch(() => {
+
+				})
+
 			},
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.swiper-img {
+		width: 100%;
+		height: 700rpx;
+	}
+
 	::-webkit-scrollbar {
 		display: none;
 		width: 0 !important;
@@ -122,7 +145,7 @@
 
 
 	.header {
-		padding: 0 30rpx;
+		// padding: 0 30rpx;
 	}
 
 	.footer {
@@ -223,7 +246,7 @@
 		.homeitem-bottom {
 			color: #d8d8d8;
 			text-align: center;
-			
+
 		}
 	}
 </style>

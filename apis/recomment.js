@@ -44,7 +44,7 @@ const apiService = {
 
 	//取消关注
 	cancelConcernUser(params) {
-		return http.delete(`${url}/mine/cancelConcernUser`, params)
+		return http.delete(`${url}/mine/cancelConcernUser`,null, params)
 	},
 }
 

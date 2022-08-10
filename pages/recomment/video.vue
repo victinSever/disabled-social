@@ -194,8 +194,8 @@
 			},
 			love(item) {
 				around.addLike({
-					userId: "1",
-					diaryId: this.videoList[this._videoIndex].diary.id
+					userId: this.loginUser.userId,
+					diaryId: this.videoList[this._videoIndex].diary.diaryId
 				}).then((res) => {
 					if (this.alreadyLike == 0) {
 						this.love_num += 1
@@ -219,22 +219,34 @@
 			},
 
 			//收藏
-			collect(item) {
-				if (this.videoList[this._videoIndex].alreadyLike == 0) {
+			collect() {
 					recomment.collect({
-						userId: "1",
+						userId:this.loginUser.userId,
 						type: "1",
 						likedId: this.videoList[this._videoIndex].diary.id
 					}).then((res) => {
-						uni.showToast({
-							icon: "none",
-							title: "收藏成功"
-						})
+						if(this.videoList[this._videoIndex].alreadyCollect==0){
+							uni.showToast({
+								icon: "none",
+								title: "收藏成功"
+							});
+							 this.isactive=1;
+							 this.redo_num++
+							this.videoList[this._videoIndex].alreadyCollect=1
+						}else{
+							uni.showToast({
+								icon: "none",
+								title: "已取消"
+							});
+							 this.isactive=0;
+							 this.redo_num--;
+							this.videoList[this._videoIndex].alreadyCollect=0
+						}
+			
 
 					}).catch(() => {
 
 					})
-				}
 
 			}
 		}

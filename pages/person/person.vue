@@ -424,12 +424,12 @@
 				display: flex;
 
 				.top-logo {
-					width: 150rpx;
+					width: 200rpx;
 					height: 200rpx;
 					box-sizing: border-box;
 
 					image {
-						width: 150rpx;
+						width: 200rpx;
 						height: 200rpx;
 						border-radius: 30rpx;
 						border: 4rpx solid #fff;

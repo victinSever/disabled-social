@@ -89,6 +89,13 @@
               },
 			}
 		},
+		onLoad() {
+			this.myInfo= this.$store.state.user.loginUser?this.$store.state.user.loginUser:{
+			    loginName: "",
+			    nickName: "",
+			    userId:""
+			}
+		},
 		onShow() {
 			this.getrecommendList();
 			this.getMessageList();
