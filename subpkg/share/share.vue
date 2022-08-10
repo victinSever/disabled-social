@@ -268,19 +268,19 @@
 
 		.share-header {
 			width: 100%;
-			height: 40px;
+			height: 80rpx;
 			// background-color: red;
 			display: flex;
 			box-sizing: border-box;
-			padding: 0 20px;
+			padding: 0 40rpx;
 			align-items: center;
 			justify-content: space-between;
 
 			.share-header-right {
-				width: 60px;
-				padding: 0 5px;
+				width: 120rpx;
+				padding: 0 10rpx;
 				height: 75%;
-				border-radius: 10px;
+				border-radius: 20rpx;
 				box-sizing: border-box;
 				display: flex;
 				align-items: center;
@@ -299,7 +299,7 @@
 				height: 220rpx;
 				width: 100%;
 				box-sizing: border-box;
-				padding: 10px;
+				padding: 20rpx;
 				// background-color: yellow;
 
 				textarea {
@@ -321,9 +321,9 @@
 					.pic-header {
 						width: 100%;
 						box-sizing: border-box;
-						padding-left: 10px;
+						padding-left: 20rpx;
 						color: #808080;
-						height: 20px;
+						height: 40rpx;
 						background-color: #dddddd;
 					}
 
@@ -338,7 +338,7 @@
 						justify-content: flex-start;
 						align-content: space-around;
 						box-sizing: border-box;
-						padding-left: 10px;
+						padding-left: 20rpx;
 
 						view {
 							width: 30%;
@@ -369,7 +369,7 @@
 
 							&.add-pic {
 								background-color: #dddddd;
-								border-radius: 15px;
+								border-radius: 30rpx;
 								display: flex;
 								align-items: center;
 								justify-content: center;

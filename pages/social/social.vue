@@ -192,7 +192,7 @@
 			text {
 				margin-right: 30rpx;
 				color: gray;
-				font-size: 18px;
+				font-size: 36rpx;
 				display: flex;
 				align-items: center;
 			}
@@ -209,11 +209,11 @@
 			.btnSend {
 				display: inline-block;
 				text-align: center;
-				padding: 5px 10px;
+				padding: 10rpx 20rpx;
 				height: 80%;
-				border-radius: 14px;
+				border-radius: 28rpx;
 				color: #fff;
-				font-size: 12px;
+				font-size: 24rpx;
 				background-color: #fc966b;
 			}
 		}
@@ -221,16 +221,16 @@
 
 	// 弹窗
 	.tip-content {
-		margin-top: 10px;
-		border-radius: 10px;
+		margin-top: 20rpx;
+		border-radius: 20rpx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 
 		hr {
-			margin: 5px 0;
-			height: 2px;
+			margin: 10rpx 0;
+			height: 4rpx;
 			width: 100%;
 			background-color: #ccc;
 		}
@@ -238,7 +238,7 @@
 		text {
 			background-color: red;
 			display: inline-block;
-			line-height: 40px;
+			line-height: 80rpx;
 		}
 
 		text:nth-child(2) {

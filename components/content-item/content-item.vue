@@ -102,12 +102,12 @@
 
 			.user-name {
 				display: flex;
-				height: 20px;
+				height: 40rpx;
 
 				.travel-img {
 					height: 100%;
-					width: 20px;
-					margin-right: 10px;
+					width: 40rpx;
+					margin-right: 20rpx;
 
 					img {
 						height: 100%;
@@ -118,15 +118,15 @@
 
 				.travel-tag {
 					height: 100%;
-					width: 60px;
+					width: 120rpx;
 					box-sizing: border-box;
-					padding: 0 8px;
+					padding: 0 16rpx;
 
 					.tag-content {
 						box-sizing: border-box;
-						padding: 1px;
-						font-size: 2px;
-						margin-right: 2px;
+						padding: 2rpx;
+						font-size: 4rpx;
+						margin-right: 4rpx;
 						background-color: #efefef;
 						color: #8e8e8e;
 					}
@@ -141,10 +141,10 @@
 				color: #a9a9a9;
 				justify-content: space-between;
 				box-sizing: border-box;
-				padding-right: 10px;
+				padding-right: 20rpx;
 
 				.time-detail {
-					font-size: 12px;
+					font-size: 24rpx;
 				}
 			}
 

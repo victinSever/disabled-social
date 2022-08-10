@@ -93,13 +93,13 @@
 
 <style lang="scss">
 	.comment-container {
-		border-top: 1px solid #f5f5f5;
-		padding-top: 15px;
+		border-top: 2rpx solid #f5f5f5;
+		padding-top: 30rpx;
 		height: 200px;
 
 		.comment-title {
 			font-weight: bold;
-			margin-bottom: 10px;
+			margin-bottom: 20rpx;
 		}
 
 		.comment-content {
@@ -107,21 +107,21 @@
 			display: flex;
 
 			.content-left {
-				width: 60px;
+				width: 120rpx;
 
 				box-sizing: border-box;
 				display: flex;
 				justify-content: center;
 
 				img {
-					width: 45px;
-					height: 45px;
+					width: 90rpx;
+					height: 90rpx;
 					border-radius: 50%;
 				}
 			}
 
 			.content-right {
-				width: calc(100vw - 60px);
+				width: calc(100vw - 120rpx);
 				height: 100%;
 
 
@@ -131,7 +131,7 @@
 					align-items: center;
 					justify-content: space-around;
 					box-sizing: border-box;
-					padding: 0 30px;
+					padding: 0 60rpx;
 
 					.btn-shouqi {
 						display: flex;
@@ -149,11 +149,11 @@
 
 		.no-comment {
 			width: 100%;
-			height: 150px;
+			height: 300rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 18px;
+			font-size: 36rpx;
 			text-align: center;
 			color: #a5a395;
 		}
