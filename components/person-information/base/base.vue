@@ -579,7 +579,7 @@
 		color: #777;
 		align-items: center;
 		margin-bottom: 40rpx;
-		font-size: 12px;
+		font-size: 24rpx;
 	}
 
 	.image-active {
@@ -630,7 +630,7 @@
 						width: 100rpx;
 						height: 60rpx;
 						border-radius: 20rpx;
-						font-size: 12px;
+						font-size: 24rpx;
 						color: #fff;
 						background-color: rgba(0, 0, 0, 0.3);
 						display: flex;
@@ -682,13 +682,13 @@
 			}
 
 			.input {
-				font-size: 14px;
+				font-size: 24rpx;
 				text-align: right;
 			}
 
 			.unit {
 				margin-left: 10rpx;
-				font-size: 14px;
+				font-size: 24rpx;
 				font-family: 'kaiti';
 			}
 		}

@@ -135,10 +135,10 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				font-size: 16px;
+				font-size: 32rpx;
 				font-weight: bold;
 				letter-spacing: 2rpx;
-				border-bottom: 1px solid #eee;
+				border-bottom: 2rpx solid #eee;
 
 				.btnSure {
 					color: darkorange;
@@ -227,7 +227,7 @@
 							border-radius: 30rpx;
 
 							text {
-								font-size: 12px;
+								font-size: 24rpx;
 							}
 						}
 

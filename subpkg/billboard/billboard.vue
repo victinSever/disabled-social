@@ -157,7 +157,7 @@
 			height: 100%;
 			
 			text {
-				font-size: 16px;
+				font-size: 32rpx;
 				display: inline-block;
 				line-height: 80rpx;
 				color: #ddd;

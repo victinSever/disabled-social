@@ -96,7 +96,7 @@
 	
 	.header {
 	
-		height: 50px;
+		height: 100rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -109,7 +109,7 @@
 			height: 100%;
 	
 			text {
-				font-size: 18px;
+				font-size: 36rpx;
 				font-weight: bold;
 				margin-left: 10rpx;
 			}
@@ -126,7 +126,7 @@
 		line-height: 60rpx;
 		background: linear-gradient(#ffaa7f, #ff557f);
 		color: #fff;
-		font-size: 14px;
+		font-size: 28rpx;
 	}
 	
 	.box{
@@ -152,7 +152,7 @@
 	
 	.title{
 		margin: 30rpx 0;
-		font-size: 18px;
+		font-size: 36rpx;
 	}
 	
 	.result{

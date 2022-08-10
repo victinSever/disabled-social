@@ -407,7 +407,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		border-bottom: 1px solid #eee;
+		border-bottom: 2rpx solid #eee;
 
 		.header-prove {
 			display: flex;
@@ -464,7 +464,7 @@
 					h1 {
 						height: 100rpx;
 						line-height: 100rpx;
-						font-size: 20px;
+						font-size: 40rpx;
 					}
 
 					p {
@@ -515,7 +515,7 @@
 
 				.item-num {
 					font-weight: bold;
-					font-size: 16px;
+					font-size: 32rpx;
 				}
 
 				.item-title {
@@ -556,14 +556,14 @@
 
 				text {
 					font-weight: bold;
-					font-size: 15px;
+					font-size: 30rpx;
 				}
 			}
 
 			.section-two {
 				text {
 					color: #777;
-					font-size: 12px;
+					font-size: 24rpx;
 				}
 			}
 
