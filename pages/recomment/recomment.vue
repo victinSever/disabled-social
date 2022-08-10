@@ -143,7 +143,12 @@
 				},
 				page: {
 					page: 1,
-					size: 10
+					size: 10,
+					age1: "",
+					age2:"",
+					distance: "",
+					sex: "",
+					tag:"",
 				},
 				imgList: [],
 				showMove: false,
