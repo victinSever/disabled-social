@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<div class="header">
-			<recomment-swiper :swiperList="imageList"></recomment-swiper>
+			<image :src="baseData.headPicPath" mode="aspectFill"></image>
 		</div>
 
 		<view class="footer">
@@ -9,20 +9,20 @@
 			<!-- 姓名 -->
 			<view class="footer-header">
 				<view class="userName">
-					<text>小懒猫</text>
+					<text>{{baseData.nickName}}</text>
 					<text class="focus" v-if="isTemplate" @click="sendAttention">关注</text>
 				</view>
 				<view class="address">
-					<text>重庆巴南(3km)</text>
+					<text>{{baseData.householdAddr}}(0km)</text>
 					<text class="point">·</text>
-					<text style="color: #F95F81;">26分钟前活跃</text>
+					<text style="color: #F95F81;">正活跃</text>
 				</view>
 			</view>
 
 			<!-- 相册 -->
 			<view class="photos">
 				<view class="title">
-					<text class="pic">动态相册</text>
+					<text class="pic">图片秀</text>
 					<text class="look">查看全部</text>
 				</view>
 				<view class="">
@@ -40,7 +40,7 @@
 					<text class="pic">个人MV</text>
 				</view>
 				<view class="">
-					暂无
+					快来添加自己的MV吧，上传自己showTime时刻！
 				</view>
 			</view>
 			
@@ -56,6 +56,7 @@
 
 <script>
 	import homeItem from '@/components/recomment-item/recomment-item.vue'
+	import { mapState } from 'vuex'
 	export default {
 		name: "personage",
 		components: {
@@ -83,24 +84,26 @@
 				default: []
 			}
 		},
+		
 		computed: {
+			...mapState('common', ['moreInfo']),
 			tag(){
-				let tagStr = this.personageData.personDetailInfo.personTag
+				let tagStr = this.moreInfo.personDetailInfo.personTag
 				return tagStr.split(' ')
 			},
 			hobby(){
-				let hobbyStr = this.personageData.personDetailInfo.hobby
+				let hobbyStr = this.moreInfo.personDetailInfo.hobby
 				return hobbyStr.split(' ')
 			},
 			introduce(){
-				return this.personageData.personBasicInfo.personIntro
+				let personIntro = this.moreInfo.personBasicInfo.personIntro || ''
+				return personIntro
 			},
 			loveSaying(){
-				return this.personageData.personBasicInfo.personSign
+				let personSign = this.moreInfo.personBasicInfo.personSign || ''
+				return personSign
+				
 			},
-		},
-		created(){
-			// console.log(this.personageData)			
 		},
 		methods: {
 			backdetail() {
@@ -114,6 +117,11 @@
 <style lang="scss" scoped>
 	.header{
 		padding: 0 30rpx;
+		
+		image{
+			border-radius: 30rpx;
+			width: 100%;
+		}
 	}
 
 	.footer {

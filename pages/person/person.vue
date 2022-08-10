@@ -280,7 +280,6 @@
 				const {data: res2} = await my.getAllData({
 					personId: this.loginUser.userId
 				})
-				console.log(res1.data);
 				// 解决后端传来的时间字段不匹配问题
 				// res2.data.personBasicInfo.expectedMarryTime = res2.data.personBasicInfo.expectedMarryTime.split('T')[0]
 				// 相册
@@ -356,6 +355,7 @@
 				let that = this
 				setTimeout(function() {
 					uni.$showMsg('积分 + ' + that.reward)
+					this.reward++
 				}, 1000)
 
 			},

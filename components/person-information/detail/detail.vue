@@ -151,15 +151,17 @@
 		
 		<view class="section">
 			<text class="label">兴趣爱好</text>
-			<view class="content" @click="gotoEditDetail(1)">
+			<view class="content" @click="gotoEditDetail(1, data.hobby)">
 				<input type="text" class="input" placeholder="请输入" v-model="data.hobby">
+				<!-- <text>data.hobby</text> -->
 			</view>
 		</view>
 		
 		<view class="section">
 			<text class="label">我的标签</text>
-			<view class="content" @click="gotoEditDetail(2)">
+			<view class="content" @click="gotoEditDetail(2, data.personTag)">
 				<input type="text" class="input" placeholder="请输入" v-model="data.personTag">
+				<!-- <text>data.personTag</text> -->
 			</view>
 		</view>
 		
@@ -295,9 +297,9 @@
 				})
 			},
 			// 编辑兴趣和标签
-			gotoEditDetail(type){
+			gotoEditDetail(type, str){
 				uni.navigateTo({
-					url: '/subpkg/editDetail/editDetail?type=' + type
+					url: '/subpkg/editDetail/editDetail?type=' + type + '&str=' + str
 				})
 			},
 			nextPage(){

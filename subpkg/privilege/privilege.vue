@@ -20,7 +20,7 @@
 					<view class="vip-bottom">
 						<image :src="data.headPicPath" alt="">
 							<text v-if="!isVip">暂未激活会员</text>
-							<text v-else>会员用户<text style="margin-left: 10rpx;">{{vipDuring}}</text></text>
+							<text v-else>会员用户<text style="margin-left: 10rpx;">会员到期 {{vipDuring}}</text></text>
 					</view>
 				</view>
 			</view>
@@ -92,11 +92,11 @@
 			</view>
 			<view class="buy-btn">
 				<button @click="openVip" v-if="!isVip">
-					<text class="price">￥{{chooseVip.allprice}}</text>
+					<text class="price">￥{{chooseVip.totalPrice}}</text>
 					<text>立即购买</text>
 				</button>
 				<button @click="renewalVip" v-else>
-					<text class="price">￥{{chooseVip.allprice}}</text>
+					<text class="price">￥{{chooseVip.totalPrice}}</text>
 					<text>立即续费</text>
 				</button>
 			</view>
@@ -160,38 +160,17 @@
 		},
 		computed: {
 			...mapState('user',['loginUser']),
+			...mapState('common',['baseInfo']),
 			vipDuring() {
-				if (!this.vipTime)
-					return returnDuringTime(this.chooseVip.time)
-				else
-					return '会员到期' + this.vipTime.split('T')[0]
+				return this.baseInfo.expirationTime
 			}
 		},
-		mounted() {		
-			this.getData()
-			this.getVipPackageList()
-			console.log(this.loginUser);
-			
+		mounted() {	
+			this.isVip = this.baseInfo.isVip === 1
+			this.data = this.baseInfo
+			this.getVipPackageList()		
 		},
 		methods: {
-			// 获取是否是会员，会员到期时间信息
-			async getData() {
-				uni.showLoading({title: '动态加载中',mask:true});
-				const {data: res} = await my.getInfo({
-					loginName: this.loginUser.loginName
-				})
-				console.log(res);
-				uni.hideLoading()
-				if (res.resultCode === 200) {
-					if (res.data.isVip === 1) {
-						this.data = res.data
-						this.isVip = true
-						this.vipTime = res.data.expirationTime
-					} else {
-						this.isVip = false
-					}
-				}
-			},
 			// 获取套餐信息
 			async getVipPackageList() {
 				const {data: res} = await my.getVipPackageList({

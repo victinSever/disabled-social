@@ -83,7 +83,7 @@
 	import marrary from "@/components/person-information/marrary/marrary.vue"
 	import personage from '@/components/personage/index.vue'
 	import my from '@/apis/my.js'
-	import { mapState } from 'vuex'
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		name: "checkinformation",
 		data() {
@@ -110,6 +110,7 @@
 			this.getData()
 		},
 		methods: {
+			...mapMutations('common',['setMoreInfo']),
 			// 获取信息
 			async getData() {
 				this.baseData = this.baseInfo
@@ -149,17 +150,27 @@
 			// 更新数据
 			async saveUpdate(){
 				let success = false
-				uni.showLoading({title: '数据更新中',mask:true})
-				console.log(this.cacheData);
-				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
-				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
-				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
-				uni.hideLoading()
+				// uni.showLoading({title: '数据更新中',mask:true})
+				// console.log(this.cacheData.personBasicInfo);
+					// const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
+					// // const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
+					// // const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
+					// // uni.hideLoading()
+					// console.log(res1);
+				my.changePersonBasicInfo(this.cacheData.personBasicInfo).then(res => {
+					console.log(res);
+				}).catch(err=>{
+					console.log(err);
+				})
 				
-				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
-					uni.$showMsg("保存成功！")
-					success = true
-				}
+				
+				// console.log(res1,res2,res2);
+				// if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
+				// 	this.setMoreInfo(this.cacheData)//更新vuex
+				// 	uni.$showMsg("保存成功！")
+				// 	console.log(2);
+				// 	success = true
+				// }
 				return success 			
 			},
 
@@ -170,9 +181,10 @@
 				})
 			},
 			// 保存修改
-			finish() {
-				if(this.saveUpdate())
+			finish() {				
+				if(this.saveUpdate()){
 					this.gotoBack()
+				}					
 			},
 		}
 	}
