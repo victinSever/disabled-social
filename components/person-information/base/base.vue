@@ -309,15 +309,6 @@
 					this.$emit('changeBase', val)
 				}
 			},
-			// 监视昵称修改，触发vip权限验证
-			"data.personName": {
-				handler(oldVal, newVal) {
-					if (this.baseInfo.isVip != 1) {
-						this.data.personName = oldVal
-						uni.$showMsg('昵称需要开通VIP才能修改哦！')
-					}
-				}
-			}
 		},
 		created() {
 			this.data = this.moreInfo.personBasicInfo ? this.moreInfo.personBasicInfo : {}
@@ -529,7 +520,7 @@
 			// 拍照
 			chooseimage() {
 				var that = this;
-				wx.showActionSheet({
+				uni.showActionSheet({
 					itemList: ['相册', '拍照'],
 					itemColor: "darkorange",
 					success: function(res) {
