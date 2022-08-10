@@ -9,7 +9,10 @@
 
 <script>
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
-	import { mapMutations,mapState } from 'vuex'
+	import {
+		mapMutations,
+		mapState
+	} from 'vuex'
 	export default {
 		name: "social-concern",
 		mixins: [MescrollMixin], // 使用mixin
@@ -48,7 +51,7 @@
 			};
 		},
 		methods: {
-			...mapState('user',['loginUser']),
+			...mapState('user', ['loginUser']),
 			init(mescroll) {
 				this.mescroll = mescroll;
 				this.$emit('init', mescroll)
@@ -57,7 +60,7 @@
 				this.mescroll.resetUpScroll();
 			},
 			upCallback(e) {
-				this.page=e.num;
+				this.page = e.num;
 				this.getMoreInfo()
 			},
 			getMoreInfo(fn) {
@@ -72,13 +75,11 @@
 							_that.flag = false
 							_that.mescroll.optDown.textSuccess = '暂无更多数据'
 						}
-						if(_that.page==1){
-							_that.acitveData=res.data.data
-						}else{
-							_that.acitveData=_that.acitveData.concat(res.data.data)
+						if (_that.page == 1) {
+							_that.acitveData = res.data.data
+						} else {
+							_that.acitveData = _that.acitveData.concat(res.data.data)
 						}
-						
-						
 						_that.mescroll.endByPage(10, parseInt(_that.total / 10));
 					})
 				} else {

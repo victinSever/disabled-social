@@ -124,6 +124,7 @@
 	// 弹出层的盒子设置
 	.homeSetting {
 		height: 93vh;
+		overflow: auto;
 		background-color: transparent;
 
 		.homeSetting-box {
