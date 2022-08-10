@@ -52,7 +52,7 @@
 		data() {
 			return {
 				type: 1, //hobby或者tag
-				keyword: '',
+				keyword: '',				
 				list: [],
 				result: '',
 			};
@@ -60,6 +60,7 @@
 		onLoad(value){
 			if(value.type){
 				this.type = value.type
+				this.list = value.str.split(' ')
 			}
 		},
 		methods: {
@@ -75,8 +76,8 @@
 				uni.navigateBack()
 			},
 			finish(){
-				this.list.forEach(item => {
-					this.result += item + ' '
+				this.list.forEach((item, i) => {
+					this.result += item + (i === this.list.length - 1 ? '':' ')
 				})
 				if(this.type == 1){
 					this.SetHobby(this.result)

@@ -2,17 +2,23 @@
 	<view>
 		<view class="login-container">
 			<!-- #ifdef MP-ALIPAY || MP-WEIXIN-->
-			<view class="other-login-way">
+<!-- 			<view class="other-login-way">
 				<view class="quick-login">
 					<text class="quick-text">快捷登录</text>
-				</view>
+				</view> -->
 				<!-- @getphonenumber="wxOneLogin"  open-type="getPhoneNumber" -->
-				<button style="border: 0; background-color: #FBFBFB;" class="flex-button" @click="btn_login()">
+<!-- 				<button style="border: 0; background-color: #FBFBFB;" class="flex-button" @click="btn_login()">
 					<image class="icon-wechat" src="@/static/images/wechat.png" mode="scaleToFill"></image>
 					一键登录
 				</button>
-			</view>
+			</view> -->
 			<!-- #endif -->
+			<view class="other-login-way">
+			<input class="uni-input" type="number" placeholder="这是一个手机号" />
+			<button style="border: 0; background-color: #FBFBFB;" class="flex-button" @click="btn_login()">
+				一键登录
+			</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -25,7 +31,9 @@
      import webSocket from "@/common/util/webSocket.js"
 	export default {
 		data() {
-			return {};
+			return {
+				tel:""
+			};
 		},
 		mounted() {
 			uni.reLaunch({
@@ -110,7 +118,7 @@
 			},
 			btn_login(){
 				auth.login({
-					tel:"15102340082"
+					tel:this.tel
 				}).then((res)=>{
                     //登录成功token
 					uni.setStorageSync(ACCESS_TOKEN,res.data.data.token);
@@ -132,6 +140,15 @@
 </script>
 <style scoped lang="scss">
 	@import url("./login.css");
+	
+	.uni-input{
+		height: 100rpx;
+		margin-bottom: 30rpx;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0 20rpx;
+		border: 1rpx solid #e3e3e3;
+	}
 	
 	.flex-button{
 		display: flex;

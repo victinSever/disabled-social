@@ -32,10 +32,10 @@
 		<!-- 举报和关注弹窗 -->
 		<uni-popup ref="tip" background-color="#fff">
 			<view class="tip-content">
-				<text>关注</text>
-				<text>匿名举报</text>
+				<text @click="btn_attention()">{{alreadyCollect==0?"关注":"不再关注"}}</text>
+				<text @click="btn_report()">匿名举报</text>
 				<hr>
-				<text>取消</text>
+				<text @click="$refs.tip.close()">取消</text>
 			</view>
 		</uni-popup>
 
@@ -48,14 +48,23 @@
 		<uni-transition mode-class="fade" :show="activeBtn.show && isClose">
 			<activity-btn :activeBtn="activeBtn"></activity-btn>
 		</uni-transition>
+		
+		
+		<!-- 投诉 -->
+		<uni-popup ref="report" background-color="#fff">
+			<report-check @close="closeReport" :reportedUserId="reportedUserId" :reportedId="reportedId" :type="1"></report-check>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import around from '../../apis/around.js'
+	import recomment from '../../apis/recomment.js'
 	import care from '../../apis/care.js'
+	import reportCheck from '@/components/report-check/report-check.vue'
 	export default {
 		name: 'social',
+		components:{reportCheck},
 		data() {
 			return {
 				// 活动按钮定制
@@ -69,7 +78,11 @@
                 requestClose:around.getRecomment,
                 requestCare:care.getCarefor,
                 getTotalAround:around.getTotal,
-                getTotalCare:care.getTotal
+                getTotalCare:care.getTotal,
+				reportedUserId:"",
+				reportedId:"",
+				alreadyCollect:0
+				
 			};
 		},
 		mounted() {
@@ -80,12 +93,52 @@
 			}, 1000)
 		},
 		methods: {
+			
+			//审核
+			btn_report(){
+				this.$refs.report.open();
+			},
+			
+			//关注
+			btn_attention(){
+				recomment.concernUser({
+					concernedUserId:this.reportedUserId
+				}).then((res) => {
+					if (this.alreadyCollect == 1) {
+						uni.showToast({
+							icon: "none",
+							title: "已取消"
+						})
+						this.alreadyCollect = 0
+					} else {
+						uni.showToast({
+							icon: "none",
+							title: "关注成功"
+						})
+						this.alreadyCollect = 1
+					}
+					this.$refs.tip.close();
+				
+				}).catch(() => {
+				
+				})
+			},
+			
+			//关闭
+			closeReport(){
+				this.$refs.tip.close();
+				this.$refs.report.close();
+			},
+			
 			gotoShare() {
 				uni.navigateTo({
 					url: '/subpkg/share/share'
 				})
 			},
-			openPopu() {
+			openPopu(item) {
+				this.alreadyCollect= item.alreadyCollect;
+				this.reportedId=item.diary.diaryUserId
+				this.reportedUserId=item.diary.diaryUserId
 				this.$refs.tip.open('bottom')
 			},
 			// 关闭弹窗

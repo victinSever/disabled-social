@@ -16,12 +16,6 @@
 </script>
 
 <style lang="scss" scoped>
-	// .root {
-	// 	position: sticky;
-	// 	top: 0;
-	// 	background-color: #fff;
-	// 	z-index: 100;
-	// 	height: 70rpx;
-	// 	width: 100%;
-	// }
+	.root {
+	}
 </style>

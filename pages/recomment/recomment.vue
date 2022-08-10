@@ -83,7 +83,7 @@
 		</template>
 		<!-- 设置按钮的弹框 -->
 		<uni-popup ref="homeSetting">
-			<recomment-setting @closePopup="closePopup"></recomment-setting>
+			<recomment-setting @closePopup="closePopup" @selectPopup="selectPopup"></recomment-setting>
 		</uni-popup>
 
 		<!-- 提示或者广告按钮的弹框 -->
@@ -202,7 +202,7 @@
 						this.getRecommentList()
 					}
 					this.selectIndex++;
-					this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?false:false;
+					this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?true:false;
 					this.obj =this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
 						headPath: "",
 						houseAddress: "",
@@ -279,9 +279,22 @@
 				// }, 1000)
 			},
 			// 关闭筛选弹出层
-			closePopup(obj={}) {
+			closePopup() {
 				// console.log(obj); //筛选的数据
 				this.$refs.homeSetting.close()
+			},
+			selectPopup(item){
+				this.page={
+					page: 1,
+					size: 10,
+					age1: item.age1,
+					age2: item.age2,
+					distance: item.distance,
+					sex: item.sex,
+					tag:item.tag,
+				};
+				this.$refs.homeSetting.close()
+				this.getRecommentList()
 			},
 			// 弹出筛选弹出层
 			openPopup() {

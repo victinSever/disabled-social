@@ -5,7 +5,7 @@
 		<view class="message-header">
 			<text>
 				<text @click="concern" style="margin-right: 40rpx;">消息</text>
-				<text @click="gotoGroup">单身群</text>
+				<!-- <text @click="gotoGroup">单身群</text> -->
 			</text>
 			<text>
 				<uni-icons type="search" size="30"></uni-icons>
@@ -44,12 +44,12 @@
 							<uni-swipe-action-item :right-options="options" @click="bindClick">
 								<view class="item" @click="gotoMessageDetail(item)">
 									<view class="left-box">
-										<img :src="item.uimg" alt="">
+										<image mode="aspectFill" :src="item.uimg" alt="">
 									</view>
 									<view class="right-box">
 										<view class="right-box-left">
 											<text>{{item.nickname}}</text>
-											<text style="font-size: 30rpx;margin-top: 10rpx;color: #736f6f;">{{item.messageText}}</text>
+											<text style="font-size: 30rpx;margin-top: 10rpx;color: #736f6f;">{{item.messageText?item.messageText:"暂无消息"}}</text>
 										</view>
 										<view class="right-box-right">
 											<!-- v-if="item.num!=0" -->
@@ -303,7 +303,7 @@
 						align-items: center;
 						width: 160rpx;
 
-						img {
+						image {
 							height: 104rpx;
 							width: 104rpx;
 							border-radius: 50%;

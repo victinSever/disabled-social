@@ -170,6 +170,13 @@
 			},
 			
 			async dialogInputConfirm(val) {
+				if(val.length > 10) {
+					uni.$showMsg('昵称长度不能大于10个字符！')
+					setTimeout(() => {
+						uni.$showMsg('更新失败！')
+					}, 2000)
+					return
+				}
 				uni.showLoading({
 					title: '正在更新中'
 				})
@@ -177,6 +184,7 @@
 					loginName: this.loginUser.loginName,
 					nickName: val
 				})
+				console.log(res);
 				let that = this
 				setTimeout(() => {
 					uni.hideLoading()
@@ -195,11 +203,12 @@
 				const { data: res } = await my.changeUserImage({
 					loginName: this.loginUser.loginName,
 					headPicPath: url
-				})				
+				})	
+				let that = this
 				setTimeout(() => {
 					uni.hideLoading();
 					if(res.resultCode == 200) {
-						this.$set(that.baseData, 'headPicPath', data.data.url)				
+						that.$set(that.baseData, 'headPicPath', data.data.url)				
 						uni.$showMsg('更新头像成功！')
 					}
 				}, 1000)
@@ -208,23 +217,23 @@
 			// 选择拍照还是相册
 			chooseImage() {
 				var that = this;
-				wx.showActionSheet({
+				uni.showActionSheet({
 					itemList: ['相册', '拍照'],
 					itemColor: "darkorange",
 					success: function(res) {
 						if (!res.cancel) {
 							if (res.tapIndex == 0) {
-								that.chooseWxImage('album')
+								that.chooseOneImage('album')
 							} else if (res.tapIndex == 1) {
-								that.chooseWxImage('camera')
+								that.chooseOneImage('camera')
 							}
 						}
 					}
 				})
 			},
 			
-			// 调用微信图片
-			chooseWxImage(type) {
+			// 调用图片
+			chooseOneImage(type) {
 				let that = this;
 				uni.chooseImage({
 					count: 6, //默认9
@@ -266,7 +275,7 @@
 				this.personActiveData = [
 					...this.personActiveData,
 					...arr
-				]			
+				]	
 			},
 
 			// 获取信息
@@ -280,7 +289,6 @@
 				const {data: res2} = await my.getAllData({
 					personId: this.loginUser.userId
 				})
-				console.log(res1.data);
 				// 解决后端传来的时间字段不匹配问题
 				// res2.data.personBasicInfo.expectedMarryTime = res2.data.personBasicInfo.expectedMarryTime.split('T')[0]
 				// 相册
@@ -356,6 +364,7 @@
 				let that = this
 				setTimeout(function() {
 					uni.$showMsg('积分 + ' + that.reward)
+					this.reward++
 				}, 1000)
 
 			},

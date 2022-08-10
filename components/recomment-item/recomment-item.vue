@@ -54,9 +54,6 @@
 <script>
 	export default {
 		props: ['title', 'content','list', 'baseData'],
-		mounted(){
-			console.log(this.baseData);
-		}
 	}
 </script>
 
