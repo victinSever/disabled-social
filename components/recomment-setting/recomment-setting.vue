@@ -9,7 +9,7 @@
 				<text class="btnSure" @click="sendMessage">确定</text>
 			</view>
 			<!-- 选项区域 -->
-			<scroll-view scroll-y="true" class="homeSetting-main">
+			<scroll-view scroll-y="true" class="homeSetting-main" style="height: 850rpx">
 				<view class="age-and-distance">
 					<view class="box">
 						<view class="top">
@@ -20,7 +20,7 @@
 						<view class="bottom">
 							<slider-range :value="ageRangeValue" :min="ageRangeMin" :max="ageRangeMax" :step="step"
 								:bar-height="3" :block-size="26" background-color="#EEEEF6" active-color="#FF6B00"
-								:format="format" :decorationVisible="true" :tipVisible="false"
+								:decorationVisible="true" :tipVisible="false"
 								@change="handleAgeRangeChange"></slider-range>
 						</view>
 					</view>
@@ -33,7 +33,7 @@
 						<view class="bottom">
 							<slider-range :value="distanceRangeValue" :showLeft="false" :min="distanceRangeMin"
 								:max="distanceRangeMax" :step="step" :bar-height="3" :block-size="26"
-								background-color="#EEEEF6" active-color="#FF6B00" :format="format"
+								background-color="#EEEEF6" active-color="#FF6B00" 
 								:decorationVisible="true" :tipVisible="false" @change="handleDistanceRangeChange">
 							</slider-range>
 						</view>
@@ -80,7 +80,7 @@
 		},
 		data() {
 			return {
-				tags: ["靠谱", '温柔', '善良', '和蔼', '务实', '厚道', '喜欢简单', '成熟'],
+				tags: ["靠谱", '温柔', '善良', '和蔼', '务实', '厚道', '喜欢简单', '成熟','开朗','正直','慷慨','自爱'],
 				sexList: ['男', '女', '不限'],
 				sexChoose: 3,
 				tagChoose: 0,
@@ -94,9 +94,6 @@
 			};
 		},
 		methods: {
-			format(val) {
-				return val + '岁'
-			},
 			handleAgeRangeChange(e) {
 				this.ageRangeValue = e
 			},
