@@ -10,7 +10,8 @@
 			<view class="footer-header">
 				<view class="userName">
 					<text>{{item.username}}</text>
-					<text class="focus" @click="sendAttention">{{item.alreadyCollect==0?"关注":"已关注"}}</text>
+					<text class="focus" @click="sendAttention" v-if="item.alreadyCollect == 0">关注</text>
+					<text class="focus" style="background-color: #ddd;" v-else>已关注</text>
 				</view>
 				<view class="address">
 					<text>{{item.houseAddress}}</text>
@@ -233,7 +234,7 @@
 				border-radius: 14rpx;
 				text-align: center;
 				font-size: 36rpx;
-				border: 1px solid #D8D8D8;
+				border: 2rpx solid #D8D8D8;
 
 				image {
 					height: 100%;

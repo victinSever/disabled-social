@@ -265,17 +265,19 @@
 				const {data: res} = await my.getMyDiary(this.paramsData)
 				this.isLoading = false
 				uni.hideLoading();
-				// 根据动态发布时间获取日月
-				let arr = res.data.map(item => {
-					item.day = getDay(item.diary.createTime)
-					item.month = getMonth(item.diary.createTime)
-					return item
-				})
-				// 合并动态数组
-				this.personActiveData = [
-					...this.personActiveData,
-					...arr
-				]	
+				if(res.data){
+					// 根据动态发布时间获取日月
+					let arr = res.data.map(item => {
+						item.day = getDay(item.diary.createTime)
+						item.month = getMonth(item.diary.createTime)
+						return item
+					})
+					// 合并动态数组
+					this.personActiveData = [
+						...this.personActiveData,
+						...arr
+					]
+				}				
 			},
 
 			// 获取信息

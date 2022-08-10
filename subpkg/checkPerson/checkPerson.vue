@@ -120,7 +120,6 @@
 				this.personData = this.moreInfo
 				this.albumData = this.albumInfo
 				this.cacheData = this.moreInfo	
-				console.log(this.moreInfo);
 			},
 			
 			// 监视缓存数据
@@ -155,7 +154,6 @@
 			async saveUpdate(){
 				let success = false
 				uni.showLoading({title: '数据更新中',mask:true})
-				console.log(this.cacheData.personBasicInfo);
 				const {data: res1} = await my.changePersonBasicInfo(this.cacheData.personBasicInfo)
 				const {data: res2} = await my.changePersonDetailInfo(this.cacheData.personDetailInfo)
 				const {data: res3} = await my.changeRequirements(this.cacheData.requirement)
@@ -164,7 +162,6 @@
 				if(res1.resultCode === 200 && res2.resultCode === 200 && res3.resultCode === 200){
 					this.setMoreInfo(this.cacheData)//更新vuex
 					uni.$showMsg("保存成功！")
-					console.log(2);
 					success = true
 				}else{
 					uni.$showMsg("部分数据遗失！")
@@ -211,7 +208,7 @@
 			height: 100%;
 
 			text {
-				font-size: 22px;
+				font-size: 44rpx;
 				font-weight: bold;
 				margin-left: 10rpx;
 			}
@@ -229,7 +226,7 @@
 			.btnSend {
 				display: inline-block;
 				text-align: center;
-				font-size: 16px;
+				font-size: 32rpx;
 				color: #fff;
 			}
 		}
@@ -240,7 +237,7 @@
 		justify-content: center;
 		height: 80rpx;
 		box-sizing: border-box;
-		font-size: 16px;
+		font-size: 32rpx;
 		background-color: #fff;
 		margin-bottom: 20rpx;
 
@@ -270,7 +267,7 @@
 		
 			display: flex;
 			box-sizing: border-box;
-			font-size: 14px;
+			font-size: 28rpx;
 			height: 80rpx;
 			background-color: #fff;
 		
