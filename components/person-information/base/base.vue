@@ -357,7 +357,7 @@
 						likeCounts: '',
 						picDesc: '',
 						picPath: '',
-						status: '1',
+						status: '',
 						userId: '',
 					})
 				}
@@ -395,7 +395,7 @@
 					sourceType: ['album'], 
 					success: function(res) {				
 						res.tempFilePaths.forEach((item) => {
-							uni.showLoading({title: '图片上传中',mask:true})
+							uni.showLoading({title: '图片上传中', mask:true})
 							uni.uploadFile({
 								url: that.vuex_uploadAction,
 								filePath: item,
