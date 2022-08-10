@@ -74,7 +74,7 @@
 		<view class="buy" v-if="!isVip || isBuy">
 			<view class="buy-top" v-if="isWechat" @click="isWechat = false">
 				<view class="top-left">
-					<image src="@/static/images/wechat.png" alt="">
+					<image src="../../static/images/wechat.png" alt="" mode="aspectFill">
 						<text>微信</text>
 				</view>
 				<view class="top-right">
@@ -83,7 +83,7 @@
 			</view>
 			<view class="buy-top" v-else @click="isWechat = true">
 				<view class="top-left">
-					<image src="static/images/pay.png" alt="">
+					<image src="../../static/images/pay.png" alt="" mode="aspectFill">
 						<text>支付宝</text>
 				</view>
 				<view class="top-right">
@@ -253,7 +253,7 @@
 				}
 
 				text {
-					font-size: 18px;
+					font-size: 36rpx;
 					font-weight: bold;
 				}
 			}
@@ -282,7 +282,7 @@
 					justify-content: space-between;
 
 					.vip-top {
-						font-size: 20px;
+						font-size: 40rpx;
 						color: #fff;
 						font-family: 'kaiti';
 
@@ -297,7 +297,7 @@
 						display: flex;
 						align-items: center;
 						color: #fbfcda;
-						font-size: 12px;
+						font-size: 24rpx;
 
 						image {
 							width: 40rpx;
@@ -330,7 +330,7 @@
 					margin-top: 15rpx;
 
 					text {
-						font-size: 24px;
+						font-size: 48rpx;
 					}
 				}
 
@@ -378,7 +378,7 @@
 			display: flex;
 			align-items: center;
 			padding: 0 20rpx;
-			font-size: 12px;
+			font-size: 24rpx;
 
 			checkbox {
 				transform: scale(0.8);
@@ -440,13 +440,13 @@
 
 					.item-right {
 						h3 {
-							font-size: 14px;
+							font-size: 28rpx;
 						}
 
 						p {
 							margin-top: 10rpx;
 							color: #777;
-							font-size: 12px;
+							font-size: 24rpx;
 						}
 					}
 				}
@@ -468,7 +468,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				font-size: 16px;
+				font-size: 32rpx;
 
 				.top-left {
 					display: flex;

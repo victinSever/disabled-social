@@ -265,17 +265,19 @@
 				const {data: res} = await my.getMyDiary(this.paramsData)
 				this.isLoading = false
 				uni.hideLoading();
-				// 根据动态发布时间获取日月
-				let arr = res.data.map(item => {
-					item.day = getDay(item.diary.createTime)
-					item.month = getMonth(item.diary.createTime)
-					return item
-				})
-				// 合并动态数组
-				this.personActiveData = [
-					...this.personActiveData,
-					...arr
-				]	
+				if(res.data){
+					// 根据动态发布时间获取日月
+					let arr = res.data.map(item => {
+						item.day = getDay(item.diary.createTime)
+						item.month = getMonth(item.diary.createTime)
+						return item
+					})
+					// 合并动态数组
+					this.personActiveData = [
+						...this.personActiveData,
+						...arr
+					]
+				}				
 			},
 
 			// 获取信息
@@ -407,7 +409,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		border-bottom: 1px solid #eee;
+		border-bottom: 2rpx solid #eee;
 
 		.header-prove {
 			display: flex;
@@ -464,7 +466,7 @@
 					h1 {
 						height: 100rpx;
 						line-height: 100rpx;
-						font-size: 20px;
+						font-size: 40rpx;
 					}
 
 					p {
@@ -515,7 +517,7 @@
 
 				.item-num {
 					font-weight: bold;
-					font-size: 16px;
+					font-size: 32rpx;
 				}
 
 				.item-title {
@@ -556,14 +558,14 @@
 
 				text {
 					font-weight: bold;
-					font-size: 15px;
+					font-size: 30rpx;
 				}
 			}
 
 			.section-two {
 				text {
 					color: #777;
-					font-size: 12px;
+					font-size: 24rpx;
 				}
 			}
 

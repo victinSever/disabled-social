@@ -154,7 +154,7 @@
 			}
 
 			.input {
-				font-size: 14px;
+				font-size: 28rpx;
 				text-align: right;
 			}
 		}

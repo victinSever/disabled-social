@@ -143,7 +143,12 @@
 				},
 				page: {
 					page: 1,
-					size: 10
+					size: 10,
+					age1: "",
+					age2:"",
+					distance: "",
+					sex: "",
+					tag:"",
 				},
 				imgList: [],
 				showMove: false,
@@ -460,7 +465,7 @@
 
 	.home-container {
 		box-sizing: border-box;
-		width: 100vw;
+		width: 100%;
 
 		.home-header {
 			height: 100rpx;
@@ -492,8 +497,8 @@
 				z-index: 4;
 
 				image {
-					width: 20px;
-					height: 20px;
+					width: 40rpx;
+					height: 40rpx;
 				}
 			}
 		}
@@ -578,8 +583,8 @@
 							justify-content: space-between;
 
 							image {
-								width: 23px;
-								height: 23px;
+								width: 46rpx;
+								height: 46rpx;
 							}
 						}
 
@@ -590,7 +595,7 @@
 							text {
 								padding: 6rpx 20rpx;
 								border-radius: 10rpx;
-								font-size: 12px;
+								font-size: 24rpx;
 								background-color: #56B2EA;
 								color: #ffffff;
 								margin-right: 20rpx;
@@ -678,7 +683,6 @@
 
 						.footer-header {
 							margin-bottom: 60rpx;
-							// background-color: bisque;
 
 							.userName {
 								display: flex;
@@ -755,18 +759,6 @@
 
 				}
 			}
-
-			// .movable-area2 {
-			// 	transform: translate3d(0rpx, 0rpx, 0rpx);
-			// }
-
-			// .movable-area1 {
-			// 	transform: translate3d(0, -50rpx, -120rpx);
-			// }
-
-			// .movable-area0 {
-			// 	transform: translate3d(0, -90rpx, -210rpx);
-			// }
 		}
 	}
 </style>
