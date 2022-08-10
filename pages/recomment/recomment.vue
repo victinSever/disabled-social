@@ -17,7 +17,7 @@
 				<view class="header-right">
 					<image @click="gotoSearch" src="@/static/images/home/seach.png" style="margin-right: 22rpx;">
 					</image>
-					<image @click="openPopup" src="@/static/images/home/screen.png"></image>
+					<image @click="openPopup" v-if="isImages" src="@/static/images/home/screen.png"></image>
 				</view>
 			</view>
 		</uni-transition>
@@ -31,7 +31,7 @@
 							<image src="@/static/images/home/shang.png"></image>
 						</view>
 						<view class="home-swiper" v-if="header">
-							<image :src="obj.headPath" class="swiper-img" style="width: 100%;height: 100%;">
+							<image :src="obj.headPath" class="swiper-img" mode="aspectFill" style="width: 100%;height: 100%;">
 							</image>
 							<view class="swiper_detail">
 								<view class="mask">
@@ -63,7 +63,8 @@
 									</view>
 
 									<view class="collection" @click="collect">
-										<image src="@/static/images/home/2.png"></image>
+										<image src="@/static/images/home/2.png" v-if="!collectShow"></image>
+										<image src="@/static/images/home/2-1.png" v-else></image>
 									</view>
 								</view>
 							</view>
@@ -145,7 +146,8 @@
 					size: 10
 				},
 				imgList: [],
-				showMove: false
+				showMove: false,
+				collectShow:false
 			}
 		},
 		onLoad() {
@@ -175,6 +177,7 @@
 						this.getRecommentList()
 					}
 					this.selectIndex++;
+					this.collectShow = this.imgList[this.selectIndex]==1?true:false;
 					this.obj = this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
 						headPath: "",
 						houseAddress: "",
@@ -199,7 +202,7 @@
 						this.getRecommentList()
 					}
 					this.selectIndex++;
-
+					this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?false:false;
 					this.obj =this.imgList[this.selectIndex]?this.imgList[this.selectIndex]:{
 						headPath: "",
 						houseAddress: "",
@@ -220,10 +223,20 @@
 					type: "2",
 					likedId: this.obj.userId
 				}).then((res) => {
-					uni.showToast({
-						icon: "none",
-						title: "收藏成功"
-					})
+					if(this.collectShow){
+						this.collectShow = false;
+						uni.showToast({
+							icon: "none",
+							title: "收藏成功"
+						})
+					}else{
+						this.collectShow = true;
+						uni.showToast({
+							icon: "none",
+							title: "已取消"
+						})
+					}
+	
 				}).catch(() => {
 
 				})
@@ -242,7 +255,8 @@
 							tags: []
 						};
 						this.imgList = response.data.data;
-						this.selectIndex = 0
+						this.selectIndex = 0;
+						this.collectShow = this.imgList[this.selectIndex].alreadyCollect==1?true:false;
 					} else {
 						this.imgList = this.imgList.concat(response.data.data);
 					}

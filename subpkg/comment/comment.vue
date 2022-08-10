@@ -5,9 +5,7 @@
 		<template v-if="showOneInfo">
 			<view class="comment-header">
 				<view class="comment-header-left">
-					<text @click="gotoBack">
-						<uni-icons type="back" size="25"></uni-icons>
-					</text>
+						<uni-icons @click="gotoBack" type="back" size="25"></uni-icons>
 					<view class="comment-header-left-info">
 						<view class="info-left">
 							<image :src="userData.headPicture" alt="" style="height: 40px;width: 40px;"></image>
@@ -15,17 +13,16 @@
 						<view class="info-right">
 							<h2>DAisss <text>√</text></h2>
 							<p>
-								<text>2天前</text>
+								<text>{{dateDiff(userData.diary.createTime)}}</text>
 								<text>·</text>
-								<text>29km</text>
+								<text>20km</text>
 							</p>
 						</view>
 					</view>
 				</view>
 
 				<view class="comment-header-right">
-					<text class="btnConcern">关注</text>
-					<text v-if="false">已关注</text>
+					<text class="btnConcern" @click="sendAttention()">{{userData.attention==0?"关注":"已关注"}}</text>
 				</view>
 			</view>
 
@@ -74,7 +71,8 @@
 
 <script>
 	import comment from '../../apis/comment.js';
-	import around from '../../apis/around.js'
+	import around from '../../apis/around.js';
+	import recomment from "@/apis/recomment.js"
 	export default {
 		data() {
 			return {
@@ -115,6 +113,65 @@
 			};
 		},
 		methods: {
+			dateDiff(nowTime) {
+				if (!nowTime) return '';
+				nowTime = nowTime.replace(/年/g, '/');
+				nowTime = nowTime.replace(/月/g, '/');
+				nowTime = nowTime.replace(/日/g, '/');
+				nowTime = nowTime.replace(/时/g, ':')
+				nowTime = nowTime.replace(/分/g, ':');
+				nowTime = nowTime.replace(/秒/g, '');
+				const arg = [nowTime]
+				const now = arg[1] ? arg[1] : new Date().getTime()
+				const diffValue = now - new Date(arg[0].replace(/-/g, '/')).getTime()
+				let result = ""
+				const minute = 1000 * 60
+				const hour = minute * 60
+				const day = hour * 24
+				const halfamonth = day * 15
+				const month = day * 30
+				const year = month * 12
+			
+				const _year = diffValue / year
+				const _month = diffValue / month
+				const _week = diffValue / (7 * day)
+				const _day = diffValue / day
+				const _hour = diffValue / hour
+				const _min = diffValue / minute
+				if (_year >= 1) result = parseInt(_year) + "年前"
+				else if (_month >= 1) result = parseInt(_month) + "个月前"
+				else if (_week >= 1) result = parseInt(_week) + "周前"
+				else if (_day >= 1) result = parseInt(_day) + "天前"
+				else if (_hour >= 1) result = parseInt(_hour) + "个小时前"
+				else if (_min >= 1) result = parseInt(_min) + "分钟前"
+				else result = "刚刚"
+				return result
+			},
+			//关注和取消用户
+				sendAttention() {
+					recomment.concernUser({
+						concernedUserId: this.userData.userId
+					}).then((res) => {
+						if (this.userData.attention == 1) {
+							uni.showToast({
+								icon: "none",
+								title: "已取消"
+							})
+							this.userData.attention = 0
+						} else {
+							uni.showToast({
+								icon: "none",
+								title: "关注成功"
+							})
+							this.userData.attention = 1
+						}
+			
+					}).catch(() => {
+			
+					})
+			
+				},
+			
 			init(mescroll) {
 				this.mescroll = mescroll;
 				this.$emit('init', mescroll)
