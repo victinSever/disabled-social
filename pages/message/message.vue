@@ -139,7 +139,7 @@
 			//获取用户列表
 			getMessageList() {
 				message.messageList(this.myInfo.userId).then(response => {
-					  this.messageData = response.data ? response.data : [];
+					  this.messageData = response.data.data ? response.data.data : [];
 					this.messageData.forEach((item,index)=>{
 						this.$set(item,'num',0);
                         this.$set(item,'messageText',"")
@@ -163,7 +163,7 @@
 					reviceuserid: id,
 					userid: this.myInfo.userId
 				}).then(response => {
-					response.data = response.data ? response.data : [];
+					response.data.data = response.data.data ? response.data.data : [];
 					let indexs=0;
 					response.data.forEach((item)=>{
 						if(item.msgstatus==0){
@@ -171,7 +171,7 @@
 						}
 					})
 					this.messageData[index].num=indexs;
-                    this.messageData[index].messageText=response.data[response.data.length-1].sendtext?response.data[response.data.length-1].sendtext:"";
+                    this.messageData[index].messageText=response.data.data[response.data.length-1].sendtext?response.data.data[response.data.length-1].sendtext:"";
 				}).catch(error => {
 				
 				})

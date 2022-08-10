@@ -36,6 +36,7 @@
 			};
 		},
 		mounted() {
+			 webSocket.open(this.$store.state.user.loginUser.userId);
 			uni.reLaunch({
 			    url:"/pages/recomment/recomment"
 			});
