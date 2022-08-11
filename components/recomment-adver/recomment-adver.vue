@@ -20,7 +20,7 @@
 		name:"recomment-adver",
 		methods:{
 			goOver(){
-				localStorage.setItem('tipToFileData', true)
+				// localStorage.setItem('tipToFileData', true)
 				this.closeAdver()
 			},
 			closeAdver(){

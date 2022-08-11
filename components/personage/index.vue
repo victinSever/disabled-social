@@ -76,23 +76,23 @@
 			...mapState('common', ['baseInfo', 'moreInfo']),
 			
 			tag(){
-				let tagStr = this.moreInfo.personDetailInfo.personTag
+				let tagStr = this.moreInfo.personDetailInfo?this.moreInfo.personDetailInfo.personTag:""
 				return tagStr.split(' ')
 			},
 			hobby(){
-				let hobbyStr = this.moreInfo.personDetailInfo.hobby
+				let hobbyStr = this.moreInfo.personDetailInfo?this.moreInfo.personDetailInfo.hobby:""
 				return hobbyStr.split(' ')
 			},
 			introduce(){
-				let personIntro = this.moreInfo.personBasicInfo.personIntro || ''
+				let personIntro = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo.personIntro:""
 				return personIntro
 			},
 			loveSaying(){
-				let personSign = this.moreInfo.personBasicInfo.personSign || ''
+				let personSign = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo.personSign:""
 				return personSign			
 			},
 			mvPath(){
-				let mv = this.moreInfo.personBasicInfo.mv || ''
+				let mv = this.moreInfo.personBasicInfo?this.moreInfo.personBasicInfo.mv:''
 				return mv			
 			},
 		},

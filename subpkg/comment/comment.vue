@@ -11,7 +11,7 @@
 							<image :src="userData.headPicture" alt="" style="height: 40px;width: 40px;"></image>
 						</view>
 						<view class="info-right">
-							<h2>DAisss <text>√</text></h2>
+							<h2>{{userData.diary.diaryUserName}} <text>√</text></h2>
 							<p>
 								<text>{{dateDiff(userData.diary.createTime)}}</text>
 								<text>·</text>
@@ -60,7 +60,7 @@
 		<!-- 评论区 -->
 		<uni-transition mode-class="slide-right" :show="true">
 			<view v-if="showComments">
-				<mescroll-uni :style="{height:wh+'px'}" ref="mescrollRef" @init="init" @down="downCallback"
+				<mescroll-uni :style="{height:wh+'px'}" ref="mescrollRef" style="display: block;width: 100%;" @init="init" @down="downCallback"
 					:down="downOption" :up="upOption" @up="upCallback" :fixed="true">
 					<comment-detail :data="data"></comment-detail>
 				</mescroll-uni>

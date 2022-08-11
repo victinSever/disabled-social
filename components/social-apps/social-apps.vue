@@ -27,48 +27,49 @@
 		name: "social-apps",
 		data() {
 			return {
+				buttonsList:[],
 				// 快捷按钮区
-				buttonsList: [{
-					iconPath: '../../static/images/tabs/compromise.png',
-					text: '约吧',
-					pagePath: '/subpkg/recomment/recomment',
-					bgc: '#feab79'
-				}, {
-					iconPath: '../../static/images/tabs/my-active.png',
-					text: '单身群',
-					pagePath: '/subpkg/group/group',
-					bgc: '#8dbbf6'
-				}, {
-					iconPath: '../../static/images/tabs/cate.png',
-					text: '活动',
-					pagePath: '/subpkg/activity/activity',
-					bgc: '#ff9771'
-				}, {
-					iconPath: '../../static/images/biaoqing.png',
-					text: '情感测试',
-					pagePath: '/subpkg/emotionTesting/emotionTesting',
-					bgc: '#fe8cc8'
-				}, {
-					iconPath: '../../static/images/tabs/cart.png',
-					text: '待补充',
-					pagePath: '#',
-					bgc: '#febd3d'
-				}, {
-					iconPath: '../../static/images/tabs/cart.png',
-					text: '待补充',
-					pagePath: '#',
-					bgc: '#5ad6d6'
-				}, {
-					iconPath: '../../static/images/tabs/cart.png',
-					text: '待补充',
-					pagePath: '#',
-					bgc: '#69d0a5'
-				}, {
-					iconPath: '../../static/images/tabs/cart.png',
-					text: '待补充',
-					pagePath: '#',
-					bgc: '#fdad18'
-				}],
+				// buttonsList: [{
+				// 	iconPath: '../../static/images/tabs/compromise.png',
+				// 	text: '约吧',
+				// 	pagePath: '/subpkg/recomment/recomment',
+				// 	bgc: '#feab79'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/my-active.png',
+				// 	text: '单身群',
+				// 	pagePath: '/subpkg/group/group',
+				// 	bgc: '#8dbbf6'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/cate.png',
+				// 	text: '活动',
+				// 	pagePath: '/subpkg/activity/activity',
+				// 	bgc: '#ff9771'
+				// }, {
+				// 	iconPath: '../../static/images/biaoqing.png',
+				// 	text: '情感测试',
+				// 	pagePath: '/subpkg/emotionTesting/emotionTesting',
+				// 	bgc: '#fe8cc8'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/cart.png',
+				// 	text: '待补充',
+				// 	pagePath: '#',
+				// 	bgc: '#febd3d'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/cart.png',
+				// 	text: '待补充',
+				// 	pagePath: '#',
+				// 	bgc: '#5ad6d6'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/cart.png',
+				// 	text: '待补充',
+				// 	pagePath: '#',
+				// 	bgc: '#69d0a5'
+				// }, {
+				// 	iconPath: '../../static/images/tabs/cart.png',
+				// 	text: '待补充',
+				// 	pagePath: '#',
+				// 	bgc: '#fdad18'
+				// }],
 			};
 		},
 		methods: {
@@ -107,7 +108,7 @@
 				padding-top: 50rpx;
 				display: flex;
 				flex-wrap: wrap;
-				justify-content: flex-start;				
+				justify-content: flex-start;
 
 				.popup-item {
 					height: 150rpx;
@@ -116,7 +117,7 @@
 					display: flex;
 					flex-direction: column;
 					align-items: center;
-					font-size: 14px;			
+					font-size: 14px;
 
 					.item-box {
 						width: 100rpx;
@@ -135,7 +136,7 @@
 							height: 60%;
 						}
 					}
-			
+
 				}
 			}
 		}
