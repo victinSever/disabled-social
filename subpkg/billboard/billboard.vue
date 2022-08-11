@@ -16,12 +16,9 @@
 		</view>
 		
 		<view class="box">
-			<uni-transition mode-class="slide-left" :show="isConcern === 1">
-				<concern :list="attentionList"></concern>
-			</uni-transition>
-			<uni-transition mode-class="slide-right" :show="isConcern === 2">
-				<fan :list="fanList"></fan>
-			</uni-transition>			
+				<concern :list="attentionList" v-if="isConcern == 1"></concern>
+				<fan :list="fanList" v-if="isConcern == 2"></fan>
+	
 		</view>
 	</view>
 </template>
@@ -60,13 +57,15 @@
 		},
 		mounted(){
 			// this.attentionPage.follower = this.loginUser.userId
-			this.fanPage.userId = this.loginUser.userId
+			this.fanPage.userId = this.loginUser.userId;
 			this.getAttentionList()
 			this.getFanList()
 		},
 		onLoad(options){	
-			if(options.type)
-				this.isConcern = parseInt(options.type)
+			if(options.type){
+                this.isConcern = parseInt(options.type)
+            }
+				
 		},
 		// 下拉触底
 		onReachBottom(){
@@ -87,22 +86,15 @@
 				this.isLoading = true
 				const { data: res} = await my.searchFan(this.attentionPage)
 				if(res.resultCode === 200){
-					this.attentionList = [
-						...this.attentionList,
-						...res.data
-					]
+					this.attentionList = this.attentionList.concat(res.data);
 				}
-				this.isLoading = false
-				console.log(this.attentionList);
+				this.isLoading = false;
 			},
 			async getFanList(){
 				this.isLoading = true
 				const { data: res} = await my.searchAttention(this.fanPage)
 				if(res.resultCode === 200){
-					this.fanList = [
-						...this.fanList,
-						...res.data
-					]
+                  this.fanList = this.fanList.concat(res.data);
 				}
 				this.isLoading = false
 			},

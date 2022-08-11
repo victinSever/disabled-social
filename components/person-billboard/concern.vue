@@ -11,8 +11,8 @@
 				<view class="left">
 					<image :src="item.headPicPath" mode=""></image>
 					<view class="info">
-						<h2 class="name">{{item.nickName}}</h2>
-						<p class="intro">{{item.personSign}}</p>
+						<text class="name">{{item.nickName}}</text>
+						<text class="intro">{{item.personSign?item.personSign:""}}</text>
 					</view>
 				</view>
 				<view class="right">

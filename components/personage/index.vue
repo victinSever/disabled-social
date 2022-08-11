@@ -12,7 +12,7 @@
 					<text>{{baseInfo.nickName}}</text>
 				</view>
 				<view class="address">
-					<text>{{baseInfo.householdAddr}}(0km)</text>
+					<text>{{baseInfo.householdAddr?baseInfo.householdAddr:"暂无位置"}}(0km)</text>
 					<text class="point">·</text>
 					<text style="color: #F95F81;">正活跃</text>
 				</view>

@@ -9,10 +9,9 @@
 		<view class="list" v-if="list.length != 0">
 			<view class="item" v-for="(item, i) in list" :key="i">
 				<view class="left">
-					<image :src="item.headPicPath" mode=""></image>
+					<image :src="item.headPicPath" mode="" />
 					<view class="info">
-						<h2 class="name">{{item.nickName}}</h2>
-						<p class="intro">对方关注了你</p>
+						<text class="name">{{item.nickName}}</text>
 					</view>
 				</view>
 				<view class="right">

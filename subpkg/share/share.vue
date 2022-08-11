@@ -4,10 +4,10 @@
 		<view class="share-container">
 			<view class="share-header">
 				<view class="share-header-left">
-					<uni-icons type="closeempty" size="25" @click="gotoBack"></uni-icons>
+					<uni-icons type="closeempty" size="24" @click="gotoBack"></uni-icons>
 				</view>
-				<view class="share-header-right" :style="'background-color: ' + (isSubmit ? 'darkorange': '#ddd')">
-					<text class="btnSend" @click="gotoShare">发布</text>
+				<view class="share-header-right" @click="gotoShare" :style="'background-color: ' + (isSubmit ? 'darkorange': '#ddd')">
+					<text class="btnSend">发布</text>
 					<uni-icons type="paperplane-filled" size="16" color="#fff"></uni-icons>
 				</view>
 			</view>
@@ -116,12 +116,6 @@
 			// #endif
 		},
 		computed: {
-			getImgPaths() {
-				return this.useImageRes.map(res => res.data.data.url)
-			},
-			getMediaPaths() {
-				return this.useMediaRes.map(res => res.data.data.url)
-			},
 		},
 		methods: {
 
@@ -235,8 +229,12 @@
 					})
 				}).then(res => {
 					uni.hideLoading()
-					uni.$showMsg('发布成功！')
-					_that.gotoBack()
+					uni.$showMsg('发布成功！请等待管理员审核');
+                    
+                    setTimeout(()=>{
+                        _that.gotoBack()
+                    },2000)
+					
 				}).catch(error => {
 					uni.hideLoading()
 					uni.$showMsg('发布失败！')
@@ -286,6 +284,10 @@
 				align-items: center;
 				justify-content: space-around;
 				color: white;
+                
+                .btnSend{
+                    font-size: 26rpx;
+                }
 			}
 		}
 
@@ -322,9 +324,8 @@
 						width: 100%;
 						box-sizing: border-box;
 						padding-left: 20rpx;
-						color: #808080;
+						color: #E17B53;
 						height: 40rpx;
-						background-color: #dddddd;
 					}
 
 					.pic-content {
@@ -385,17 +386,16 @@
 
 				.share-media {
 					width: 100%;
-					margin-bottom: 70px;
+					margin-bottom: 140rpx;
 					display: flex;
 					flex-direction: column;
 
 					.media-header {
 						box-sizing: border-box;
-						padding-left: 10px;
+						padding-left: 20rpx;
 						width: 100%;
-						height: 20px;
-						color: #808080;
-						background-color: #dddddd;
+						height: 40rpx;
+						 color: #E17B53;
 					}
 
 					.media-content {
@@ -404,7 +404,7 @@
 						height: 250rpx;
 						box-sizing: border-box;
 						// background-color: beige;
-						padding: 10px;
+						padding: 20rpx;
 
 						view {
 							width: 30%;
@@ -443,7 +443,7 @@
 			position: fixed;
 			bottom: 0;
 			width: 100%;
-			height: 70px;
+			height: 140rpx;
 
 			.share-top {
 				height: 50%;
@@ -452,16 +452,16 @@
 				align-items: center;
 				justify-content: space-between;
 				box-sizing: border-box;
-				padding: 0 25px 0 10px;
+				padding: 0 210rpx 0 20rpx;
 
 				.share-tag {
 					text {
 						color: #E17B53;
-						font-size: 12px;
+						font-size: 24rpx;
 						background-color: #fcdfd3;
-						border-radius: 10px;
-						padding: 3px 5px;
-						margin-right: 10px;
+						border-radius: 20rpx;
+						padding: 6rpx 10rpx;
+						margin-right: 20rpx;
 					}
 				}
 
@@ -484,8 +484,8 @@
 				justify-content: space-around;
 
 				image {
-					height: 30px;
-					width: 30px;
+					height: 60rpx;
+					width: 60rpx;
 				}
 			}
 		}

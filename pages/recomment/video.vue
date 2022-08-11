@@ -30,7 +30,7 @@
 				<view class="video-num">{{comm_num}}</view>
 			</cover-view>
 			<cover-view class="video-redo" @click="collect()">
-				<template v-if="isactive">
+				<template v-if="isactive==1">
 					<image src="../../static/images/home/2-1.png" class="img2"></image>
 				</template>
 				<template v-else>
@@ -225,6 +225,7 @@
 						type: "1",
 						likedId: this.videoList[this._videoIndex].diary.id
 					}).then((res) => {
+                        debugger
 						if(this.videoList[this._videoIndex].alreadyCollect==0){
 							uni.showToast({
 								icon: "none",
