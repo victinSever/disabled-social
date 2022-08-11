@@ -70,7 +70,7 @@
 
 			text {
 				color: white;
-				font-size: 16rpx;
+				font-size: 32rpx;
 				background-color: white;
 				border-radius: 25rpx;
 				padding: 8rpx 35rpx;
