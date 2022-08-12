@@ -11,21 +11,16 @@ spring:
     password: 2000516
     driver-class-name: com.mysql.cj.jdbc.Driver
     rabbitmq:
-      host: 175.178.177.105
+      host: 222.177.66.230
       port: 5672
-      username: itcast
-      password: itcast
-      virtual-host: /
+      username: admin
+      password: admin
+      virtual-host: /disable
       listener:
         simple:
           prefetch: 1     #（设置preFetch这个值，可以控制预取消息的上限）每次只能获取一条消息，处理完成才能获取下一个消息
 server:
-  port: 5211
-#  application:
-#    name: disablesquare
-#  cloud:
-#    nacos:
-#      server-addr: localhost:8848 # nacos服务地址
+  port: 5210
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

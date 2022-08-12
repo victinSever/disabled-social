@@ -6,6 +6,15 @@ spring:
     username: root
     password: 2000516
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: 222.177.66.230
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /disable
+    listener:
+      simple:
+        prefetch: 1     #（设置preFetch这个值，可以控制预取消息的上限）每次只能获取一条消息，处理完成才能获取下一个消息
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

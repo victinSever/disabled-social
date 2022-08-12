@@ -39,7 +39,7 @@ public class Diary {
     private String diaryUserName;
     private String diaryTitle;
     private String diaryContent;
-    private Integer diaryKind;         //动态分类id 1-图文动态 2-视频类动态
+    private Integer diaryKind;          //动态分类id 1-图文动态 2-视频类动态 3-语音动态
     private Integer diaryCategoryId;    //主题分类id
     private String diaryCategoryName;
     private String diaryTags;
@@ -47,14 +47,15 @@ public class Diary {
     private Integer diaryComment;
     private Integer diaryViews;
     private Integer diaryLove;
+    private Integer diaryCollect;
     private Integer enableLook;
     private Integer enableComment;
     private  Integer isDeleted;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy年MM月dd日 HH时mm分ss秒", timezone = "GMT+8")
     private Date createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy年MM月dd日 HH时mm分ss秒", timezone = "GMT+8")
     private Date updateTime;
     private Integer isReport;       //举报 0-不举报 1-举报
-    private String ps;              //审核不通过后返回的提示
+    private String ps;  //审核不通过后返回的提示
 
 }
