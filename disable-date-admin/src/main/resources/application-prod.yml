@@ -42,11 +42,11 @@ spring:
       max-request-size: 1000Mb
    
   rabbitmq:
-    host: 175.178.177.105
+    host: localhost
     port: 5672
     username: itcast
     password: itcast
-    virtual-host: /
+    virtual-host: /disable
     listener:
       simple:
         prefetch: 1     #（设置preFetch这个值，可以控制预取消息的上限）每次只能获取一条消息，处理完成才能获取下一个消息
