@@ -18,10 +18,10 @@
             ></el-input>
           </el-form-item>
           <!-- 用户名 -->
-          <el-form-item prop="userName">
+          <el-form-item prop="username">
             <el-input
               prefix-icon="el-icon-user"
-              v-model="formData.userName"
+              v-model="formData.username"
               placeholder="用户名"
             ></el-input>
           </el-form-item>
@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { register } from '@/api/manage'
 export default {
   name: "register",
   data() {
@@ -117,7 +118,7 @@ export default {
     return {
       formData: {
         account: "",
-        userName: "",
+        username: "",
         password: "",
         passwordS: "",
         department: "",
@@ -133,7 +134,7 @@ export default {
             trigger: "blur",
           },
         ],
-        userName: [
+        username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
             min: 3,
@@ -176,17 +177,17 @@ export default {
         role: [{ required: true, message: "请输入用户名", trigger: "blur" }],
       },
       departments: [
-        { label: "开发部", value: "开发部", disabled: false },
-        { label: "运维部", value: "运维部", disabled: false },
-        { label: "策划部", value: "策划部", disabled: false },
-        { label: "市场部", value: "市场部", disabled: false },
-        { label: "管理部", value: "管理部", disabled: false },
-        { label: "信息技术支持部", value: "信息技术支持部", disabled: false },
+        { label: "开发部", value: "0", disabled: false },
+        { label: "运维部", value: "1", disabled: false },
+        { label: "策划部", value: "2", disabled: false },
+        { label: "市场部", value: "3", disabled: false },
+        { label: "管理部", value: "4", disabled: false },
+        { label: "信息技术支持部", value: "5", disabled: false },
       ], //部门数据
       roles: [
-        { label: "管理员", value: "0", disabled: false },
-        { label: "审核员", value: "1", disabled: false },
-        { label: "超级管理员", value: "超级管理员", disabled: true },
+        { label: "管理员", value: "1", disabled: false },
+        { label: "审核员", value: "2", disabled: false },
+        { label: "超级管理员", value: "3", disabled: true },
       ], //部门数据
     };
   },
@@ -204,19 +205,15 @@ export default {
 
     //注册信息发送
     async sentData() {
-      const data = {
-        account: this.formData.account,
-        userName: this.formData.userName,
-        password: this.formData.password,
-        department: this.formData.department,
-        role: this.formData.role,
-      };
       try {
-        const res = await this.$http.post("user/register", data);
+        const res = await register(this.formData);
         if (res.status === 200) {
           this.resetForm();
-          this.$message.success("注册成功！正返回登陆");
-          this.$router.push("/login");
+          this.$message.success("注册成功！正返回登陆页面");
+          let that = this
+          setTimeout(function(){
+            that.$router.push("/login");
+          },2000)         
         }
       } catch (err) {
         this.$message.error("注册失败！错误：" + err);

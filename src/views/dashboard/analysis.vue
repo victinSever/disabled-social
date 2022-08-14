@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { formBigNum } from "@/api/api";
+import { formBigNum } from "@/api/tools";
 export default {
   data() {
     return {

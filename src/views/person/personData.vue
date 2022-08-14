@@ -48,11 +48,11 @@
         </el-menu>
         <div v-if="activeIndex == '1'">
           <el-form
-            ref="form"
+            ref="formperson"
             :model="personData"
             label-position="right"
             label-width="100px"
-            size=""
+            :rules="rules"
           >
             <el-col :span="12">
               <el-form-item label="用户名" prop="userName">
@@ -63,13 +63,19 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="角色" prop="role">
-                <el-select v-model="personData.role" placeholder="请选择角色权限">
+                <el-select
+                  v-model="personData.role"
+                  placeholder="请选择角色权限"
+                >
                   <el-option label="" value="0"></el-option>
                   <el-option label="审核员" value="1"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="部门" prop="role">
-                <el-select v-model="personData.department" placeholder="请选择部门">
+                <el-select
+                  v-model="personData.department"
+                  placeholder="请选择部门"
+                >
                   <el-option label="运营部门" value="0"></el-option>
                   <el-option label="审核部门" value="1"></el-option>
                 </el-select>
@@ -102,14 +108,20 @@
                   clearable
                 ></el-input>
               </el-form-item>
-              <el-form-item label="个人简介" prop="userSaying">
+              <el-form-item label="个人简介" prop="introduction">
                 <el-input
-                  v-model="personData.userSaying"
+                  v-model="personData.introduction"
                   type="textarea"
                   rows="5"
                   placeholder="输入个人简介"
                   clearable
                 ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-divider></el-divider>
+                <el-button type="primary" @click="changeAdminInfo"
+                  >确定</el-button
+                >
               </el-form-item>
             </el-col>
           </el-form>
@@ -118,7 +130,7 @@
           <div class="section">
             <div class="left-box">
               <p>密保手机</p>
-              <p class="text">已绑定手机：{{personData.phone}}</p>
+              <p class="text">已绑定手机：{{ personData.phone }}</p>
             </div>
             <div class="right-box">
               <span>去修改</span>
@@ -128,7 +140,7 @@
           <div class="section">
             <div class="left-box">
               <p>密保邮箱</p>
-              <p class="text">已绑定邮箱：{{personData.email}}</p>
+              <p class="text">已绑定邮箱：{{ personData.email }}</p>
             </div>
             <div class="right-box">
               <span>去修改</span>
@@ -142,6 +154,7 @@
 </template>
 
 <script>
+import { changeInfo, getAdministrator } from "@/api/manage";
 export default {
   data() {
     return {
@@ -150,23 +163,73 @@ export default {
       personData: {
         imgPath: require("@/assets/images/user.jpeg"),
         userName: "鲲鹏",
-        userSaying:
+        introduction:
           "没有谁的幸运，凭空而来，只有当你足够努力，你才会足够幸运。这世界不会辜负每一份努力和坚持，时光不会怠慢执着而勇敢的每一个人！",
         role: "0",
         department: "审核部门",
         tags: ["爱吃冰激凌", "工作达人", "上班族"],
-        name: "张三",
+        name: "张三", 
         sex: "0",
         phone: "184151955552",
         email: "javac@163.com",
         place: "重庆市巴南区理工大学",
       },
+      rules: {
+        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+        userName: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入电话", trigger: "blur" }],
+        introduction: [
+          { required: true, message: "请输入个人介绍", trigger: "blur" },
+        ],
+        tabs: [{ required: true, message: "请输入标签", trigger: "blur" }],
+      },
     };
+  },
+  mounted() {
+    this.personData = this.$store.state.userInfo;
+  },
+  computed: {
+    changeData() {
+      let tab = "";
+      this.personData.tags = [];
+      this.personData.tags.forEach((item) => {
+        tab += item;
+      });
+      this.personData.tab = tab;
+      return this.personData;
+    },
   },
   methods: {
     handleSelect(key, keyPath) {
       this.activeIndex = keyPath + "";
     },
+    
+    //修改管理员信息
+    changeAdminInfo() {
+      this.$refs["formperson"].validate((valid) => {
+        if (valid) {
+          this.sendChangeInfo();
+        } else {
+          this.$message.warning("数据填写有误");
+        }
+      });
+    },
+    async sendChangeInfo() {
+      this.$nprogress.start()
+      const res = await changeInfo(this.changeData);
+      this.$nprogress.done()
+      if (res.status !== 200) {
+        this.$message.error("修改失败！");
+      } else {
+        this.$message.success("修改成功！");
+      }
+    },
+    // 获取管理员信息
+    async getInfo(){
+      const res = await getAdministrator({
+        id: this.personData.id
+      });
+    }
   },
 };
 </script>
@@ -218,30 +281,30 @@ export default {
     margin-bottom: 20px;
   }
 
-  .binding{
-    .section{
+  .binding {
+    .section {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 14px;
       height: 60px;
 
-      .left-box{
-        p{
+      .left-box {
+        p {
           line-height: 30px;
         }
 
-        .text{
+        .text {
           color: rgb(160, 158, 158);
         }
       }
 
-      .right-box{
+      .right-box {
         color: blue;
         cursor: pointer;
       }
 
-      .right-box:hover{
+      .right-box:hover {
         color: #000;
       }
     }

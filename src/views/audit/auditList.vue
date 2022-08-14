@@ -79,7 +79,6 @@
                 v-else-if="scope.row.type === 3"
                 >举报审核</el-tag
               >
-
             </div>
           </template>
         </el-table-column>
@@ -91,31 +90,34 @@
         >
           <template slot-scope="scope">
             <div>
-              <el-tag type="danger" size="mini" v-if="scope.row.status === 0"
+              <el-tag
+                type="danger"
+                size="mini"
+                v-if="scope.row.auditStatus === 0"
                 >草稿</el-tag
               >
               <el-tag
                 type="warning"
                 size="mini"
-                v-else-if="scope.row.status === 1"
+                v-else-if="scope.row.auditStatus === 1"
                 >审核中</el-tag
               >
               <el-tag
                 type="success"
                 size="mini"
-                v-else-if="scope.row.status === 2"
+                v-else-if="scope.row.auditStatus === 2"
                 >已通过</el-tag
               >
               <el-tag
                 type="danger"
                 size="mini"
-                v-else-if="scope.row.status === 3"
+                v-else-if="scope.row.auditStatus === 3"
                 >未通过</el-tag
               >
               <el-tag
                 type="success"
                 size="mini"
-                v-else-if="scope.row.status === 4"
+                v-else-if="scope.row.auditStatus === 4"
                 >已发布</el-tag
               >
             </div>
@@ -132,14 +134,14 @@
           width="200"
           align="center"
           label="受理时间"
-          prop="updateTime"
+          prop="acceptTime"
         >
         </el-table-column>
         <el-table-column
           width="150"
           align="center"
           label="审核员"
-          prop="admin"
+          prop="adminName"
         >
         </el-table-column>
         <el-table-column
@@ -153,7 +155,6 @@
         <el-table-column width="200" align="center" label="操作" fixed="right">
           <template slot-scope="scope">
             <div class="operation">
-
               <el-popconfirm
                 confirm-button-text="确认"
                 cancel-button-text="取消"
@@ -165,7 +166,7 @@
                 <el-button
                   type="danger"
                   size="mini"
-                  class="el-icon-delete"                
+                  class="el-icon-delete"
                   slot="reference"
                   >删除</el-button
                 >
@@ -180,42 +181,37 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.pageNum"
-          :page-sizes="[
-            page.total / 4,
-            (page.total / 4) * 2,
-            (page.total / 4) * 3,
-            page.total,
-          ]"
+          :page-sizes="[5, 10, 15, 20]"
           :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="page.total"
         >
         </el-pagination>
       </div>
-
     </el-card>
   </div>
 </template>
 
 <script>
 import activeDetail from "@/components/audit/activeDetail.vue";
+import { getAuditLogs } from "@/api/manage";
 export default {
   components: { activeDetail },
   data() {
     const options = {
       statusOptions: [
-        { label: "草稿", value: 0, type: 'info' },
-        { label: "审核中", value: 1, type: 'warning' },
-        { label: "审核通过", value: 2, type: 'success' },
-        { label: "审核拒绝", value: 3, type: 'danger' },
-        { label: "已发布", value: 4, type: 'success' },
+        { label: "草稿", value: 0, type: "info" },
+        { label: "审核中", value: 1, type: "warning" },
+        { label: "审核通过", value: 2, type: "success" },
+        { label: "审核拒绝", value: 3, type: "danger" },
+        { label: "已发布", value: 4, type: "success" },
       ],
       typeOptions: [
-        { label: "动态审核", value: 0, type: 'primary' },
-        { label: "图片审核", value: 1, type: 'primary' },
-        { label: "视屏审核", value: 2, type: 'primary' },
-        { label: "举报审核", value: 3, type: 'primary' },
-      ]
+        { label: "动态审核", value: 0, type: "primary" },
+        { label: "图片审核", value: 1, type: "primary" },
+        { label: "视屏审核", value: 2, type: "primary" },
+        { label: "举报审核", value: 3, type: "primary" },
+      ],
     };
     return {
       options,
@@ -229,55 +225,36 @@ export default {
           id: "S74856125151",
           status: 1,
           type: 0,
-          admin: '下雪',
-          adminId: 'S61662',
+          admin: "下雪",
+          adminId: "S61662",
           createTime: "2022/7/28 21:46",
           updateTime: "2022/7/28 21:46",
-          
-        },
-        {
-          id: "S74856125151",
-          status: 2,
-          type: 1,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
-        },
-        {
-          id: "S74856125151",
-          status: 4,
-          type: 3,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
-        },
-        {
-          id: "S74856125151",
-          status: 3,
-          type: 0,
-          admin: '下雪',
-          adminId: 'S61662',
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          
         },
       ],
       page: {
-        pageSize: 10,
+        pageSize: 5,
         pageNum: 1,
         total: 20,
         keyword: "",
-        status: '',
-        type: ''
+        status: "",
+        type: "",
       },
     };
   },
+  mounted() {
+    this.getData();
+  },
 
   methods: {
+    async getData() {
+      const { data: res } = await getAuditLogs({
+        page: this.page.pageNum,
+        size: this.page.pageSize,
+      });
+      console.log(res);
+      this.tableData = res.AuditLogs;
+      this.page.total = res.total;
+    },
     // 查看详情抽屉
     openDrawer(index, row) {
       this.itemData = row;
@@ -298,11 +275,10 @@ export default {
 
     // 删除该动态
     handelDelete(index, row) {
-      if(this.isRight() == 1) {
+      if (this.isRight() == 1) {
         this.tableData.splice(index, 1);
-      this.$message.success("删除该动态成功！");
+        this.$message.success("删除该动态成功！");
       }
-   
     },
 
     // 批量删除
@@ -311,17 +287,16 @@ export default {
       if (this.multipleSelection.length === 0)
         return this.$message.warning("您还未选择删除的用户！");
       // 验证是否具有权限
-      this.isRight()
+      this.isRight();
       // 批量删除
       console.log(this.multipleSelection);
       this.$message.warning("暂未开放功能");
     },
     // 验证权限
-    isRight(){
+    isRight() {
       let admin = this.$store.state.userInfo;
-      if (admin.role !== 1) 
-        this.$message.warning("您的权限不足！");
-      return admin.role
+      if (admin.role !== 1) this.$message.warning("您的权限不足！");
+      return admin.role;
     },
     // 多选
     handleSelectionChange(val) {
@@ -331,10 +306,12 @@ export default {
     // 改变页大小
     handleSizeChange(val) {
       this.page.pageSize = val;
+      this.getData();
     },
     // 改变页码
     handleCurrentChange(val) {
       this.page.pageNum = val;
+      this.getData();
     },
   },
 };

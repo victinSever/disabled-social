@@ -58,13 +58,13 @@
         <div class="scroll-list">
           <el-timeline>
             <el-timeline-item
-              :timestamp="item.time"
+              :timestamp="item.releaseTime"
               placement="top"
-              v-for="(item, i) in updateData"
+              v-for="(item, i) in versionData"
               :key="i"
             >
               <el-card>
-                <h4>{{ item.content }}</h4>
+                <h4>{{item.version}}：{{ item.descrip }}</h4>
               </el-card>
             </el-timeline-item>
           </el-timeline>
@@ -204,7 +204,7 @@
           <span>团队成员</span>
         </div>
         <div class="team-box">
-          <div class="team-item" v-for="(item, i) in teamData" :key="i">
+          <div class="team-item" v-for="(item, i) in administratorData" :key="i">
             <div class="item-left">
               <img :src="item.userImg" alt="">
               <div>
@@ -234,27 +234,10 @@
 </template>
 
 <script>
+import { getVersions, getAllAdministrator } from "@/api/manage";
 export default {
   data() {
-    return {
-      
-      // 团队成员
-      teamData: [{
-        userImg: require('@/assets/images/user.jpeg'),
-        userName: '陌上微凉',
-        role: '管理员，测试员',
-        status: 1
-      },{
-        userImg: require('@/assets/images/user.jpeg'),
-        userName: '奥德赛巴莱',
-        role: '审核员',
-        status: 0
-      },{
-        userImg: require('@/assets/images/user.jpeg'),
-        userName: '出清',
-        role: '审核员',
-        status: 1
-      }],
+    return {         
       // 活动
       activityData: [
         {
@@ -316,29 +299,8 @@ export default {
           status: 2,
         },
       ],
-      // 更新数据
-      updateData: [
-        {
-          time: "2022/7/30",
-          content: "完成v1.0.0开发",
-        },
-        {
-          time: "2022/8/5",
-          content: "修复一些列bug",
-        },
-        {
-          time: "2022/8/10",
-          content: "完成v1.0.2开发",
-        },
-        {
-          time: "2022/8/12",
-          content: "完成v1.0.3开发",
-        },
-        {
-          time: "2022/8/15",
-          content: "残疾人婚恋平台APP正式上线",
-        },
-      ],
+      
+      
       // 快捷入口数据
       entrance: [
         {
@@ -390,12 +352,40 @@ export default {
           router: '/person/personData'
         },
       ],
+
+      // 更新数据
+      versionPage: {
+        page: 1,
+        size: 10
+      },     
+      versionTotal: 0,
+      versionData: [],
+
+      // 管理员
+      administratorPage: {
+        page: 1,
+        size: 10
+      },
+      administratorTotal: 0,
+      administratorData: []
     };
   },
   mounted() {
     this.loadTargetTable();
+    this.getData()
   },
   methods: {
+    async getData(){
+      const { data: res1 } = await getVersions(this.versionPage)
+      this.versionTotal = res1.page
+      this.versionData = res1.version
+
+      const { data: res2 } = await getAllAdministrator(this.administratorPage)
+      // this.administratorTotal = res.page
+      this.administratorData = res2
+      
+      console.log(res2);
+    },
     load() {
       this.updateData += 2;
     },

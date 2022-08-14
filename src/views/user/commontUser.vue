@@ -61,56 +61,34 @@
         border
         @selection-change="handleSelectionChange"
       >
-
         <el-table-column type="selection" width="55" align="center" fixed>
         </el-table-column>
         <el-table-column
           prop="userId"
           label="ID"
-          width="50"
+          width="100"
           align="center"
           fixed
         >
         </el-table-column>
 
-        <el-table-column prop="userName" label="姓名" width="80" align="center">
+        <el-table-column prop="nickName" label="昵称" width="150" align="center">
         </el-table-column>
         <el-table-column
-          prop="userCount"
-          label="用户名"
-          width="120"
+          prop="loginName"
+          label="账号"
+          width="150"
           align="center"
         >
         </el-table-column>
-        <el-table-column label="头像" align="center" width="80">
+        <el-table-column label="头像" align="center" width="150">
           <template slot-scope="scope">
-            <img
-              :src="scope.row.userImg"
-              alt="未上传头像"
+            <!-- <img
+              v-if="scope.row.headPicPath"
+              :src="scope.row.headPicPath"
+              alt=""
               style="width: 30px; height: 30px; border-radius: 50%"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="userPhone"
-          label="手机号"
-          width="120"
-          align="center"
-        >
-        </el-table-column>
-        <el-table-column label="上网时长" align="center" width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.onlineTime + scope.row.onlineTimeUnit }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="角色" align="center" width="100">
-          <template slot-scope="scope">
-            <el-tag size="mini" type="primary" v-if="scope.row.role === 0"
-              >普通用户</el-tag
-            >
-            <el-tag size="mini" type="danger" v-else-if="scope.row.role === 1"
-              >管理员</el-tag
-            >
+            /> -->
           </template>
         </el-table-column>
         <el-table-column label="特权" align="center" width="150">
@@ -123,45 +101,26 @@
             >
           </template>
         </el-table-column>
-        <el-table-column
-          prop="status"
-          label="认证状态"
-          align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <i
-              class="el-icon-close"
-              v-if="scope.row.isRight === 0"
-              style="font-size: 20px; color: red"
-            ></i>
-            <i
-              class="el-icon-check"
-              v-if="scope.row.isRight === 1"
-              style="font-size: 20px; color: green"
-            ></i>
-          </template>
-        </el-table-column>
 
         <el-table-column
           prop="createTime"
           label="创建时间"
           align="center"
-          width="150"
+          width="200"
         >
         </el-table-column>
         <el-table-column
           prop="updateTime"
           label="更新时间"
           align="center"
-          width="150"
+          width="200"
         >
         </el-table-column>
         <el-table-column
-          prop="destoryTime"
+          prop="deleteTime"
           label="注销时间"
           align="center"
-          width="150"
+          width="200"
         >
         </el-table-column>
         <el-table-column label="操作" width="200" align="center" fixed="right">
@@ -169,16 +128,24 @@
             <el-button
               size="mini"
               class="el-icon-view"
+              type="primary"
               @click="openDetail(scope.$index, scope.row)"
               >详细信息</el-button
             >
-            <el-button
-              size="mini"
-              class="el-icon-delete"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
+
+            <el-popconfirm
+              confirm-button-text="确认"
+              cancel-button-text="取消"
+              icon="el-icon-info"
+              icon-color="red"
+              title="确认删除该用户？"
+              style="margin-left: 10px"
+              @confirm="handleDelete(scope.row)"
             >
+              <el-button size="mini" class="el-icon-delete" type="danger" slot="reference"
+                >删除</el-button
+              >
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -216,7 +183,7 @@
       :visible.sync="dialogVisible2"
       :before-close="handleClose"
     >
-      <userBase ref="userBase"/>
+      <userBase ref="userBase" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
         <el-button type="primary" @click="addUserData()">确 定</el-button>
@@ -228,16 +195,18 @@
 <script>
 import UserDetail from "@/components/user/userDetail.vue";
 import userBase from "@/components/user/userBase.vue";
-import nProgress from 'nprogress'
+import nProgress from "nprogress";
+import { getUserList, deleteUser } from "@/api/manage";
 export default {
   components: {
-    UserDetail,userBase
+    UserDetail,
+    userBase,
   },
   data() {
     return {
       // 弹窗显示
-      dialogVisible: false,//详细信息
-      dialogVisible2: false,//添加单个用户
+      dialogVisible: false, //详细信息
+      dialogVisible2: false, //添加单个用户
       personData: {
         baseData: {
           role: 0, //0为用户，1为管理员
@@ -255,36 +224,34 @@ export default {
           dianzan: 4, //点赞数
           sorts: 4884, //积分
 
-          personId: '1',
-          personName: '花',
+          personId: "1",
+          personName: "花",
           sex: 1,
           age: 26,
-          phone: '18412385469',
+          phone: "18412385469",
           imagePath: require("@/assets/images/user.jpeg"),
-          disableNumber: 'G500226201599999999',
-          workAddr: '理工大学',
-          householdAddr: '重庆南岸',
-          maritalStatus: '未婚',
+          disableNumber: "G500226201599999999",
+          workAddr: "理工大学",
+          householdAddr: "重庆南岸",
+          maritalStatus: "未婚",
           height: 178,
           weight: 120,
-          degree: '中专',
+          degree: "中专",
           income: 20000,
-          occupation: '无业',
-          housingStatus: '两套别墅',
-          carStatus: '无',
-          expectedMarryTime: '半年内',
-          personIntro: '我是一个开朗的人',
-          personSign: '在天愿作比翼鸟，在地愿为连理枝',
+          occupation: "无业",
+          housingStatus: "两套别墅",
+          carStatus: "无",
+          expectedMarryTime: "半年内",
+          personIntro: "我是一个开朗的人",
+          personSign: "在天愿作比翼鸟，在地愿为连理枝",
           longitude: 42.5,
           latitude: 85.93,
-          wechat: '951616262',
+          wechat: "951616262",
           wechatCodeImagesPath: require("@/assets/images/user.jpeg"),
-          qq: '1255115515',
-          email: 'dsadahfdsn@qq.com'
+          qq: "1255115515",
+          email: "dsadahfdsn@qq.com",
         },
-        detailData: {
-          
-        },
+        detailData: {},
         marrayData: {},
       }, //个人信息
 
@@ -370,38 +337,49 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getData();
+  },
   methods: {
-    addUserData(){    
-      let data = this.$refs.userBase.returnData()
+    async getData() {
+      const { data: res } = await getUserList({
+        size: this.page.pageSize,
+        page: this.page.pageNum,
+      });
+      this.tableData = res.list;
+      this.page.total = res.total;
+    },
+
+    addUserData() {
+      let data = this.$refs.userBase.returnData();
       console.log(data);
-      if(data !== false){
-        nProgress.start()
-        this.$message.success('添加成功')
-        this.handleClose()
-        nProgress.done()
-      }         
-      
+      if (data !== false) {
+        nProgress.start();
+        this.$message.success("添加成功");
+        this.handleClose();
+        nProgress.done();
+      }
     },
 
     // 刷新页面数据
-    refreshPage(){
-      location.reload()
+    refreshPage() {
+      location.reload();
     },
 
     //关闭窗口
     handleClose() {
-      this.dialogVisible = false
-      this.dialogVisible2 = false
+      this.dialogVisible = false;
+      this.dialogVisible2 = false;
     },
 
     // 打开详情diaglo
-    openDetail(index, row) {  
+    openDetail(index, row) {
       this.peronData = row;
       this.dialogVisible = true;
     },
     // 添加单个
-    handleAdd(){
-      this.dialogVisible2 = true
+    handleAdd() {
+      this.dialogVisible2 = true;
     },
     // 批量添加
     handleAddMore(scope) {
@@ -409,22 +387,33 @@ export default {
     },
 
     // 删除一个
-    handleDelete(index, row) {
-      console.log(index, row);
-      this.$message.warning("暂未开放功能");
+    async handleDelete(row) {
+      const res = await deleteUser({
+        userId: row.userId,
+      });
+      if (res.status == 200) {
+        this.getData();
+        this.$message.success("删除成功！");
+      } else {
+        this.$message.danger("删除失败！");
+      }
     },
+
     // 批量删除
     handleDeleteMore() {
       // 验证是否存在选择
-      if(this.multipleSelection.length === 0) return this.$message.warning('您还未选择删除的用户！')
+      if (this.multipleSelection.length === 0)
+        return this.$message.warning("您还未选择删除的用户！");
       // 验证是否具有权限
-      let admin = this.$store.state.userInfo
-      if(admin.role !== 1) return this.$message.warning('您未有该权限！')
+      let admin = this.$store.state.userInfo;
+      if (admin.role !== 1) return this.$message.warning("您未有该权限！");
       // 批量删除
       console.log(this.multipleSelection);
-      this.$message.warning("暂未开放功能");
+      this.multipleSelection.forEach((item) => {
+        this.handleDelete(item);
+      });
     },
-    
+
     // 多选
     handleSelectionChange(val) {
       this.multipleSelection = val;

@@ -317,6 +317,7 @@ export default {
     };
   },
   methods: {
+    // 
     addUserData() {
       let data = this.$refs.userBase.returnData();
       console.log(data);
@@ -339,6 +340,7 @@ export default {
       }
     },
 
+    // 审核失败
     sendAuditResultFaile() {
       if (this.faileResult) {
         this.dialogVisible2 = false;

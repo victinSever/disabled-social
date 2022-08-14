@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { baseImgPath } from '@/api/base'
 export default {
   data() {
     return {
@@ -106,7 +107,7 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(file);
+      console.log(file,this.imageUrl);
       this.$message.success("上传成功");
     },
 

@@ -5,7 +5,7 @@ import store from './store';
 import axios from 'axios';
 import { v4 } from 'uuid';
 import 'animate.css';
-import 'nprogress'
+import nProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import ElementUI from 'element-ui';
 import echarts from 'echarts'
@@ -14,18 +14,18 @@ Vue.use(ElementUI);
 import VueUeditorWrap from 'vue-ueditor-wrap'
 Vue.component('vue-ueditor-wrap', VueUeditorWrap)
 
-//基础地址
-axios.defaults.baseURL = "http://192.168.103.249:5210/";
+// //基础地址
+// axios.defaults.baseURL = "http://192.168.235.249:5210";
 
 // axios拦截请求
 axios.interceptors.request.use(config => {
     config.headers.Authorization = window.sessionStorage.getItem('token')
-    // config.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:8080"
     //为请求对象添加token验证的Authorization
     return config
 })
 Vue.prototype.$http = axios
 Vue.prototype.$uuid = v4
+Vue.prototype.$nprogress = nProgress
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()

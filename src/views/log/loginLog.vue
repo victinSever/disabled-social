@@ -2,7 +2,7 @@
   <div class="loginLog">
 
     <el-card
-      v-if="tableData.length"
+      v-if="tableData.length !== 0"
       class="animate__animated animate__bounceInRight"
       style="margin-top: 20px"
     >
@@ -19,29 +19,29 @@
               align="center"
               width="80px"
             ></el-table-column>
-            <el-table-column prop="userName" label="登陆用户"></el-table-column>
-            <el-table-column prop="userName" label="登陆用户">
+            <el-table-column prop="id" label="ID"></el-table-column>
+            <el-table-column prop="nickName" label="登陆用户"></el-table-column>
+            <el-table-column prop="userName" label="权限">
               <template slot-scope="scope">
                 <el-tag type="success" v-if="scope.row.role === 1">管理员</el-tag>
                 <el-tag type="warning" v-else-if="scope.row.role === 2">审核员</el-tag>
               </template>
             </el-table-column>
             <el-table-column
-              prop="loginTime"
+              prop="lastTime"
               label="最近登陆时间"
             ></el-table-column>
           </el-table>
 
           <!--分页-->
           <el-pagination
-            v-if="showPagination"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="this.pageNum"
+            :current-page="page.pageNum"
             :page-sizes="[10, 15, 20, 50]"
-            :page-size="this.pageSize"
+            :page-size="page.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="this.total"
+            :total="page.total"
             style="margin-top: 20px"
           ></el-pagination>
       </el-row>
@@ -57,31 +57,18 @@
 </template>
 
 <script>
+import { getLoginLogs } from "@/api/manage";
 export default {
   name: "LoginLog",
   data() {
     return {
       total: 0,
-      tableData: [{
-          userName: '雾里看花',
-          role: 1,
-          loginTime: '2022/7/24 23:17:25'
-      },{
-          userName: '梦',
-          role: 1,
-          loginTime: '2022/7/24 23:17:25'
-      },{
-          userName: '潜水员',
-          role: 2,
-          loginTime: '2022/7/24 23:17:25'
-      },{
-          userName: '来生',
-          role: 2,
-          loginTime: '2022/7/24 23:17:25'
-      }],
-      pageSize: 10,
-      pageNum: 1,
-      showPagination: true,
+      tableData: [],
+      page: {
+        pageSize: 10,
+        pageNum: 1,
+        total: 20,
+      },
     };
   },
   mounted() {
@@ -89,18 +76,20 @@ export default {
   },
   methods: {
     async getData() {
-      // const { data: res } = await this.$http.get(
-      //   `/user/searchUserLogVo/${this.pageNum}/${this.pageSize}`
-      // );
-      // this.tableData = res.data.userLog.records;
-      // this.total = res.data.userLog.total;
+      const { data: res } = await getLoginLogs({
+        size: this.page.pageSize,
+        page: this.page.pageNum,
+      });
+      this.tableData = res.logs;
+      this.page.total = res.total;
     },
+
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
+      this.page.pageSize = newSize;
       this.getData();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
+      this.page.pageNum = newPage;
       this.getData();
     },
   },

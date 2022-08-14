@@ -34,69 +34,59 @@
         <el-table-column type="index" width="55" align="center" fixed>
         </el-table-column>
 
-        <el-table-column width="150" align="center" label="ID" prop="id">
+        <el-table-column width="200" align="center" label="动态ID" prop="diary.diaryId">
         </el-table-column>
         <el-table-column
           width="500"
           align="center"
           label="动态部分文本内容"
-          prop="text"
+          prop="diary.diaryContent"
         >
         </el-table-column>
         <el-table-column
-          width="150"
+          width="120"
           align="center"
           label="审核状态"
-          prop="status"
         >
           <template slot-scope="scope">
             <div>
-              <el-tag type="danger" size="mini" v-if="scope.row.status === 0"
-                >草稿</el-tag
-              >
               <el-tag
                 type="warning"
                 size="mini"
-                v-else-if="scope.row.status === 1"
+                v-if="scope.row.diary.diaryStatus === 1"
                 >审核中</el-tag
               >
               <el-tag
                 type="success"
                 size="mini"
-                v-else-if="scope.row.status === 2"
+                v-else-if="scope.row.diary.diaryStatus === 2"
                 >已通过</el-tag
               >
               <el-tag
                 type="danger"
                 size="mini"
-                v-else-if="scope.row.status === 3"
+                v-else-if="scope.row.diary.diaryStatus === 3"
                 >未通过</el-tag
-              >
-              <el-tag
-                type="success"
-                size="mini"
-                v-else-if="scope.row.status === 4"
-                >已发布</el-tag
               >
             </div>
           </template>
         </el-table-column>
         <el-table-column
-          width="200"
+          width="220"
           align="center"
           label="发布时间"
-          prop="createTime"
+          prop="diary.createTime"
         >
         </el-table-column>
         <el-table-column
-          width="200"
+          width="220"
           align="center"
           label="更新时间"
-          prop="updateTime"
+          prop="diary.updateTime"
         >
         </el-table-column>
 
-        <el-table-column width="200" align="center" label="操作" fixed="right">
+        <el-table-column width="300" align="center" label="操作" fixed="right">
           <template slot-scope="scope">
             <div class="operation">
               <el-button
@@ -126,7 +116,7 @@
                   size="mini"
                   class="el-icon-edit"
                   slot="reference"
-                  v-if="scope.row.status < 2"
+                  v-if="scope.row.diary.diaryStatus < 2"
                   >审核</el-button
                 >
               </el-popover>
@@ -137,8 +127,7 @@
                 icon="el-icon-info"
                 icon-color="red"
                 title="确认删除该条动态审核？"
-                v-if="scope.row.status >= 2"
-                @confirm="handelDelete(scope.$index, scope.row)"
+                @confirm="openDialogVisible2(scope.$index)"
               >
                 <el-button
                   type="danger"
@@ -158,12 +147,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.pageNum"
-          :page-sizes="[
-            page.total / 4,
-            (page.total / 4) * 2,
-            (page.total / 4) * 3,
-            page.total,
-          ]"
+          :page-sizes="[5, 10, 15, 20]"
           :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="page.total"
@@ -178,7 +162,11 @@
         :before-close="handleClose"
         size="90%"
       >
-        <activeDetail :itemData="itemData" @sendAuditResult="sendAuditResult" />
+        <activeDetail 
+        :itemData="itemData" 
+        :index="index" 
+        @sendAuditResult="sendAuditResult"
+        @changeIndex="changeIndex" />
       </el-drawer>
 
       <!-- 审核原因 -->
@@ -199,22 +187,40 @@
           >
         </div>
       </el-dialog>
+
+      <!-- 删除原因 -->
+      <el-dialog
+        :visible.sync="dialogVisible2"
+        width="300px"
+        :before-close="handleCloseDialog2"
+      >
+        <el-input
+          type="textarea"
+          placeholder="填写删除原因"
+          focus
+          v-model="deleteMap.ps"
+        ></el-input>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handelDelete"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
     </el-card>
   </div>
 </template>
 
 <script>
 import activeDetail from "@/components/audit/activeDetail.vue";
+import { getActiveList, deleteActive } from '@/api/manage';
 export default {
   components: { activeDetail },
   data() {
     const options = {
       statusOptions: [
-        { label: "草稿", value: 0 },
         { label: "审核中", value: 1 },
         { label: "审核通过", value: 2 },
         { label: "审核拒绝", value: 3 },
-        { label: "已发布", value: 4 },
       ],
     };
     return {
@@ -222,64 +228,60 @@ export default {
       isPass: false, //是否通过
       drawerVisible: false,
       dialogVisible: false,
+      dialogVisible2: false,
       faileResult: "", //不通过原因
-      tableData: [
-        {
-          id: "S74856125151",
-          text: "懒懒散散",
-          status: 1,
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          activeData: {
-            userInfo: {
-              imgPath: require("@/assets/images/user.jpeg"),
-              userName: "小懒猫",
-            },
-            activeInfo: {
-              publishTime: "2022/7/28 19:35",
-              text: "迷迷糊糊的活着",
-              imgArray: [
-                require("@/assets/images/role-bg.png"),
-                require("@/assets/images/space2.jpg"),
-              ],
-            },
-          },
-        },
-        {
-          id: "S744241",
-          text: "只愿得一人心",
-          status: 3,
-          createTime: "2022/7/28 21:46",
-          updateTime: "2022/7/28 21:46",
-          activeData: {
-            userInfo: {
-              imgPath: require("@/assets/images/user.jpeg"),
-              userName: "主",
-            },
-            activeInfo: {
-              publishTime: "2022/7/28 19:35",
-              text: "只愿得一人心，白首不分离",
-              imgArray: [require("@/assets/images/role-bg.png")],
-            },
-          },
-        },
-      ],
+      deleteResult: "",//删除原因
+      tableData: [],
       //单个动态数据
       itemData: {},
       index: 0,
       page: {
-        pageSize: 10,
+        pageSize: 5,
         pageNum: 1,
         total: 20,
         keyword: "",
         status: '',
       },
+      deleteMap: {
+        diaryId: 0,
+        isDeleted: 1,
+        ps: ''
+      }
     };
+  },
+  mounted(){
+    this.getData()
   },
 
   methods: {
+    // 关闭删除原因弹框
+    handleCloseDialog2(){
+      this.drawerVisible2 = false
+    },
+    // 改变审核序号
+    changeIndex(index){
+      console.log(index);
+      if(index >= this.tableData.length  && index < this.total){
+        this.page.pageNum++
+        this.getData()
+      }
+      this.itemData = this.tableData[index]
+    },
+    //获取动态数据
+    async getData() {
+      const { data: res } = await getActiveList({
+        page: this.page.pageNum,
+        size: this.page.pageSize
+      });
+      if(res.code === 200){
+        this.tableData = res.data
+        this.page.total = res.map.total
+      }
+      
+    },
     // 查看详情抽屉
     openDrawer(index, row) {
+      this.index = index
       this.itemData = row;
       this.drawerVisible = true;
     },
@@ -298,6 +300,7 @@ export default {
 
     // 发送审核结果
     sendAuditResult(judge, index) {
+      return this.$message.warning('未开放接口')
       this.index = index;
       if (judge) {
         this.tableData[index].status = 2;
@@ -313,19 +316,32 @@ export default {
       this.$message.error("审核未通过！原因：" + this.faileResult);
     },
 
+    //打开删除原因弹窗
+    openDialogVisible2(index){
+      this.deleteMap.diaryId = index
+      this.dialogVisible2 = true
+    },
+
     // 删除该动态
-    handelDelete(index, row) {
-      this.tableData.splice(index, 1);
-      this.$message.success("删除该动态成功！");
+    async handelDelete() {  
+      const { data: res } = await deleteActive(this.deleteMap)
+      if(res.code === 200){       
+        this.getData()
+        this.$message.success("删除该动态成功！");
+      }else{
+        this.$message.success("删除失败！");
+      }
     },
 
     // 改变页大小
     handleSizeChange(val) {
       this.page.pageSize = val;
+      this.getData()
     },
     // 改变页码
     handleCurrentChange(val) {
       this.page.pageNum = val;
+      this.getData()
     },
   },
 };

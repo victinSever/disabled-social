@@ -48,7 +48,7 @@
           <el-form-item prop="account">
             <el-input
               prefix-icon="el-icon-user"
-              v-model="formData.userName"
+              v-model="formData.username"
               placeholder="账号"
               @keyup.enter.native="submitFormData"
               maxlength="20"
@@ -78,7 +78,6 @@
             </div>
           </el-form-item>
 
-          
           <!-- 登录按钮 -->
           <el-form-item class="form-commit">
             <el-button
@@ -99,17 +98,18 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { login } from "@/api/manage";
 export default {
   name: "login",
   data() {
     return {
       checked: false, //是否记住密码
       formData: {
-        userName: "admin",
+        username: "admin",
         password: "123456",
       },
       formRules: {
-        userName: [
+        username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
             min: 1,
@@ -330,7 +330,7 @@ export default {
               perms: null,
               type: 0,
               children: [],
-            },           
+            },
             {
               id: 36,
               parentId: 3,
@@ -417,7 +417,6 @@ export default {
               type: 0,
               children: [],
             },
-
           ],
         },
         {
@@ -464,8 +463,9 @@ export default {
           ],
         },
       ],
+
       // 审核员菜单栏数据
-      menuList2: [     
+      menuList2: [
         {
           id: 2,
           parentId: 0,
@@ -492,7 +492,7 @@ export default {
               perms: "welcome:view",
               type: 0,
               children: [],
-            }, 
+            },
             {
               id: 22,
               parentId: 2,
@@ -506,7 +506,7 @@ export default {
               perms: "",
               type: 0,
               children: [],
-            },        
+            },
             {
               id: 23,
               parentId: 2,
@@ -521,7 +521,7 @@ export default {
               type: 0,
               children: [],
             },
-            
+
             {
               id: 24,
               parentId: 2,
@@ -535,7 +535,8 @@ export default {
               perms: "welcome:view",
               type: 0,
               children: [],
-            },{
+            },
+            {
               id: 25,
               parentId: 2,
               menuName: "审核记录",
@@ -550,7 +551,6 @@ export default {
               children: [],
             },
           ],
-
         },
         {
           id: 8,
@@ -579,19 +579,18 @@ export default {
               type: 0,
               children: [],
             },
-
           ],
         },
       ],
+      
     };
   },
-  mounted() {},
   methods: {
     ...mapMutations(["setUserInfo", "setMenuList"]),
 
     // 找回密码
-    gotoSearchPassward(){
-      this.$message.warning('暂未开放找回密码通道！')
+    gotoSearchPassward() {
+      this.$message.warning("暂未开放找回密码通道！");
     },
 
     //提交表单
@@ -601,51 +600,44 @@ export default {
           return this.$message.warning("输入数据不合法！");
         } else {
           // 数据验证合法，发送请求
-          this.sendData(this.formData);
+          this.sendData();
         }
       });
     },
 
     // 发送请求获取管理员信息
-    sendData(data) {
+    async sendData() {
       // 发送请求
+      try {
+        const res = await login(this.formData);
 
-      // 获取管理员基本信息
-      this.formData = {
-        ...this.formData,
-        userName: "李华",
-        userImg: require("@/assets/images/user.jpeg"),
-        userSex: 1,
-        userPhone: 18140267749,
-        role: 1, //角色信息
-        department: 1, //部门信息
-        status: true,
-        createTime: "2022-7-23 18:30:55",
-        updateTime: "2022-7-23 18:30:55",
-      };
-      if (data.userName != "admin") {
-        this.formData.role = 2;
+        if (res.data.code !== 1) {
+          return this.$message.error("账号或密码错误！");
+        }
+
+        let data = res.data.map.admin;
+
+        console.log(data);
+
+        sessionStorage.setItem("token", "sfdgsbfjhsFBDSAHJFSDFL");
+        this.setUserInfo(data);
+
+        if (data.role == "1") {
+          this.setMenuList(this.menuList);
+          this.$router.push("/dashboard/workplace");
+        } else {
+          this.setMenuList(this.menuList2);
+          this.$router.push("/person/personData");
+        }
+
+        this.$message.success(
+          (data.role == "1" ? "管理员" : "审核员") +
+            data.userName +
+            "，欢迎登录!"
+        );
+      } catch (err) {
+        this.$message.error("出错了：" + err);
       }
-
-      // 向vuex中存储个人信息和菜单栏信息
-      this.setUserInfo(this.formData);
-      this.setMenuList(this.menuList);
-      // 存储token
-      sessionStorage.setItem("token", "sfdgsbfjhsFBDSAHJFSDFL");
-
-      if (data.userName != "admin") {
-        this.setMenuList(this.menuList2);
-        this.$router.push("/person/personData");
-      }else{
-        // 跳转至主页
-        this.$router.push("/dashboard/workplace");
-      }
-     
-      this.$message.success(
-        (this.formData.role === 1 ? "管理员" : "审核员") +
-          this.formData.userName +
-          "，欢迎登录"
-      );
     },
     //重置表单
     resetForm() {
@@ -659,17 +651,17 @@ export default {
 /* 引入特效css */
 @import url(../assets/css/login-style.css);
 
-.check{
-  display:flex;
+.check {
+  display: flex;
   justify-content: center;
 }
 
-.check span{
+.check span {
   color: skyblue;
   cursor: pointer;
 }
 
-.check span:hover{
+.check span:hover {
   color: #fefefe;
 }
 

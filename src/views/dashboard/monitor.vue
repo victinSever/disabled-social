@@ -123,7 +123,7 @@
 <script>
 import jsonp from "jsonp";
 import "echarts/map/js/china";
-import { formatDateTime } from "@/api/api";
+import { formatDateTime } from "@/api/tools";
 
 const option = {
   title: {

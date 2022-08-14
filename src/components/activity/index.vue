@@ -23,7 +23,7 @@
         <el-form-item label="活动主图" prop="imgPath">
           <el-upload
             class="avatar-uploader"
-            action="http://222.177.66.230:9898/"
+            action="/apisFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
