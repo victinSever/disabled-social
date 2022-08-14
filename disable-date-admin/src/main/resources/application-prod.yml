@@ -42,17 +42,10 @@ spring:
       max-request-size: 1000Mb
    
   rabbitmq:
-<<<<<<< HEAD
-    host: 222.177.66.230
+    host: localhost
     port: 5672
     username: admin
     password: admin
-=======
-    host: localhost
-    port: 5672
-    username: itcast
-    password: itcast
->>>>>>> 8885e25e31ad96474dc7690272039d5fab8f7d93
     virtual-host: /disable
     listener:
       simple:
