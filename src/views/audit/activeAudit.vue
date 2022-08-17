@@ -296,7 +296,9 @@ export default {
     },
 
     // 按条件搜索动态
-    searchActive() {},
+    searchActive() {
+      return this.$message.warning('未开放接口')
+    },
 
     // 发送审核结果
     sendAuditResult(judge, index) {

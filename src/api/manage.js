@@ -77,7 +77,9 @@ export const getAuditLogs = data => fetch('/audit/getAuditLogs', data, 'get') //
 
 export const getActiveList = data => fetch('/audit/getNotVideoDiaryList', data, 'get') //获取动态列表
 
-export const deleteActive = data => fetch('/audit/getAuditDiaryResult', data, 'put')
+export const deleteActive = data => fetch('/audit/getAuditDiaryResult', data, 'put') //删除动态
+
+export const getVedioList = data => fetch('/audit/getVideoDiaryList', data, 'get') //获取动态列表
 
 
 /***********************************************************************************
