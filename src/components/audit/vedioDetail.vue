@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <el-col :span="14" :offset="1">
+    <el-col :span="14" :offset="1">
       <el-card shadow="never">
         <el-form :model="data" size="mini" label-width="100px">
           <el-form-item label="ID" prop="id">{{data.diary.diaryId}}</el-form-item>
@@ -10,11 +10,8 @@
             <el-card class="content">
               <p><span>文本：</span>{{data.diary.diaryContent}}</p>
               <p><span>图片：</span></p>
-              <div class="imgs" v-if="data.vedio">
-                <vedio :src="data.vedio" autoplay controls alt="无"></vedio>
-              </div>
-              <div class="imgs" v-else>
-                <div style="font-size: 12px; text-indent: 3em">该动态无视频!</div>
+              <div class="video" v-if="data.video">
+                <video :src="data.video" autoplay controls alt="无"></video>
               </div>
             </el-card>
           </el-form-item>
@@ -62,12 +59,13 @@
           <el-button type="primary" @click="getNext">审核下一个</el-button>
         </el-form-item>
       </el-form>     
-    </el-col> -->
+    </el-col>
   </div>
 </template>
 
 <script>
 export default {
+    name: 'vedioDetail',
   props: ['itemData', 'index', 'result'],
   data(){
     return {
@@ -78,22 +76,23 @@ export default {
       indexCurr: 0,//正在审核的序号
     }
   },
-//   mounted(){
-//     this.indexCurr = this.index
-//   },
-//   watch: {
-//     itemData: {
-//       immediate: true,
-//       handler() { 
-//         this.data = this.itemData
-//         this.status = this.itemData.diary.diaryStatus
-//        }
-//     },
-//     result: {
-//       immediate: true,
-//       handler() { this.faileResult = this.result }
-//     }
-//   },
+  mounted(){
+    this.indexCurr = this.index
+    console.log(this.itemData);
+  },
+  watch: {
+    itemData: {
+      immediate: true,
+      handler() { 
+        this.data = this.itemData
+        this.status = this.itemData.diary.diaryStatus
+       }
+    },
+    result: {
+      immediate: true,
+      handler() { this.faileResult = this.result }
+    }
+  },
   methods: {
     // 审核
     auditActive(judge){
@@ -116,17 +115,14 @@ export default {
 
 <style scoped lang='less'>
 .content{
-  .imgs{
+  .video{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-   
+    justify-content: center;
+    width: 100%;
+    max-width: 60%;
 
-    img{
-      width: 300px;
-      box-shadow: 2px 3px 8px rgba(0,0,0,0.8);
-      margin-right: 20px;
-      margin-bottom: 20px;
+    video{
+        width: 80%;
     }
   }
 

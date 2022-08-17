@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import vedioDetail from "@/components/audit/activeDetail.vue";
+import vedioDetail from "@/components/audit/vedioDetail.vue";
 import { getVedioList, deleteActive } from '@/api/manage';
 export default {
   components: { vedioDetail },
@@ -273,7 +273,7 @@ export default {
         page: this.page.pageNum,
         size: this.page.pageSize
       });
-      console.log(res);
+      console.log(res.data);
       if(res.code === 200){
         this.tableData = res.data
         this.page.total = res.map.total
