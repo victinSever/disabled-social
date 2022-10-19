@@ -1,7 +1,7 @@
 import { http } from '@/common/service/service.js'
 
-let url="/api/personinfo"
-let url2="/api/square"
+let url="http://119.91.135.239:8086" //person
+let url2="http://175.178.37.103:5211" //sqare 119.91.135.239:8080
 const apiService = {
 	
 	// 获取主页个人基本信息

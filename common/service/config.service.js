@@ -1,7 +1,7 @@
 let BASE_URL = ''
 
 
-BASE_URL = 'http://222.177.66.230:8080/'
+BASE_URL = 'http://175.178.37.103:5211/'
 
 // BASE_URL = 'http://120.26.7.136:8082/'
 // // #ifdef H5
